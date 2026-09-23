@@ -2,168 +2,360 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Meu Player</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <title>Estacao-TI // Music Network</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
 
 <body>
 
-    <main class="container">
+    <!-- =====================================================
+         DECORAÇÃO METRO
+    ====================================================== -->
 
-        <!-- ================================= -->
-        <!-- CABEÇALHO -->
-        <!-- ================================= -->
+    <div class="metro-background">
 
-        <header class="header">
+        <div class="metro-circle circle-1"></div>
+        <div class="metro-circle circle-2"></div>
+        <div class="metro-circle circle-3"></div>
 
-            <h1>🎵 Meu Player</h1>
+        <div class="metro-star star-1">★</div>
+        <div class="metro-star star-2">★</div>
+        <div class="metro-star star-3">★</div>
 
-            <p>
-                Música compartilhada com seu grupo
-            </p>
+        <div class="metro-spark spark-1">✦</div>
+        <div class="metro-spark spark-2">✦</div>
+        <div class="metro-spark spark-3">✦</div>
+
+        <div class="metro-orbit orbit-1"></div>
+        <div class="metro-orbit orbit-2"></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SITE
+    ====================================================== -->
+
+    <main class="site">
+
+        <!-- =================================================
+             TOPO
+        ================================================== -->
+
+        <header class="top-header">
+
+            <div class="brand">
+
+                <div class="brand-symbol">
+                    ✦
+                </div>
+
+                <div class="brand-text">
+
+                    <h1>
+                        ESTACAO-TI
+                    </h1>
+
+                    <span>
+                        MUSIC NETWORK
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-status">
+
+                <span class="status-light"></span>
+
+                <span>
+                    ONLINE
+                </span>
+
+            </div>
 
         </header>
 
 
-        <!-- ================================= -->
-        <!-- SALA -->
-        <!-- ================================= -->
+        <!-- =================================================
+             BARRA RETRÔ
+        ================================================== -->
 
-        <section class="room-section">
+        <div class="retro-bar">
 
-            <h2>👥 Sala compartilhada</h2>
+            <span>
+                ★ ESTACAO-TI MUSIC NETWORK ★
+            </span>
 
-            <div class="room-actions">
+            <span>
+                // 2000'S EDITION //
+            </span>
 
-                <button
-                    id="create-room-button"
-                >
-                    ✨ Criar sala
-                </button>
+            <span>
+                ♪ NOW ONLINE ♪
+            </span>
 
-                <input
-                    type="text"
-                    id="room-input"
-                    placeholder="Código da sala"
-                    maxlength="6"
-                    autocomplete="off"
-                >
+        </div>
 
-                <button
-                    id="join-room-button"
-                >
-                    Entrar
-                </button>
+
+        <!-- =================================================
+             SALA
+        ================================================== -->
+
+        <section class="room-panel">
+
+            <div class="section-title">
+
+                <span class="title-icon">
+                    ♫
+                </span>
+
+                <div>
+
+                    <h2>
+                        MUSIC ROOM
+                    </h2>
+
+                    <p>
+                        conecte-se à sua estação
+                    </p>
+
+                </div>
 
             </div>
 
 
-            <div class="room-info">
+            <div class="room-content">
 
-                <p>
-                    Sala:
-                    <strong id="room-code">
-                        ---
-                    </strong>
-                </p>
+                <div class="room-buttons">
 
-                <p>
-                    👥
-                    <span id="room-users">
-                        0
+                    <button
+                        id="create-room-button"
+                        class="metro-button primary"
+                    >
+                        ✦ CRIAR SALA
+                    </button>
+
+
+                    <div class="join-area">
+
+                        <input
+                            type="text"
+                            id="room-input"
+                            placeholder="CÓDIGO DA SALA"
+                            maxlength="6"
+                            autocomplete="off"
+                        >
+
+                        <button
+                            id="join-room-button"
+                            class="metro-button"
+                        >
+                            ENTRAR
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="room-info">
+
+                    <div class="info-box">
+
+                        <span class="info-label">
+                            SALA
+                        </span>
+
+                        <strong id="room-code">
+                            ------
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span class="info-label">
+                            USUÁRIOS
+                        </span>
+
+                        <strong>
+                            <span id="room-users">
+                                0
+                            </span>
+                        </strong>
+
+                    </div>
+
+
+                    <div class="connection-box">
+
+                        <span
+                            id="connection-status"
+                        >
+                            ⚪ OFFLINE
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="enable-audio-button"
+                    class="audio-button"
+                    hidden
+                >
+                    🔊 ATIVAR REPRODUÇÃO
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PLAYER
+        ================================================== -->
+
+        <section class="player-panel">
+
+            <div class="section-title player-title">
+
+                <span class="title-icon">
+                    ◉
+                </span>
+
+                <div>
+
+                    <h2>
+                        NOW PLAYING
+                    </h2>
+
+                    <p>
+                        estação musical compartilhada
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="player-window">
+
+                <div class="player-topbar">
+
+                    <span>
+                        ESTACAO-TI // PLAYER.EXE
                     </span>
-                    pessoa(s)
-                </p>
 
-                <p id="connection-status">
-                    ⚪ Não conectado
-                </p>
+                    <div class="window-buttons">
 
-            </div>
+                        <span>—</span>
+                        <span>□</span>
+                        <span>×</span>
 
+                    </div>
 
-            <button
-                id="enable-audio-button"
-                class="audio-button"
-                hidden
-            >
-                🔊 Ativar reprodução
-            </button>
-
-        </section>
+                </div>
 
 
-        <!-- ================================= -->
-        <!-- PESQUISA -->
-        <!-- ================================= -->
-
-        <section class="search-section">
-
-            <input
-                type="text"
-                id="search-input"
-                placeholder="Digite uma música ou artista..."
-                autocomplete="off"
-            >
-
-            <button
-                id="search-button"
-            >
-                🔎 Buscar
-            </button>
-
-        </section>
-
-
-        <!-- ================================= -->
-        <!-- PLAYER -->
-        <!-- ================================= -->
-
-        <section class="player">
-
-            <div
-                id="youtube-player"
-                class="youtube-player"
-            ></div>
-
-
-            <div class="current-music">
-
-                <h2 id="music-title">
-                    Nenhuma música tocando
-                </h2>
-
-                <p id="music-artist">
-                    Entre em uma sala para começar
-                </p>
+                <div
+                    id="youtube-player"
+                    class="youtube-player"
+                ></div>
 
             </div>
 
 
-            <!-- CONTROLES -->
+            <div class="music-display">
+
+                <div class="music-disc">
+
+                    <div class="disc-ring ring-one"></div>
+                    <div class="disc-ring ring-two"></div>
+                    <div class="disc-ring ring-three"></div>
+
+                    <div class="disc-center">
+                        ♪
+                    </div>
+
+                </div>
+
+
+                <div class="music-data">
+
+                    <span class="music-label">
+                        CURRENT TRACK
+                    </span>
+
+                    <h2 id="music-title">
+                        Nenhuma música tocando
+                    </h2>
+
+                    <p id="music-artist">
+                        Entre em uma sala para começar
+                    </p>
+
+                    <div class="equalizer">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
 
             <div class="player-controls">
 
                 <button
                     id="previous-button"
+                    class="control-button"
                 >
-                    ⏮ Anterior
+                    ◀◀
+                    <small>ANTERIOR</small>
                 </button>
+
 
                 <button
                     id="play-pause-button"
+                    class="control-button main-control"
                 >
-                    ▶ Tocar
+                    ▶
+                    <small>TOCAR</small>
                 </button>
+
 
                 <button
                     id="next-button"
+                    class="control-button"
                 >
-                    Próxima ⏭
+                    ▶▶
+                    <small>PRÓXIMA</small>
                 </button>
 
             </div>
@@ -171,65 +363,188 @@
         </section>
 
 
-        <!-- ================================= -->
-        <!-- RESULTADOS -->
-        <!-- ================================= -->
+        <!-- =================================================
+             PESQUISA
+        ================================================== -->
 
-        <section class="results-section">
+        <section class="search-panel">
 
-            <h2>🔎 Resultados</h2>
+            <div class="section-title">
+
+                <span class="title-icon">
+                    ✧
+                </span>
+
+                <div>
+
+                    <h2>
+                        MUSIC SEARCH
+                    </h2>
+
+                    <p>
+                        procure sua próxima música
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Digite música, artista, álbum..."
+                    autocomplete="off"
+                >
+
+                <button
+                    id="search-button"
+                    class="search-button"
+                >
+                    🔎 BUSCAR
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RESULTADOS
+        ================================================== -->
+
+        <section class="results-panel">
+
+            <div class="panel-heading">
+
+                <div>
+
+                    <span>
+                        SEARCH RESULTS
+                    </span>
+
+                    <h2>
+                        RESULTADOS
+                    </h2>
+
+                </div>
+
+                <div class="heading-decoration">
+                    ✦ ✧ ★
+                </div>
+
+            </div>
+
 
             <div id="search-results">
 
-                <p class="empty-message">
-                    Pesquise uma música para ver os resultados.
-                </p>
+                <div class="empty-message">
+
+                    <span class="empty-icon">
+                        ♪
+                    </span>
+
+                    <strong>
+                        NENHUM RESULTADO
+                    </strong>
+
+                    <p>
+                        Pesquise uma música para começar
+                    </p>
+
+                </div>
 
             </div>
 
         </section>
 
 
-        <!-- ================================= -->
-        <!-- FILA -->
-        <!-- ================================= -->
+        <!-- =================================================
+             FILA
+        ================================================== -->
 
-        <section class="queue">
+        <section class="queue-panel">
 
-            <h2>
-                🎶 Fila da sala
-            </h2>
+            <div class="panel-heading">
+
+                <div>
+
+                    <span>
+                        PLAYLIST.EXE
+                    </span>
+
+                    <h2>
+                        FILA DA SALA
+                    </h2>
+
+                </div>
+
+                <div class="heading-decoration">
+                    ♫ ♫ ♫
+                </div>
+
+            </div>
+
 
             <div id="queue-list">
 
-                <p class="empty-message">
-                    A fila está vazia.
-                </p>
+                <div class="empty-message">
+
+                    <span class="empty-icon">
+                        ♬
+                    </span>
+
+                    <strong>
+                        A FILA ESTÁ VAZIA
+                    </strong>
+
+                    <p>
+                        Adicione músicas para criar sua playlist
+                    </p>
+
+                </div>
 
             </div>
 
         </section>
+
+
+        <!-- =================================================
+             RODAPÉ
+        ================================================== -->
+
+        <footer class="footer">
+
+            <div class="footer-decoration">
+                ✦ ─────── ✧ ─────── ★
+            </div>
+
+            <strong>
+                ESTACAO-TI MUSIC NETWORK
+            </strong>
+
+            <span>
+                © 2000'S DIGITAL REVIVAL
+            </span>
+
+            <span>
+                made with ♡ + music
+            </span>
+
+        </footer>
 
     </main>
 
 
-    <!-- ================================= -->
-    <!-- SOCKET.IO -->
-    <!-- ================================= -->
+    <!-- =====================================================
+         SCRIPTS
+    ====================================================== -->
 
     <script src="/socket.io/socket.io.js"></script>
 
-
-    <!-- ================================= -->
-    <!-- YOUTUBE -->
-    <!-- ================================= -->
-
     <script src="https://www.youtube.com/iframe_api"></script>
-
-
-    <!-- ================================= -->
-    <!-- NOSSO JAVASCRIPT -->
-    <!-- ================================= -->
 
     <script src="script.js"></script>
 
