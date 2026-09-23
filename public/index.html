@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meu Player</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- ================================= -->
+        <!-- CABEÇALHO -->
+        <!-- ================================= -->
+
+        <header class="header">
+
+            <h1>🎵 Meu Player</h1>
+
+            <p>
+                Música compartilhada com seu grupo
+            </p>
+
+        </header>
+
+
+        <!-- ================================= -->
+        <!-- SALA -->
+        <!-- ================================= -->
+
+        <section class="room-section">
+
+            <h2>👥 Sala compartilhada</h2>
+
+            <div class="room-actions">
+
+                <button
+                    id="create-room-button"
+                >
+                    ✨ Criar sala
+                </button>
+
+                <input
+                    type="text"
+                    id="room-input"
+                    placeholder="Código da sala"
+                    maxlength="6"
+                    autocomplete="off"
+                >
+
+                <button
+                    id="join-room-button"
+                >
+                    Entrar
+                </button>
+
+            </div>
+
+
+            <div class="room-info">
+
+                <p>
+                    Sala:
+                    <strong id="room-code">
+                        ---
+                    </strong>
+                </p>
+
+                <p>
+                    👥
+                    <span id="room-users">
+                        0
+                    </span>
+                    pessoa(s)
+                </p>
+
+                <p id="connection-status">
+                    ⚪ Não conectado
+                </p>
+
+            </div>
+
+
+            <button
+                id="enable-audio-button"
+                class="audio-button"
+                hidden
+            >
+                🔊 Ativar reprodução
+            </button>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- PESQUISA -->
+        <!-- ================================= -->
+
+        <section class="search-section">
+
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Digite uma música ou artista..."
+                autocomplete="off"
+            >
+
+            <button
+                id="search-button"
+            >
+                🔎 Buscar
+            </button>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- PLAYER -->
+        <!-- ================================= -->
+
+        <section class="player">
+
+            <div
+                id="youtube-player"
+                class="youtube-player"
+            ></div>
+
+
+            <div class="current-music">
+
+                <h2 id="music-title">
+                    Nenhuma música tocando
+                </h2>
+
+                <p id="music-artist">
+                    Entre em uma sala para começar
+                </p>
+
+            </div>
+
+
+            <!-- CONTROLES -->
+
+            <div class="player-controls">
+
+                <button
+                    id="previous-button"
+                >
+                    ⏮ Anterior
+                </button>
+
+                <button
+                    id="play-pause-button"
+                >
+                    ▶ Tocar
+                </button>
+
+                <button
+                    id="next-button"
+                >
+                    Próxima ⏭
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- RESULTADOS -->
+        <!-- ================================= -->
+
+        <section class="results-section">
+
+            <h2>🔎 Resultados</h2>
+
+            <div id="search-results">
+
+                <p class="empty-message">
+                    Pesquise uma música para ver os resultados.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- FILA -->
+        <!-- ================================= -->
+
+        <section class="queue">
+
+            <h2>
+                🎶 Fila da sala
+            </h2>
+
+            <div id="queue-list">
+
+                <p class="empty-message">
+                    A fila está vazia.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================= -->
+    <!-- SOCKET.IO -->
+    <!-- ================================= -->
+
+    <script src="/socket.io/socket.io.js"></script>
+
+
+    <!-- ================================= -->
+    <!-- YOUTUBE -->
+    <!-- ================================= -->
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+
+    <!-- ================================= -->
+    <!-- NOSSO JAVASCRIPT -->
+    <!-- ================================= -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

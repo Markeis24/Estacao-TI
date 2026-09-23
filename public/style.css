@@ -1,0 +1,289 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #111;
+    color: #fff;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: #aaa;
+}
+
+
+/* ================================= */
+/* PESQUISA                          */
+/* ================================= */
+
+.search-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+#search-input {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+#search-input:focus {
+    outline: 2px solid #555;
+}
+
+#search-button {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+    color: #111;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    opacity: 0.85;
+}
+
+
+/* ================================= */
+/* PLAYER                            */
+/* ================================= */
+
+.player {
+    background: #1b1b1b;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.youtube-player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.youtube-player iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.current-music {
+    padding-top: 20px;
+}
+
+.current-music h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.current-music p {
+    color: #aaa;
+}
+
+
+/* ================================= */
+/* RESULTADOS                        */
+/* ================================= */
+
+.results-section {
+    margin-bottom: 30px;
+}
+
+.results-section h2,
+.queue h2 {
+    margin-bottom: 15px;
+}
+
+#search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.result-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #1b1b1b;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.result-card img {
+    width: 160px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.result-info {
+    flex: 1;
+}
+
+.result-info h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.result-info p {
+    color: #999;
+    font-size: 14px;
+}
+
+.result-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.result-actions button {
+    border: none;
+    border-radius: 7px;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.play-button {
+    background: #fff;
+    color: #111;
+}
+
+.queue-button {
+    background: #333;
+    color: #fff;
+}
+
+.result-actions button:hover {
+    opacity: 0.8;
+}
+
+
+/* ================================= */
+/* FILA                              */
+/* ================================= */
+
+.queue {
+    margin-bottom: 30px;
+}
+
+#queue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.queue-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1b1b1b;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.queue-item img {
+    width: 80px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.queue-info {
+    flex: 1;
+}
+
+.queue-info strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.queue-info span {
+    color: #888;
+    font-size: 13px;
+}
+
+.queue-item button {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.empty-message {
+    color: #777;
+    padding: 15px 0;
+}
+
+
+/* ================================= */
+/* CELULAR                           */
+/* ================================= */
+
+@media (max-width: 700px) {
+
+    .container {
+        padding: 20px 12px;
+    }
+
+    .header h1 {
+        font-size: 28px;
+    }
+
+    .search-section {
+        flex-direction: column;
+    }
+
+    #search-button {
+        width: 100%;
+    }
+
+    .result-card {
+        flex-wrap: wrap;
+    }
+
+    .result-card img {
+        width: 120px;
+        height: 68px;
+    }
+
+    .result-actions {
+        width: 100%;
+    }
+
+    .result-actions button {
+        flex: 1;
+    }
+
+}
