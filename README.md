@@ -152,9 +152,6 @@ my-player/
 │   ├── style.css
 │   └── script.js
 │
-├── music/
-│   └── teste.mp3
-│
 ├── .env
 ├── .gitignore
 ├── package.json
