@@ -3,11 +3,13 @@
 // SCRIPT PRINCIPAL
 // ==========================================================
 
+
 // ==========================================================
 // SOCKET.IO
 // ==========================================================
 
 let socket = null;
+
 
 // ==========================================================
 // YOUTUBE
@@ -16,6 +18,7 @@ let socket = null;
 let player = null;
 let playerPronto = false;
 let aplicandoEstadoServidor = false;
+
 
 // ==========================================================
 // ESTADO DA SALA
@@ -27,6 +30,7 @@ let estadoSala = {
     tocando: false,
     posicao: 0
 };
+
 
 // ==========================================================
 // ELEMENTOS
@@ -80,6 +84,7 @@ const playPauseButton =
 const nextButton =
     document.getElementById("next-button");
 
+
 // ==========================================================
 // YOUTUBE API
 // ==========================================================
@@ -118,6 +123,7 @@ window.onYouTubeIframeAPIReady = function () {
                 },
 
                 onStateChange: function (event) {
+
                     tratarEstadoPlayer(event);
                 },
 
@@ -133,6 +139,7 @@ window.onYouTubeIframeAPIReady = function () {
     );
 };
 
+
 // ==========================================================
 // ESTADO DO YOUTUBE
 // ==========================================================
@@ -147,6 +154,7 @@ function tratarEstadoPlayer(event) {
         event.data ===
         YT.PlayerState.PLAYING
     ) {
+
         enviarControle({
             tipo: "play"
         });
@@ -156,6 +164,7 @@ function tratarEstadoPlayer(event) {
         event.data ===
         YT.PlayerState.PAUSED
     ) {
+
         enviarControle({
             tipo: "pause"
         });
@@ -180,6 +189,7 @@ function tratarEstadoPlayer(event) {
     }
 }
 
+
 // ==========================================================
 // CRIAR SALA
 // ==========================================================
@@ -187,9 +197,11 @@ function tratarEstadoPlayer(event) {
 createRoomButton.addEventListener(
     "click",
     function () {
+
         conectarSocket();
     }
 );
+
 
 // ==========================================================
 // ENTRAR EM SALA
@@ -205,6 +217,7 @@ joinRoomButton.addEventListener(
                 .toUpperCase();
 
         if (!codigo) {
+
             alert(
                 "Digite o código da sala."
             );
@@ -216,6 +229,7 @@ joinRoomButton.addEventListener(
     }
 );
 
+
 // ==========================================================
 // SOCKET
 // ==========================================================
@@ -223,7 +237,9 @@ joinRoomButton.addEventListener(
 function conectarSocket(codigoSala = null) {
 
     if (socket) {
+
         socket.disconnect();
+
         socket = null;
     }
 
@@ -231,6 +247,7 @@ function conectarSocket(codigoSala = null) {
 
     connectionStatus.textContent =
         "🟡 CONECTANDO...";
+
 
     socket.on(
         "connect",
@@ -243,6 +260,7 @@ function conectarSocket(codigoSala = null) {
 
             connectionStatus.textContent =
                 "🟢 ONLINE";
+
 
             if (codigoSala) {
 
@@ -260,6 +278,7 @@ function conectarSocket(codigoSala = null) {
         }
     );
 
+
     socket.on(
         "sala-criada",
         function (dados) {
@@ -270,6 +289,7 @@ function conectarSocket(codigoSala = null) {
         }
     );
 
+
     socket.on(
         "entrou-sala",
         function (dados) {
@@ -279,6 +299,7 @@ function conectarSocket(codigoSala = null) {
             );
         }
     );
+
 
     socket.on(
         "erro-sala",
@@ -291,6 +312,17 @@ function conectarSocket(codigoSala = null) {
         }
     );
 
+
+    // ======================================================
+    // ATUALIZAÇÃO DA FILA
+    //
+    // IMPORTANTE:
+    // Atualizar a fila NÃO sincroniza o player.
+    //
+    // Isso impede que adicionar uma música faça
+    // a música atual reiniciar ou voltar de posição.
+    // ======================================================
+
     socket.on(
         "fila-atualizada",
         function (dados) {
@@ -302,10 +334,17 @@ function conectarSocket(codigoSala = null) {
                 dados.indiceAtual ?? -1;
 
             atualizarFila();
+
             atualizarMusicaAtual();
-            tentarAplicarEstado();
+
+            // NÃO chamar tentarAplicarEstado() aqui.
         }
     );
+
+
+    // ======================================================
+    // ESTADO DO PLAYER
+    // ======================================================
 
     socket.on(
         "estado-player",
@@ -321,10 +360,13 @@ function conectarSocket(codigoSala = null) {
                 dados.indiceAtual ?? -1;
 
             atualizarFila();
+
             atualizarMusicaAtual();
+
             tentarAplicarEstado();
         }
     );
+
 
     socket.on(
         "usuarios-atualizados",
@@ -335,6 +377,7 @@ function conectarSocket(codigoSala = null) {
         }
     );
 
+
     socket.on(
         "disconnect",
         function () {
@@ -344,6 +387,7 @@ function conectarSocket(codigoSala = null) {
         }
     );
 }
+
 
 // ==========================================================
 // ENTRAR VISUALMENTE NA SALA
@@ -362,19 +406,25 @@ function entrarVisualmenteNaSala(dados) {
     roomInput.value =
         dados.codigo;
 
+
     estadoSala =
         dados.estado || {
+
             fila: [],
             indiceAtual: -1,
             tocando: false,
             posicao: 0
         };
 
+
     atualizarFila();
+
     atualizarMusicaAtual();
+
 
     const novaUrl =
         `${window.location.pathname}?room=${dados.codigo}`;
+
 
     window.history.replaceState(
         {},
@@ -382,8 +432,10 @@ function entrarVisualmenteNaSala(dados) {
         novaUrl
     );
 
+
     tentarAplicarEstado();
 }
+
 
 // ==========================================================
 // SOCKET CONECTADO?
@@ -396,6 +448,7 @@ function socketConectado() {
         socket.connected
     );
 }
+
 
 // ==========================================================
 // CONTROLE
@@ -413,6 +466,7 @@ function enviarControle(dados) {
     );
 }
 
+
 // ==========================================================
 // PESQUISA
 // ==========================================================
@@ -422,7 +476,9 @@ async function pesquisarMusicas() {
     const consulta =
         searchInput.value.trim();
 
+
     if (!consulta) {
+
         alert(
             "Digite o nome de uma música ou artista."
         );
@@ -430,7 +486,9 @@ async function pesquisarMusicas() {
         return;
     }
 
+
     searchResults.innerHTML = `
+
         <div class="empty-message">
 
             <span class="empty-icon">
@@ -448,6 +506,7 @@ async function pesquisarMusicas() {
         </div>
     `;
 
+
     try {
 
         const resposta =
@@ -457,22 +516,27 @@ async function pesquisarMusicas() {
                 )}`
             );
 
+
         const dados =
             await resposta.json();
+
 
         if (
             !resposta.ok ||
             !dados.sucesso
         ) {
+
             throw new Error(
                 dados.erro ||
                 "Erro ao pesquisar."
             );
         }
 
+
         mostrarResultados(
             dados.resultados
         );
+
 
     } catch (erro) {
 
@@ -481,7 +545,9 @@ async function pesquisarMusicas() {
             erro
         );
 
+
         searchResults.innerHTML = `
+
             <div class="empty-message">
 
                 <span class="empty-icon">
@@ -503,6 +569,7 @@ async function pesquisarMusicas() {
     }
 }
 
+
 // ==========================================================
 // MOSTRAR RESULTADOS
 // ==========================================================
@@ -511,12 +578,14 @@ function mostrarResultados(resultados) {
 
     searchResults.innerHTML = "";
 
+
     if (
         !resultados ||
         resultados.length === 0
     ) {
 
         searchResults.innerHTML = `
+
             <div class="empty-message">
 
                 <span class="empty-icon">
@@ -537,6 +606,7 @@ function mostrarResultados(resultados) {
         return;
     }
 
+
     resultados.forEach(
         function (musica) {
 
@@ -545,10 +615,13 @@ function mostrarResultados(resultados) {
                     "div"
                 );
 
+
             card.className =
                 "result-card";
 
+
             card.innerHTML = `
+
                 <img
                     src="${escaparAtributo(
                         musica.imagem
@@ -589,10 +662,12 @@ function mostrarResultados(resultados) {
                 </div>
             `;
 
+
             const botaoTocar =
                 card.querySelector(
                     ".play-button"
                 );
+
 
             botaoTocar.addEventListener(
                 "click",
@@ -604,10 +679,12 @@ function mostrarResultados(resultados) {
                 }
             );
 
+
             const botaoFila =
                 card.querySelector(
                     ".queue-button"
                 );
+
 
             botaoFila.addEventListener(
                 "click",
@@ -619,12 +696,14 @@ function mostrarResultados(resultados) {
                 }
             );
 
+
             searchResults.appendChild(
                 card
             );
         }
     );
 }
+
 
 // ==========================================================
 // TOCAR AGORA
@@ -633,6 +712,7 @@ function mostrarResultados(resultados) {
 function tocarMusica(musica) {
 
     if (!socketConectado()) {
+
         alert(
             "Entre em uma sala primeiro."
         );
@@ -640,11 +720,15 @@ function tocarMusica(musica) {
         return;
     }
 
+
     enviarControle({
+
         tipo: "play-now",
+
         musica: musica
     });
 }
+
 
 // ==========================================================
 // ADICIONAR À FILA
@@ -653,6 +737,7 @@ function tocarMusica(musica) {
 function adicionarNaFila(musica) {
 
     if (!socketConectado()) {
+
         alert(
             "Entre em uma sala primeiro."
         );
@@ -660,11 +745,15 @@ function adicionarNaFila(musica) {
         return;
     }
 
+
     enviarControle({
+
         tipo: "adicionar",
+
         musica: musica
     });
 }
+
 
 // ==========================================================
 // TOCAR
@@ -673,9 +762,11 @@ function adicionarNaFila(musica) {
 function tocarAtual() {
 
     enviarControle({
+
         tipo: "play"
     });
 }
+
 
 // ==========================================================
 // PAUSAR
@@ -684,9 +775,11 @@ function tocarAtual() {
 function pausarAtual() {
 
     enviarControle({
+
         tipo: "pause"
     });
 }
+
 
 // ==========================================================
 // PRÓXIMA
@@ -695,9 +788,11 @@ function pausarAtual() {
 function proxima() {
 
     enviarControle({
+
         tipo: "next"
     });
 }
+
 
 // ==========================================================
 // ANTERIOR
@@ -706,9 +801,11 @@ function proxima() {
 function anterior() {
 
     enviarControle({
+
         tipo: "previous"
     });
 }
+
 
 // ==========================================================
 // REMOVER
@@ -717,10 +814,13 @@ function anterior() {
 function remover(index) {
 
     enviarControle({
+
         tipo: "remove",
+
         index: index
     });
 }
+
 
 // ==========================================================
 // MÚSICA ATUAL
@@ -731,8 +831,10 @@ function obterMusicaAtual() {
     if (
         estadoSala.indiceAtual < 0
     ) {
+
         return null;
     }
+
 
     return (
         estadoSala.fila[
@@ -740,6 +842,7 @@ function obterMusicaAtual() {
         ] || null
     );
 }
+
 
 // ==========================================================
 // ATUALIZAR MÚSICA
@@ -749,6 +852,7 @@ function atualizarMusicaAtual() {
 
     const musica =
         obterMusicaAtual();
+
 
     if (!musica) {
 
@@ -764,11 +868,13 @@ function atualizarMusicaAtual() {
         return;
     }
 
+
     musicTitle.textContent =
         musica.titulo;
 
     musicArtist.textContent =
         musica.canal;
+
 
     if (
         estadoSala.tocando
@@ -784,6 +890,7 @@ function atualizarMusicaAtual() {
     }
 }
 
+
 // ==========================================================
 // ATUALIZAR FILA
 // ==========================================================
@@ -792,11 +899,13 @@ function atualizarFila() {
 
     queueList.innerHTML = "";
 
+
     if (
         estadoSala.fila.length === 0
     ) {
 
         queueList.innerHTML = `
+
             <div class="empty-message">
 
                 <span class="empty-icon">
@@ -817,6 +926,7 @@ function atualizarFila() {
         return;
     }
 
+
     estadoSala.fila.forEach(
         function (musica, index) {
 
@@ -825,19 +935,24 @@ function atualizarFila() {
                     "div"
                 );
 
+
             item.className =
                 "queue-item";
+
 
             if (
                 index ===
                 estadoSala.indiceAtual
             ) {
+
                 item.classList.add(
                     "current"
                 );
             }
 
+
             item.innerHTML = `
+
                 <img
                     src="${escaparAtributo(
                         musica.imagem
@@ -876,26 +991,32 @@ function atualizarFila() {
                 </button>
             `;
 
+
             const botaoTocar =
                 item.querySelector(
                     ".queue-play-button"
                 );
+
 
             botaoTocar.addEventListener(
                 "click",
                 function () {
 
                     enviarControle({
+
                         tipo: "play-index",
+
                         index: index
                     });
                 }
             );
 
+
             const botaoRemover =
                 item.querySelector(
                     ".queue-remove-button"
                 );
+
 
             botaoRemover.addEventListener(
                 "click",
@@ -905,6 +1026,7 @@ function atualizarFila() {
                 }
             );
 
+
             queueList.appendChild(
                 item
             );
@@ -912,29 +1034,47 @@ function atualizarFila() {
     );
 }
 
+
 // ==========================================================
 // APLICAR ESTADO NO YOUTUBE
 // ==========================================================
+//
+// sincronizarPosicao = true
+//     Sincroniza também o tempo da música.
+//
+// sincronizarPosicao = false
+//     Apenas atualiza play/pause sem alterar
+//     a posição atual.
+//
+// Isso é importante para não reiniciar a música
+// quando a fila recebe uma nova música.
+// ==========================================================
 
-function tentarAplicarEstado() {
+function tentarAplicarEstado(
+    sincronizarPosicao = true
+) {
 
     if (!playerPronto) {
         return;
     }
 
+
     const musica =
         obterMusicaAtual();
+
 
     if (!musica) {
         return;
     }
 
+
     try {
 
-        aplicandoEstadoServidor =
-            true;
+        aplicandoEstadoServidor = true;
+
 
         let videoAtual = "";
+
 
         try {
 
@@ -947,6 +1087,7 @@ function tentarAplicarEstado() {
 
             videoAtual = "";
         }
+
 
         // ==================================================
         // VÍDEO DIFERENTE
@@ -962,8 +1103,10 @@ function tentarAplicarEstado() {
             ) {
 
                 player.loadVideoById({
+
                     videoId:
                         musica.videoId,
+
                     startSeconds:
                         estadoSala.posicao || 0
                 });
@@ -971,22 +1114,24 @@ function tentarAplicarEstado() {
             } else {
 
                 player.cueVideoById({
+
                     videoId:
                         musica.videoId,
+
                     startSeconds:
                         estadoSala.posicao || 0
                 });
             }
 
-        }
 
         // ==================================================
         // MESMO VÍDEO
         // ==================================================
 
-        else {
+        } else {
 
             let tempoLocal = 0;
+
 
             try {
 
@@ -998,24 +1143,44 @@ function tentarAplicarEstado() {
                 tempoLocal = 0;
             }
 
+
             const tempoServidor =
                 estadoSala.posicao || 0;
 
-            const diferenca =
-                Math.abs(
-                    tempoLocal -
-                    tempoServidor
-                );
+
+            // ==================================================
+            // SINCRONIZAÇÃO DE POSIÇÃO
+            //
+            // Só acontece quando realmente precisamos
+            // sincronizar com o servidor.
+            // ==================================================
 
             if (
-                diferenca > 2
+                sincronizarPosicao
             ) {
 
-                player.seekTo(
-                    tempoServidor,
-                    true
-                );
+                const diferenca =
+                    Math.abs(
+                        tempoLocal -
+                        tempoServidor
+                    );
+
+
+                if (
+                    diferenca > 2
+                ) {
+
+                    player.seekTo(
+                        tempoServidor,
+                        true
+                    );
+                }
             }
+
+
+            // ==================================================
+            // PLAY / PAUSE
+            // ==================================================
 
             if (
                 estadoSala.tocando
@@ -1029,6 +1194,7 @@ function tentarAplicarEstado() {
             }
         }
 
+
     } catch (erro) {
 
         console.error(
@@ -1036,6 +1202,7 @@ function tentarAplicarEstado() {
             erro
         );
     }
+
 
     setTimeout(
         function () {
@@ -1047,6 +1214,7 @@ function tentarAplicarEstado() {
         1200
     );
 }
+
 
 // ==========================================================
 // ATIVAR ÁUDIO
@@ -1060,11 +1228,25 @@ enableAudioButton.addEventListener(
             return;
         }
 
+
         aplicandoEstadoServidor =
             true;
 
+
         player.unMute();
-        player.playVideo();
+
+
+        if (
+            estadoSala.tocando
+        ) {
+
+            player.playVideo();
+
+        } else {
+
+            player.pauseVideo();
+        }
+
 
         setTimeout(
             function () {
@@ -1076,10 +1258,12 @@ enableAudioButton.addEventListener(
             1200
         );
 
+
         enableAudioButton.hidden =
             true;
     }
 );
+
 
 // ==========================================================
 // PLAY / PAUSE
@@ -1102,6 +1286,7 @@ playPauseButton.addEventListener(
     }
 );
 
+
 // ==========================================================
 // PRÓXIMA
 // ==========================================================
@@ -1113,6 +1298,7 @@ nextButton.addEventListener(
         proxima();
     }
 );
+
 
 // ==========================================================
 // ANTERIOR
@@ -1126,6 +1312,7 @@ previousButton.addEventListener(
     }
 );
 
+
 // ==========================================================
 // PESQUISA
 // ==========================================================
@@ -1137,6 +1324,7 @@ searchButton.addEventListener(
         pesquisarMusicas();
     }
 );
+
 
 searchInput.addEventListener(
     "keydown",
@@ -1151,6 +1339,7 @@ searchInput.addEventListener(
     }
 );
 
+
 // ==========================================================
 // TECLADO
 // ==========================================================
@@ -1163,8 +1352,10 @@ document.addEventListener(
             document.activeElement ===
             searchInput
         ) {
+
             return;
         }
+
 
         if (
             event.key === "ArrowRight"
@@ -1172,6 +1363,7 @@ document.addEventListener(
 
             proxima();
         }
+
 
         if (
             event.key === "ArrowLeft"
@@ -1181,6 +1373,7 @@ document.addEventListener(
         }
     }
 );
+
 
 // ==========================================================
 // SEGURANÇA HTML
@@ -1192,36 +1385,45 @@ function escaparHTML(texto) {
         texto === null ||
         texto === undefined
     ) {
+
         return "";
     }
 
+
     return String(texto)
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
         );
 }
 
+
 function escaparAtributo(texto) {
 
     return escaparHTML(texto);
 }
+
 
 // ==========================================================
 // SALA PELA URL
@@ -1232,8 +1434,10 @@ const parametros =
         window.location.search
     );
 
+
 const salaInicial =
     parametros.get("room");
+
 
 if (salaInicial) {
 
@@ -1241,12 +1445,15 @@ if (salaInicial) {
         salaInicial.toUpperCase();
 }
 
+
 // ==========================================================
 // INICIALIZAÇÃO
 // ==========================================================
 
 atualizarFila();
+
 atualizarMusicaAtual();
+
 
 console.log(
     "★ ESTACAO-TI MUSIC NETWORK carregado ★"
