@@ -1,41 +1,36 @@
-// ========================================
+// ==========================================================
+// ESTACAO-TI MUSIC NETWORK
+// SCRIPT PRINCIPAL
+// ==========================================================
+
+// ==========================================================
 // SOCKET.IO
-// ========================================
+// ==========================================================
 
 let socket = null;
 
-
-// ========================================
+// ==========================================================
 // YOUTUBE
-// ========================================
+// ==========================================================
 
 let player = null;
-
 let playerPronto = false;
-
 let aplicandoEstadoServidor = false;
 
-
-// ========================================
+// ==========================================================
 // ESTADO DA SALA
-// ========================================
+// ==========================================================
 
 let estadoSala = {
-
     fila: [],
-
     indiceAtual: -1,
-
     tocando: false,
-
     posicao: 0
-
 };
 
-
-// ========================================
-// ELEMENTOS DA PÁGINA
-// ========================================
+// ==========================================================
+// ELEMENTOS
+// ==========================================================
 
 const searchInput =
     document.getElementById("search-input");
@@ -85,10 +80,9 @@ const playPauseButton =
 const nextButton =
     document.getElementById("next-button");
 
-
-// ========================================
+// ==========================================================
 // YOUTUBE API
-// ========================================
+// ==========================================================
 
 window.onYouTubeIframeAPIReady = function () {
 
@@ -96,27 +90,18 @@ window.onYouTubeIframeAPIReady = function () {
         "YouTube Player API carregada."
     );
 
-
     player = new YT.Player(
         "youtube-player",
         {
-
             height: "100%",
-
             width: "100%",
-
             videoId: "",
 
             playerVars: {
-
                 autoplay: 0,
-
                 controls: 1,
-
                 rel: 0,
-
                 modestbranding: 1
-
             },
 
             events: {
@@ -127,21 +112,14 @@ window.onYouTubeIframeAPIReady = function () {
                         "Player do YouTube pronto."
                     );
 
-
                     playerPronto = true;
 
-
                     tentarAplicarEstado();
-
                 },
-
 
                 onStateChange: function (event) {
-
                     tratarEstadoPlayer(event);
-
                 },
-
 
                 onError: function (event) {
 
@@ -149,73 +127,39 @@ window.onYouTubeIframeAPIReady = function () {
                         "Erro no player do YouTube:",
                         event.data
                     );
-
                 }
-
             }
-
         }
     );
-
 };
 
-
-// ========================================
-// ESTADO DO PLAYER DO YOUTUBE
-// ========================================
+// ==========================================================
+// ESTADO DO YOUTUBE
+// ==========================================================
 
 function tratarEstadoPlayer(event) {
 
-    // ------------------------------------
-    // Ignora eventos causados pelo servidor
-    // ------------------------------------
-
     if (aplicandoEstadoServidor) {
-
         return;
-
     }
-
-
-    // ------------------------------------
-    // PLAY
-    // ------------------------------------
 
     if (
         event.data ===
         YT.PlayerState.PLAYING
     ) {
-
         enviarControle({
-
             tipo: "play"
-
         });
-
     }
-
-
-    // ------------------------------------
-    // PAUSE
-    // ------------------------------------
 
     if (
         event.data ===
         YT.PlayerState.PAUSED
     ) {
-
         enviarControle({
-
             tipo: "pause"
-
         });
-
     }
-
-
-    // ------------------------------------
-    // FIM DA MÚSICA
-    // ------------------------------------
 
     if (
         event.data ===
@@ -225,45 +169,31 @@ function tratarEstadoPlayer(event) {
         const musicaAtual =
             obterMusicaAtual();
 
-
         if (!musicaAtual) {
-
             return;
-
         }
 
-
         enviarControle({
-
             tipo: "ended",
-
-            videoId:
-                musicaAtual.videoId
-
+            videoId: musicaAtual.videoId
         });
-
     }
-
 }
 
-
-// ========================================
+// ==========================================================
 // CRIAR SALA
-// ========================================
+// ==========================================================
 
 createRoomButton.addEventListener(
     "click",
     function () {
-
         conectarSocket();
-
     }
 );
 
-
-// ========================================
+// ==========================================================
 // ENTRAR EM SALA
-// ========================================
+// ==========================================================
 
 joinRoomButton.addEventListener(
     "click",
@@ -274,59 +204,33 @@ joinRoomButton.addEventListener(
                 .trim()
                 .toUpperCase();
 
-
         if (!codigo) {
-
             alert(
                 "Digite o código da sala."
             );
 
             return;
-
         }
 
-
         conectarSocket(codigo);
-
     }
 );
 
+// ==========================================================
+// SOCKET
+// ==========================================================
 
-// ========================================
-// CONECTAR SOCKET.IO
-// ========================================
-
-function conectarSocket(
-    codigoSala = null
-) {
-
-    // ------------------------------------
-    // Desconecta anterior
-    // ------------------------------------
+function conectarSocket(codigoSala = null) {
 
     if (socket) {
-
         socket.disconnect();
-
         socket = null;
-
     }
-
-
-    // ------------------------------------
-    // Cria conexão
-    // ------------------------------------
 
     socket = io();
 
-
     connectionStatus.textContent =
-        "🟡 Conectando...";
-
-
-    // ====================================
-    // CONECTOU
-    // ====================================
+        "🟡 CONECTANDO...";
 
     socket.on(
         "connect",
@@ -337,10 +241,8 @@ function conectarSocket(
                 socket.id
             );
 
-
             connectionStatus.textContent =
-                "🟢 Conectado";
-
+                "🟢 ONLINE";
 
             if (codigoSala) {
 
@@ -354,16 +256,9 @@ function conectarSocket(
                 socket.emit(
                     "criar-sala"
                 );
-
             }
-
         }
     );
-
-
-    // ====================================
-    // SALA CRIADA
-    // ====================================
 
     socket.on(
         "sala-criada",
@@ -372,14 +267,8 @@ function conectarSocket(
             entrarVisualmenteNaSala(
                 dados
             );
-
         }
     );
-
-
-    // ====================================
-    // ENTROU NA SALA
-    // ====================================
 
     socket.on(
         "entrou-sala",
@@ -388,14 +277,8 @@ function conectarSocket(
             entrarVisualmenteNaSala(
                 dados
             );
-
         }
     );
-
-
-    // ====================================
-    // ERRO DA SALA
-    // ====================================
 
     socket.on(
         "erro-sala",
@@ -403,17 +286,10 @@ function conectarSocket(
 
             alert(mensagem);
 
-
             connectionStatus.textContent =
-                "🔴 Erro ao entrar";
-
+                "🔴 ERRO";
         }
     );
-
-
-    // ====================================
-    // FILA ATUALIZADA
-    // ====================================
 
     socket.on(
         "fila-atualizada",
@@ -422,24 +298,14 @@ function conectarSocket(
             estadoSala.fila =
                 dados.fila || [];
 
-
             estadoSala.indiceAtual =
                 dados.indiceAtual ?? -1;
 
-
             atualizarFila();
-
             atualizarMusicaAtual();
-
             tentarAplicarEstado();
-
         }
     );
-
-
-    // ====================================
-    // ESTADO DO PLAYER
-    // ====================================
 
     socket.on(
         "estado-player",
@@ -448,28 +314,17 @@ function conectarSocket(
             estadoSala.tocando =
                 dados.tocando;
 
-
             estadoSala.posicao =
                 dados.posicao || 0;
-
 
             estadoSala.indiceAtual =
                 dados.indiceAtual ?? -1;
 
-
             atualizarFila();
-
             atualizarMusicaAtual();
-
             tentarAplicarEstado();
-
         }
     );
-
-
-    // ====================================
-    // USUÁRIOS ATUALIZADOS
-    // ====================================
 
     socket.on(
         "usuarios-atualizados",
@@ -477,88 +332,49 @@ function conectarSocket(
 
             roomUsers.textContent =
                 dados.quantidade || 0;
-
         }
     );
-
-
-    // ====================================
-    // DESCONECTADO
-    // ====================================
 
     socket.on(
         "disconnect",
         function () {
 
             connectionStatus.textContent =
-                "🔴 Desconectado";
-
+                "🔴 OFFLINE";
         }
     );
-
 }
 
-
-// ========================================
+// ==========================================================
 // ENTRAR VISUALMENTE NA SALA
-// ========================================
+// ==========================================================
 
-function entrarVisualmenteNaSala(
-    dados
-) {
+function entrarVisualmenteNaSala(dados) {
 
     console.log(
         "Entrando na sala:",
         dados.codigo
     );
 
-
-    // ------------------------------------
-    // Código
-    // ------------------------------------
-
     roomCode.textContent =
         dados.codigo;
-
 
     roomInput.value =
         dados.codigo;
 
-
-    // ------------------------------------
-    // Estado inicial
-    // ------------------------------------
-
     estadoSala =
         dados.estado || {
-
             fila: [],
-
             indiceAtual: -1,
-
             tocando: false,
-
             posicao: 0
-
         };
 
-
-    // ------------------------------------
-    // Atualiza tela
-    // ------------------------------------
-
     atualizarFila();
-
     atualizarMusicaAtual();
-
-
-    // ------------------------------------
-    // Coloca sala na URL
-    // ------------------------------------
 
     const novaUrl =
         `${window.location.pathname}?room=${dados.codigo}`;
-
 
     window.history.replaceState(
         {},
@@ -566,19 +382,12 @@ function entrarVisualmenteNaSala(
         novaUrl
     );
 
-
-    // ------------------------------------
-    // Tenta sincronizar
-    // ------------------------------------
-
     tentarAplicarEstado();
-
 }
 
-
-// ========================================
-// VERIFICA SOCKET
-// ========================================
+// ==========================================================
+// SOCKET CONECTADO?
+// ==========================================================
 
 function socketConectado() {
 
@@ -586,64 +395,58 @@ function socketConectado() {
         socket &&
         socket.connected
     );
-
 }
 
+// ==========================================================
+// CONTROLE
+// ==========================================================
 
-// ========================================
-// ENVIAR CONTROLE
-// ========================================
-
-function enviarControle(
-    dados
-) {
+function enviarControle(dados) {
 
     if (!socketConectado()) {
-
         return;
-
     }
-
 
     socket.emit(
         "controle-sala",
         dados
     );
-
 }
 
-
-// ========================================
-// PESQUISAR MÚSICAS
-// ========================================
+// ==========================================================
+// PESQUISA
+// ==========================================================
 
 async function pesquisarMusicas() {
 
     const consulta =
         searchInput.value.trim();
 
-
     if (!consulta) {
-
         alert(
             "Digite o nome de uma música ou artista."
         );
 
         return;
-
     }
 
-
     searchResults.innerHTML = `
+        <div class="empty-message">
 
-        <p class="empty-message">
+            <span class="empty-icon">
+                🔎
+            </span>
 
-            🔎 Pesquisando...
+            <strong>
+                PESQUISANDO...
+            </strong>
 
-        </p>
+            <p>
+                procurando na rede musical
+            </p>
 
+        </div>
     `;
-
 
     try {
 
@@ -654,28 +457,22 @@ async function pesquisarMusicas() {
                 )}`
             );
 
-
         const dados =
             await resposta.json();
-
 
         if (
             !resposta.ok ||
             !dados.sucesso
         ) {
-
             throw new Error(
                 dados.erro ||
                 "Erro ao pesquisar."
             );
-
         }
-
 
         mostrarResultados(
             dados.resultados
         );
-
 
     } catch (erro) {
 
@@ -684,35 +481,35 @@ async function pesquisarMusicas() {
             erro
         );
 
-
         searchResults.innerHTML = `
+            <div class="empty-message">
 
-            <p class="empty-message">
+                <span class="empty-icon">
+                    ⚠
+                </span>
 
-                ❌
-                ${escaparHTML(
-                    erro.message
-                )}
+                <strong>
+                    ERRO NA PESQUISA
+                </strong>
 
-            </p>
+                <p>
+                    ${escaparHTML(
+                        erro.message
+                    )}
+                </p>
 
+            </div>
         `;
-
     }
-
 }
 
-
-// ========================================
+// ==========================================================
 // MOSTRAR RESULTADOS
-// ========================================
+// ==========================================================
 
-function mostrarResultados(
-    resultados
-) {
+function mostrarResultados(resultados) {
 
     searchResults.innerHTML = "";
-
 
     if (
         !resultados ||
@@ -720,19 +517,25 @@ function mostrarResultados(
     ) {
 
         searchResults.innerHTML = `
+            <div class="empty-message">
 
-            <p class="empty-message">
+                <span class="empty-icon">
+                    ♪
+                </span>
 
-                Nenhum resultado encontrado.
+                <strong>
+                    NENHUM RESULTADO
+                </strong>
 
-            </p>
+                <p>
+                    tente outra pesquisa
+                </p>
 
+            </div>
         `;
 
         return;
-
     }
-
 
     resultados.forEach(
         function (musica) {
@@ -742,13 +545,10 @@ function mostrarResultados(
                     "div"
                 );
 
-
             card.className =
                 "result-card";
 
-
             card.innerHTML = `
-
                 <img
                     src="${escaparAtributo(
                         musica.imagem
@@ -759,19 +559,15 @@ function mostrarResultados(
                 <div class="result-info">
 
                     <h3>
-
                         ${escaparHTML(
                             musica.titulo
                         )}
-
                     </h3>
 
                     <p>
-
                         ${escaparHTML(
                             musica.canal
                         )}
-
                     </p>
 
                 </div>
@@ -781,29 +577,22 @@ function mostrarResultados(
                     <button
                         class="play-button"
                     >
-                        ▶ Tocar
+                        ▶ TOCAR
                     </button>
 
                     <button
                         class="queue-button"
                     >
-                        ＋ Fila
+                        ＋ FILA
                     </button>
 
                 </div>
-
             `;
-
-
-            // --------------------------------
-            // BOTÃO TOCAR
-            // --------------------------------
 
             const botaoTocar =
                 card.querySelector(
                     ".play-button"
                 );
-
 
             botaoTocar.addEventListener(
                 "click",
@@ -812,20 +601,13 @@ function mostrarResultados(
                     tocarMusica(
                         musica
                     );
-
                 }
             );
-
-
-            // --------------------------------
-            // BOTÃO FILA
-            // --------------------------------
 
             const botaoFila =
                 card.querySelector(
                     ".queue-button"
                 );
-
 
             botaoFila.addEventListener(
                 "click",
@@ -834,265 +616,206 @@ function mostrarResultados(
                     adicionarNaFila(
                         musica
                     );
-
                 }
             );
-
 
             searchResults.appendChild(
                 card
             );
-
         }
     );
-
 }
 
+// ==========================================================
+// TOCAR AGORA
+// ==========================================================
 
-// ========================================
-// TOCAR MÚSICA AGORA
-// ========================================
-
-function tocarMusica(
-    musica
-) {
+function tocarMusica(musica) {
 
     if (!socketConectado()) {
-
         alert(
             "Entre em uma sala primeiro."
         );
 
         return;
-
     }
 
-
     enviarControle({
-
         tipo: "play-now",
-
         musica: musica
-
     });
-
 }
 
-
-// ========================================
+// ==========================================================
 // ADICIONAR À FILA
-// ========================================
+// ==========================================================
 
-function adicionarNaFila(
-    musica
-) {
+function adicionarNaFila(musica) {
 
     if (!socketConectado()) {
-
         alert(
             "Entre em uma sala primeiro."
         );
 
         return;
-
     }
 
-
     enviarControle({
-
         tipo: "adicionar",
-
         musica: musica
-
     });
-
 }
 
-
-// ========================================
+// ==========================================================
 // TOCAR
-// ========================================
+// ==========================================================
 
 function tocarAtual() {
 
     enviarControle({
-
         tipo: "play"
-
     });
-
 }
 
-
-// ========================================
+// ==========================================================
 // PAUSAR
-// ========================================
+// ==========================================================
 
 function pausarAtual() {
 
     enviarControle({
-
         tipo: "pause"
-
     });
-
 }
 
-
-// ========================================
+// ==========================================================
 // PRÓXIMA
-// ========================================
+// ==========================================================
 
 function proxima() {
 
     enviarControle({
-
         tipo: "next"
-
     });
-
 }
 
-
-// ========================================
+// ==========================================================
 // ANTERIOR
-// ========================================
+// ==========================================================
 
 function anterior() {
 
     enviarControle({
-
         tipo: "previous"
-
     });
-
 }
 
-
-// ========================================
+// ==========================================================
 // REMOVER
-// ========================================
+// ==========================================================
 
-function remover(
-    index
-) {
+function remover(index) {
 
     enviarControle({
-
         tipo: "remove",
-
         index: index
-
     });
-
 }
 
-
-// ========================================
-// OBTER MÚSICA ATUAL
-// ========================================
+// ==========================================================
+// MÚSICA ATUAL
+// ==========================================================
 
 function obterMusicaAtual() {
 
     if (
         estadoSala.indiceAtual < 0
     ) {
-
         return null;
-
     }
-
 
     return (
         estadoSala.fila[
             estadoSala.indiceAtual
         ] || null
     );
-
 }
 
-
-// ========================================
-// ATUALIZAR MÚSICA ATUAL
-// ========================================
+// ==========================================================
+// ATUALIZAR MÚSICA
+// ==========================================================
 
 function atualizarMusicaAtual() {
 
     const musica =
         obterMusicaAtual();
 
-
     if (!musica) {
 
         musicTitle.textContent =
             "Nenhuma música tocando";
 
-
         musicArtist.textContent =
-            "Adicione uma música à fila";
+            "Entre em uma sala para começar";
 
-
-        playPauseButton.textContent =
-            "▶ Tocar";
-
+        playPauseButton.innerHTML =
+            `▶ <small>TOCAR</small>`;
 
         return;
-
     }
-
 
     musicTitle.textContent =
         musica.titulo;
 
-
     musicArtist.textContent =
         musica.canal;
-
 
     if (
         estadoSala.tocando
     ) {
 
-        playPauseButton.textContent =
-            "⏸ Pausar";
+        playPauseButton.innerHTML =
+            `⏸ <small>PAUSAR</small>`;
 
     } else {
 
-        playPauseButton.textContent =
-            "▶ Tocar";
-
+        playPauseButton.innerHTML =
+            `▶ <small>TOCAR</small>`;
     }
-
 }
 
-
-// ========================================
+// ==========================================================
 // ATUALIZAR FILA
-// ========================================
+// ==========================================================
 
 function atualizarFila() {
 
     queueList.innerHTML = "";
-
 
     if (
         estadoSala.fila.length === 0
     ) {
 
         queueList.innerHTML = `
+            <div class="empty-message">
 
-            <p class="empty-message">
+                <span class="empty-icon">
+                    ♬
+                </span>
 
-                A fila está vazia.
+                <strong>
+                    A FILA ESTÁ VAZIA
+                </strong>
 
-            </p>
+                <p>
+                    Adicione músicas para criar sua playlist
+                </p>
 
+            </div>
         `;
 
         return;
-
     }
-
 
     estadoSala.fila.forEach(
         function (musica, index) {
@@ -1102,25 +825,19 @@ function atualizarFila() {
                     "div"
                 );
 
-
             item.className =
                 "queue-item";
-
 
             if (
                 index ===
                 estadoSala.indiceAtual
             ) {
-
                 item.classList.add(
                     "current"
                 );
-
             }
 
-
             item.innerHTML = `
-
                 <img
                     src="${escaparAtributo(
                         musica.imagem
@@ -1131,130 +848,93 @@ function atualizarFila() {
                 <div class="queue-info">
 
                     <strong>
-
                         ${escaparHTML(
                             musica.titulo
                         )}
-
                     </strong>
 
                     <span>
-
                         ${escaparHTML(
                             musica.canal
                         )}
-
                     </span>
 
                 </div>
 
                 <button
                     class="queue-play-button"
+                    title="Tocar"
                 >
                     ▶
                 </button>
 
                 <button
                     class="queue-remove-button"
+                    title="Remover"
                 >
-                    🗑️
+                    ×
                 </button>
-
             `;
-
-
-            // --------------------------------
-            // TOCAR DA FILA
-            // --------------------------------
 
             const botaoTocar =
                 item.querySelector(
                     ".queue-play-button"
                 );
 
-
             botaoTocar.addEventListener(
                 "click",
                 function () {
 
                     enviarControle({
-
                         tipo: "play-index",
-
                         index: index
-
                     });
-
                 }
             );
-
-
-            // --------------------------------
-            // REMOVER
-            // --------------------------------
 
             const botaoRemover =
                 item.querySelector(
                     ".queue-remove-button"
                 );
 
-
             botaoRemover.addEventListener(
                 "click",
                 function () {
 
                     remover(index);
-
                 }
             );
-
 
             queueList.appendChild(
                 item
             );
-
         }
     );
-
 }
 
-
-// ========================================
+// ==========================================================
 // APLICAR ESTADO NO YOUTUBE
-// ========================================
+// ==========================================================
 
 function tentarAplicarEstado() {
 
     if (!playerPronto) {
-
         return;
-
     }
-
 
     const musica =
         obterMusicaAtual();
 
-
     if (!musica) {
-
         return;
-
     }
-
 
     try {
 
         aplicandoEstadoServidor =
             true;
 
-
-        // --------------------------------
-        // VÍDEO ATUAL
-        // --------------------------------
-
         let videoAtual = "";
-
 
         try {
 
@@ -1266,13 +946,11 @@ function tentarAplicarEstado() {
         } catch (erro) {
 
             videoAtual = "";
-
         }
 
-
-        // --------------------------------
+        // ==================================================
         // VÍDEO DIFERENTE
-        // --------------------------------
+        // ==================================================
 
         if (
             videoAtual !==
@@ -1284,40 +962,31 @@ function tentarAplicarEstado() {
             ) {
 
                 player.loadVideoById({
-
                     videoId:
                         musica.videoId,
-
                     startSeconds:
                         estadoSala.posicao || 0
-
                 });
 
             } else {
 
                 player.cueVideoById({
-
                     videoId:
                         musica.videoId,
-
                     startSeconds:
                         estadoSala.posicao || 0
-
                 });
-
             }
 
         }
 
-
-        // --------------------------------
+        // ==================================================
         // MESMO VÍDEO
-        // --------------------------------
+        // ==================================================
 
         else {
 
             let tempoLocal = 0;
-
 
             try {
 
@@ -1327,24 +996,16 @@ function tentarAplicarEstado() {
             } catch (erro) {
 
                 tempoLocal = 0;
-
             }
-
 
             const tempoServidor =
                 estadoSala.posicao || 0;
-
 
             const diferenca =
                 Math.abs(
                     tempoLocal -
                     tempoServidor
                 );
-
-
-            // ----------------------------
-            // CORRIGE DIFERENÇA
-            // ----------------------------
 
             if (
                 diferenca > 2
@@ -1354,13 +1015,7 @@ function tentarAplicarEstado() {
                     tempoServidor,
                     true
                 );
-
             }
-
-
-            // ----------------------------
-            // PLAY
-            // ----------------------------
 
             if (
                 estadoSala.tocando
@@ -1368,21 +1023,11 @@ function tentarAplicarEstado() {
 
                 player.playVideo();
 
-            }
-
-
-            // ----------------------------
-            // PAUSE
-            // ----------------------------
-
-            else {
+            } else {
 
                 player.pauseVideo();
-
             }
-
         }
-
 
     } catch (erro) {
 
@@ -1390,13 +1035,7 @@ function tentarAplicarEstado() {
             "Erro ao sincronizar YouTube:",
             erro
         );
-
     }
-
-
-    // ------------------------------------
-    // Libera eventos depois de um tempo
-    // ------------------------------------
 
     setTimeout(
         function () {
@@ -1407,33 +1046,25 @@ function tentarAplicarEstado() {
         },
         1200
     );
-
 }
 
-
-// ========================================
+// ==========================================================
 // ATIVAR ÁUDIO
-// ========================================
+// ==========================================================
 
 enableAudioButton.addEventListener(
     "click",
     function () {
 
         if (!playerPronto) {
-
             return;
-
         }
-
 
         aplicandoEstadoServidor =
             true;
 
-
         player.unMute();
-
         player.playVideo();
-
 
         setTimeout(
             function () {
@@ -1445,17 +1076,14 @@ enableAudioButton.addEventListener(
             1200
         );
 
-
         enableAudioButton.hidden =
             true;
-
     }
 );
 
-
-// ========================================
-// BOTÃO PLAY / PAUSE
-// ========================================
+// ==========================================================
+// PLAY / PAUSE
+// ==========================================================
 
 playPauseButton.addEventListener(
     "click",
@@ -1470,54 +1098,45 @@ playPauseButton.addEventListener(
         } else {
 
             tocarAtual();
-
         }
-
     }
 );
 
-
-// ========================================
+// ==========================================================
 // PRÓXIMA
-// ========================================
+// ==========================================================
 
 nextButton.addEventListener(
     "click",
     function () {
 
         proxima();
-
     }
 );
 
-
-// ========================================
+// ==========================================================
 // ANTERIOR
-// ========================================
+// ==========================================================
 
 previousButton.addEventListener(
     "click",
     function () {
 
         anterior();
-
     }
 );
 
-
-// ========================================
+// ==========================================================
 // PESQUISA
-// ========================================
+// ==========================================================
 
 searchButton.addEventListener(
     "click",
     function () {
 
         pesquisarMusicas();
-
     }
 );
-
 
 searchInput.addEventListener(
     "keydown",
@@ -1528,16 +1147,13 @@ searchInput.addEventListener(
         ) {
 
             pesquisarMusicas();
-
         }
-
     }
 );
 
-
-// ========================================
+// ==========================================================
 // TECLADO
-// ========================================
+// ==========================================================
 
 document.addEventListener(
     "keydown",
@@ -1547,123 +1163,91 @@ document.addEventListener(
             document.activeElement ===
             searchInput
         ) {
-
             return;
-
         }
-
 
         if (
             event.key === "ArrowRight"
         ) {
 
             proxima();
-
         }
-
 
         if (
             event.key === "ArrowLeft"
         ) {
 
             anterior();
-
         }
-
     }
 );
 
+// ==========================================================
+// SEGURANÇA HTML
+// ==========================================================
 
-// ========================================
-// ESCAPAR HTML
-// ========================================
-
-function escaparHTML(
-    texto
-) {
+function escaparHTML(texto) {
 
     if (
         texto === null ||
         texto === undefined
     ) {
-
         return "";
-
     }
 
-
     return String(texto)
-
         .replace(
             /&/g,
             "&amp;"
         )
-
         .replace(
             /</g,
             "&lt;"
         )
-
         .replace(
             />/g,
             "&gt;"
         )
-
         .replace(
             /"/g,
             "&quot;"
         )
-
         .replace(
             /'/g,
             "&#039;"
         );
-
 }
 
+function escaparAtributo(texto) {
 
-function escaparAtributo(
-    texto
-) {
-
-    return escaparHTML(
-        texto
-    );
-
+    return escaparHTML(texto);
 }
 
-
-// ========================================
-// VERIFICA SALA NA URL
-// ========================================
+// ==========================================================
+// SALA PELA URL
+// ==========================================================
 
 const parametros =
     new URLSearchParams(
         window.location.search
     );
 
-
 const salaInicial =
     parametros.get("room");
-
 
 if (salaInicial) {
 
     roomInput.value =
         salaInicial.toUpperCase();
-
 }
 
-
-// ========================================
-// INICIALIZA
-// ========================================
+// ==========================================================
+// INICIALIZAÇÃO
+// ==========================================================
 
 atualizarFila();
-
 atualizarMusicaAtual();
 
-
 console.log(
-    "Meu Player carregado."
+    "★ ESTACAO-TI MUSIC NETWORK carregado ★"
 );
