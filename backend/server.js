@@ -6,31 +6,10 @@ const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
 
-
-// ========================================
-// CONFIGURAÇÕES
-// ========================================
-
 const PORT = process.env.PORT || 3000;
 
-
-// ========================================
-// EXPRESS
-// ========================================
-
 const app = express();
-
-
-// ========================================
-// SERVIDOR HTTP
-// ========================================
-
 const server = http.createServer(app);
-
-
-// ========================================
-// SOCKET.IO
-// ========================================
 
 const io = new Server(server, {
     cors: {
@@ -38,18 +17,8 @@ const io = new Server(server, {
     }
 });
 
-
-// ========================================
-// MIDDLEWARES
-// ========================================
-
 app.use(cors());
 app.use(express.json());
-
-
-// ========================================
-// ARQUIVOS DO SITE
-// ========================================
 
 app.use(
     express.static(
@@ -57,13 +26,7 @@ app.use(
     )
 );
 
-
-// ========================================
-// PÁGINA INICIAL
-// ========================================
-
 app.get("/", (req, res) => {
-
     res.sendFile(
         path.join(
             __dirname,
@@ -73,9 +36,9 @@ app.get("/", (req, res) => {
 });
 
 
-// ========================================
-// TESTE DA API
-// ========================================
+/* 
+   API TESTE
+ */
 
 app.get("/api/teste", (req, res) => {
 
@@ -83,56 +46,44 @@ app.get("/api/teste", (req, res) => {
         sucesso: true,
         mensagem: "A API está funcionando!"
     });
+
 });
 
 
-// ========================================
-// PESQUISA NO YOUTUBE
-// ========================================
+/* 
+   YOUTUBE SEARCH
+ */
 
 app.get("/api/search", async (req, res) => {
 
     try {
 
-        const query =
-            String(req.query.q || "").trim();
+        const query = String(
+            req.query.q || ""
+        ).trim();
 
-
-        // --------------------------------
-        // VERIFICA PESQUISA
-        // --------------------------------
 
         if (!query) {
 
             return res.status(400).json({
-
                 sucesso: false,
-
                 erro:
                     "Digite o nome de uma música ou artista."
             });
+
         }
 
-
-        // --------------------------------
-        // VERIFICA API KEY
-        // --------------------------------
 
         if (!process.env.YOUTUBE_API_KEY) {
 
             return res.status(500).json({
-
                 sucesso: false,
-
                 erro:
                     "A chave da YouTube API não foi configurada."
             });
+
         }
 
-
-        // --------------------------------
-        // MONTA URL
-        // --------------------------------
 
         const url = new URL(
             "https://www.googleapis.com/youtube/v3/search"
@@ -180,21 +131,11 @@ app.get("/api/search", async (req, res) => {
         );
 
 
-        // --------------------------------
-        // CONSULTA YOUTUBE
-        // --------------------------------
-
-        const response =
-            await fetch(url);
-
+        const response = await fetch(url);
 
         const data =
             await response.json();
 
-
-        // --------------------------------
-        // TRATA ERRO
-        // --------------------------------
 
         if (!response.ok) {
 
@@ -203,33 +144,28 @@ app.get("/api/search", async (req, res) => {
                 data
             );
 
+            return res.status(
+                response.status
+            ).json({
+                sucesso: false,
+                erro:
+                    data.error?.message ||
+                    "Erro ao pesquisar no YouTube."
+            });
 
-            return res
-                .status(response.status)
-                .json({
-
-                    sucesso: false,
-
-                    erro:
-                        data.error?.message ||
-                        "Erro ao pesquisar no YouTube."
-                });
         }
 
 
-        // --------------------------------
-        // ORGANIZA RESULTADOS
-        // --------------------------------
-
         const resultados =
             (data.items || [])
+
                 .filter(
-                    (item) =>
+                    item =>
                         item.id?.videoId
                 )
-                .map(
-                    (item) => ({
 
+                .map(
+                    item => ({
                         videoId:
                             item.id.videoId,
 
@@ -243,20 +179,16 @@ app.get("/api/search", async (req, res) => {
                             item.snippet.description,
 
                         imagem:
-                            item.snippet.thumbnails
-                                ?.medium?.url
+                            item.snippet
+                                .thumbnails
+                                ?.medium
+                                ?.url
                     })
                 );
 
 
-        // --------------------------------
-        // RETORNA
-        // --------------------------------
-
         res.json({
-
             sucesso: true,
-
             resultados
         });
 
@@ -268,40 +200,87 @@ app.get("/api/search", async (req, res) => {
             error
         );
 
-
         res.status(500).json({
-
             sucesso: false,
-
             erro:
                 "Erro interno do servidor."
         });
+
     }
+
 });
 
 
-// ========================================
-// SALAS
-// ========================================
-//
-// Cada sala possui:
-//
-// {
-//     fila: [],
-//     indiceAtual: -1,
-//     tocando: false,
-//     posicao: 0,
-//     atualizadoEm: timestamp
-// }
-//
-// ========================================
+/* 
+   SALAS
+ */
 
 const salas = new Map();
 
 
-// ========================================
-// GERAR CÓDIGO
-// ========================================
+/* 
+   AVATARES PERMITIDOS
+ */
+
+const AVATARES_PERMITIDOS = new Set([
+    "avatar01.png",
+    "avatar02.png",
+    "avatar03.png",
+    "avatar04.png",
+    "avatar05.png",
+    "avatar06.png",
+    "avatar07.png",
+    "avatar08.png",
+    "avatar09.png",
+    "avatar10.png"
+]);
+
+
+/* 
+   NORMALIZAR USUÁRIO
+ */
+
+function normalizarUsuario(usuario) {
+
+    const nomeRecebido =
+        String(
+            usuario?.nome || ""
+        )
+        .trim()
+        .replace(/\s+/g, " ")
+        .slice(0, 20);
+
+
+    const avatarRecebido =
+        String(
+            usuario?.avatar || ""
+        ).trim();
+
+
+    const nome =
+        nomeRecebido ||
+        "Visitante";
+
+
+    const avatar =
+        AVATARES_PERMITIDOS.has(
+            avatarRecebido
+        )
+            ? avatarRecebido
+            : "avatar01.png";
+
+
+    return {
+        nome,
+        avatar
+    };
+
+}
+
+
+/* 
+   CRIAR CÓDIGO DA SALA
+ */
 
 function gerarCodigoSala() {
 
@@ -328,11 +307,10 @@ function gerarCodigoSala() {
                     caracteres.length
                 );
 
-
             codigo +=
                 caracteres[indice];
-        }
 
+        }
 
     } while (
         salas.has(codigo)
@@ -340,12 +318,13 @@ function gerarCodigoSala() {
 
 
     return codigo;
+
 }
 
 
-// ========================================
-// CRIAR SALA
-// ========================================
+/* 
+   CRIAR SALA
+ */
 
 function criarSala() {
 
@@ -356,7 +335,6 @@ function criarSala() {
     salas.set(
         codigo,
         {
-
             fila: [],
 
             indiceAtual: -1,
@@ -372,18 +350,20 @@ function criarSala() {
 
 
     return codigo;
+
 }
 
 
-// ========================================
-// CALCULAR POSIÇÃO ATUAL
-// ========================================
+/* 
+   POSIÇÃO DO PLAYER
+ */
 
 function obterPosicaoAtual(sala) {
 
     if (!sala.tocando) {
 
         return sala.posicao;
+
     }
 
 
@@ -402,27 +382,24 @@ function obterPosicaoAtual(sala) {
         sala.posicao +
         segundos
     );
+
 }
 
-
-// ========================================
-// SALVAR POSIÇÃO ATUAL
-// ========================================
 
 function salvarPosicaoAtual(sala) {
 
     sala.posicao =
         obterPosicaoAtual(sala);
 
-
     sala.atualizadoEm =
         Date.now();
+
 }
 
 
-// ========================================
-// ENVIAR ESTADO DO PLAYER
-// ========================================
+/* 
+   ESTADO DO PLAYER
+ */
 
 function enviarEstadoPlayer(codigo) {
 
@@ -431,7 +408,9 @@ function enviarEstadoPlayer(codigo) {
 
 
     if (!sala) {
+
         return;
+
     }
 
 
@@ -442,7 +421,6 @@ function enviarEstadoPlayer(codigo) {
     io.to(codigo).emit(
         "estado-player",
         {
-
             tocando:
                 sala.tocando,
 
@@ -456,12 +434,13 @@ function enviarEstadoPlayer(codigo) {
                 sala.indiceAtual
         }
     );
+
 }
 
 
-// ========================================
-// ENVIAR FILA
-// ========================================
+/* 
+   FILA
+ */
 
 function enviarFila(codigo) {
 
@@ -470,14 +449,15 @@ function enviarFila(codigo) {
 
 
     if (!sala) {
+
         return;
+
     }
 
 
     io.to(codigo).emit(
         "fila-atualizada",
         {
-
             fila:
                 sala.fila,
 
@@ -485,999 +465,106 @@ function enviarFila(codigo) {
                 sala.indiceAtual
         }
     );
+
 }
 
 
-// ========================================
-// SOCKET.IO
-// ========================================
+/* 
+   LISTA DE USUÁRIOS
+ */
 
-io.on(
-    "connection",
-    (socket) => {
+function obterUsuariosDaSala(codigo) {
 
-        console.log(
-            "Usuário conectado:",
-            socket.id
+    const room =
+        io.sockets.adapter.rooms.get(
+            codigo
         );
 
 
-        // ====================================
-        // CRIAR SALA
-        // ====================================
+    if (!room) {
 
-        socket.on(
-            "criar-sala",
-            () => {
+        return [];
 
-                // ----------------------------
-                // Se já estava em uma sala
-                // ----------------------------
-
-                if (socket.sala) {
-
-                    const salaAnterior =
-                        socket.sala;
-
-
-                    socket.leave(
-                        salaAnterior
-                    );
-
-
-                    socket.sala =
-                        null;
-
-
-                    atualizarQuantidadeUsuarios(
-                        salaAnterior
-                    );
-
-
-                    removerSalaSeVazia(
-                        salaAnterior
-                    );
-                }
-
-
-                // ----------------------------
-                // Cria nova sala
-                // ----------------------------
-
-                const codigo =
-                    criarSala();
-
-
-                const sala =
-                    salas.get(codigo);
-
-
-                // ----------------------------
-                // Entra
-                // ----------------------------
-
-                socket.join(codigo);
-
-                socket.sala =
-                    codigo;
-
-
-                // ----------------------------
-                // Envia estado
-                // ----------------------------
-
-                socket.emit(
-                    "sala-criada",
-                    {
-
-                        codigo,
-
-                        estado:
-                            sala
-                    }
-                );
-
-
-                // ----------------------------
-                // Atualiza usuários
-                // ----------------------------
-
-                atualizarQuantidadeUsuarios(
-                    codigo
-                );
-
-
-                console.log(
-                    `Sala criada: ${codigo}`
-                );
-            }
-        );
-
-
-        // ====================================
-        // ENTRAR EM SALA
-        // ====================================
-
-        socket.on(
-            "entrar-sala",
-            (codigoRecebido) => {
-
-                const codigo =
-                    String(
-                        codigoRecebido || ""
-                    )
-                        .trim()
-                        .toUpperCase();
-
-
-                // ----------------------------
-                // Verifica código
-                // ----------------------------
-
-                if (!codigo) {
-
-                    socket.emit(
-                        "erro-sala",
-                        "Informe o código da sala."
-                    );
-
-                    return;
-                }
-
-
-                // ----------------------------
-                // Verifica existência
-                // ----------------------------
-
-                if (!salas.has(codigo)) {
-
-                    socket.emit(
-                        "erro-sala",
-                        "Essa sala não existe."
-                    );
-
-                    return;
-                }
-
-
-                // ----------------------------
-                // Sai da sala anterior
-                // ----------------------------
-
-                if (
-                    socket.sala &&
-                    socket.sala !== codigo
-                ) {
-
-                    const salaAnterior =
-                        socket.sala;
-
-
-                    socket.leave(
-                        salaAnterior
-                    );
-
-
-                    socket.sala =
-                        null;
-
-
-                    atualizarQuantidadeUsuarios(
-                        salaAnterior
-                    );
-
-
-                    removerSalaSeVazia(
-                        salaAnterior
-                    );
-                }
-
-
-                // ----------------------------
-                // Entra
-                // ----------------------------
-
-                socket.join(codigo);
-
-                socket.sala =
-                    codigo;
-
-
-                const sala =
-                    salas.get(codigo);
-
-
-                // ----------------------------
-                // Envia estado
-                // ----------------------------
-
-                socket.emit(
-                    "entrou-sala",
-                    {
-
-                        codigo,
-
-                        estado: {
-
-                            fila:
-                                sala.fila,
-
-                            indiceAtual:
-                                sala.indiceAtual,
-
-                            tocando:
-                                sala.tocando,
-
-                            posicao:
-                                obterPosicaoAtual(
-                                    sala
-                                )
-                        }
-                    }
-                );
-
-
-                // ----------------------------
-                // Atualiza usuários
-                // ----------------------------
-
-                atualizarQuantidadeUsuarios(
-                    codigo
-                );
-
-
-                console.log(
-                    `Usuário ${socket.id} entrou na sala ${codigo}`
-                );
-            }
-        );
-
-
-        // ====================================
-        // CONTROLES DA SALA
-        // ====================================
-
-        socket.on(
-            "controle-sala",
-            (dados) => {
-
-                const codigo =
-                    socket.sala;
-
-
-                if (!codigo) {
-                    return;
-                }
-
-
-                const sala =
-                    salas.get(codigo);
-
-
-                if (!sala) {
-                    return;
-                }
-
-
-                const tipo =
-                    dados?.tipo;
-
-
-                // =================================
-                // ADICIONAR
-                // =================================
-
-                if (
-                    tipo === "adicionar"
-                ) {
-
-                    const musica =
-                        limparMusica(
-                            dados.musica
-                        );
-
-
-                    if (!musica) {
-                        return;
-                    }
-
-
-                    const existe =
-                        sala.fila.some(
-                            (item) =>
-                                item.videoId ===
-                                musica.videoId
-                        );
-
-
-                    if (existe) {
-                        return;
-                    }
-
-
-                    // =================================
-                    // IMPORTANTE
-                    //
-                    // Antes de alterar a fila,
-                    // salva a posição REAL da música.
-                    //
-                    // Isso evita que a posição antiga
-                    // seja usada depois.
-                    // =================================
-
-                    if (sala.tocando) {
-
-                        salvarPosicaoAtual(
-                            sala
-                        );
-                    }
-
-
-                    sala.fila.push(
-                        musica
-                    );
-
-
-                    // ---------------------------------
-                    // Primeira música
-                    // ---------------------------------
-
-                    if (
-                        sala.indiceAtual === -1
-                    ) {
-
-                        sala.indiceAtual =
-                            0;
-
-                        sala.posicao =
-                            0;
-
-                        sala.tocando =
-                            false;
-
-                        sala.atualizadoEm =
-                            Date.now();
-                    }
-
-
-                    // =================================
-                    // IMPORTANTE
-                    //
-                    // NÃO enviamos estado-player aqui.
-                    //
-                    // Adicionar música não deve
-                    // mexer no player atual.
-                    // =================================
-
-                    enviarFila(
-                        codigo
-                    );
-
-
-                    console.log(
-                        `Música adicionada na sala ${codigo}: ${musica.titulo}`
-                    );
-
-
-                    return;
-                }
-
-
-                // =================================
-                // TOCAR AGORA
-                // =================================
-
-                if (
-                    tipo === "play-now"
-                ) {
-
-                    const musica =
-                        limparMusica(
-                            dados.musica
-                        );
-
-
-                    if (!musica) {
-                        return;
-                    }
-
-
-                    const indiceExistente =
-                        sala.fila.findIndex(
-                            (item) =>
-                                item.videoId ===
-                                musica.videoId
-                        );
-
-
-                    if (
-                        indiceExistente === -1
-                    ) {
-
-                        sala.fila.push(
-                            musica
-                        );
-
-
-                        sala.indiceAtual =
-                            sala.fila.length - 1;
-
-                    } else {
-
-                        sala.indiceAtual =
-                            indiceExistente;
-                    }
-
-
-                    sala.posicao =
-                        0;
-
-
-                    sala.tocando =
-                        true;
-
-
-                    sala.atualizadoEm =
-                        Date.now();
-
-
-                    enviarFila(
-                        codigo
-                    );
-
-
-                    enviarEstadoPlayer(
-                        codigo
-                    );
-
-
-                    console.log(
-                        `Tocando agora na sala ${codigo}: ${musica.titulo}`
-                    );
-
-
-                    return;
-                }
-
-
-                // =================================
-                // PLAY
-                // =================================
-
-                if (
-                    tipo === "play"
-                ) {
-
-                    if (
-                        sala.indiceAtual === -1
-                    ) {
-
-                        return;
-                    }
-
-
-                    sala.posicao =
-                        obterPosicaoAtual(
-                            sala
-                        );
-
-
-                    sala.tocando =
-                        true;
-
-
-                    sala.atualizadoEm =
-                        Date.now();
-
-
-                    enviarEstadoPlayer(
-                        codigo
-                    );
-
-
-                    return;
-                }
-
-
-                // =================================
-                // PAUSE
-                // =================================
-
-                if (
-                    tipo === "pause"
-                ) {
-
-                    salvarPosicaoAtual(
-                        sala
-                    );
-
-
-                    sala.tocando =
-                        false;
-
-
-                    enviarEstadoPlayer(
-                        codigo
-                    );
-
-
-                    return;
-                }
-
-
-                // =================================
-                // NEXT
-                // =================================
-
-                if (
-                    tipo === "next"
-                ) {
-
-                    if (
-                        sala.indiceAtual <
-                        sala.fila.length - 1
-                    ) {
-
-                        sala.indiceAtual++;
-
-                        sala.posicao =
-                            0;
-
-                        sala.tocando =
-                            true;
-
-                        sala.atualizadoEm =
-                            Date.now();
-
-
-                        enviarFila(
-                            codigo
-                        );
-
-
-                        enviarEstadoPlayer(
-                            codigo
-                        );
-                    }
-
-
-                    return;
-                }
-
-
-                // =================================
-                // PREVIOUS
-                // =================================
-
-                if (
-                    tipo === "previous"
-                ) {
-
-                    if (
-                        sala.indiceAtual > 0
-                    ) {
-
-                        sala.indiceAtual--;
-
-                        sala.posicao =
-                            0;
-
-                        sala.tocando =
-                            true;
-
-                        sala.atualizadoEm =
-                            Date.now();
-
-
-                        enviarFila(
-                            codigo
-                        );
-
-
-                        enviarEstadoPlayer(
-                            codigo
-                        );
-                    }
-
-
-                    return;
-                }
-
-
-                // =================================
-                // PLAY POR ÍNDICE
-                // =================================
-
-                if (
-                    tipo === "play-index"
-                ) {
-
-                    const index =
-                        Number(
-                            dados.index
-                        );
-
-
-                    if (
-                        !Number.isInteger(index)
-                    ) {
-
-                        return;
-                    }
-
-
-                    if (
-                        index < 0 ||
-                        index >= sala.fila.length
-                    ) {
-
-                        return;
-                    }
-
-
-                    sala.indiceAtual =
-                        index;
-
-
-                    sala.posicao =
-                        0;
-
-
-                    sala.tocando =
-                        true;
-
-
-                    sala.atualizadoEm =
-                        Date.now();
-
-
-                    enviarFila(
-                        codigo
-                    );
-
-
-                    enviarEstadoPlayer(
-                        codigo
-                    );
-
-
-                    return;
-                }
-
-
-                // =================================
-                // REMOVER
-                // =================================
-
-                if (
-                    tipo === "remove"
-                ) {
-
-                    const index =
-                        Number(
-                            dados.index
-                        );
-
-
-                    if (
-                        !Number.isInteger(index)
-                    ) {
-
-                        return;
-                    }
-
-
-                    if (
-                        index < 0 ||
-                        index >= sala.fila.length
-                    ) {
-
-                        return;
-                    }
-
-
-                    const removendoAtual =
-                        index ===
-                        sala.indiceAtual;
-
-
-                    // ---------------------------------
-                    // Se estiver removendo a atual,
-                    // salva primeiro a posição atual.
-                    // ---------------------------------
-
-                    if (
-                        removendoAtual &&
-                        sala.tocando
-                    ) {
-
-                        salvarPosicaoAtual(
-                            sala
-                        );
-                    }
-
-
-                    sala.fila.splice(
-                        index,
-                        1
-                    );
-
-
-                    // -----------------------------
-                    // FILA VAZIA
-                    // -----------------------------
-
-                    if (
-                        sala.fila.length === 0
-                    ) {
-
-                        sala.indiceAtual =
-                            -1;
-
-                        sala.tocando =
-                            false;
-
-                        sala.posicao =
-                            0;
-
-                        sala.atualizadoEm =
-                            Date.now();
-                    }
-
-
-                    // -----------------------------
-                    // Removeu antes da atual
-                    // -----------------------------
-
-                    else if (
-                        index <
-                        sala.indiceAtual
-                    ) {
-
-                        sala.indiceAtual--;
-                    }
-
-
-                    // -----------------------------
-                    // Removeu a atual
-                    // -----------------------------
-
-                    else if (
-                        removendoAtual
-                    ) {
-
-                        if (
-                            sala.indiceAtual >=
-                            sala.fila.length
-                        ) {
-
-                            sala.indiceAtual =
-                                sala.fila.length - 1;
-                        }
-
-
-                        sala.posicao =
-                            0;
-
-
-                        sala.tocando =
-                            true;
-
-
-                        sala.atualizadoEm =
-                            Date.now();
-                    }
-
-
-                    // -----------------------------
-                    // Corrige índice
-                    // -----------------------------
-
-                    if (
-                        sala.indiceAtual >=
-                        sala.fila.length
-                    ) {
-
-                        sala.indiceAtual =
-                            sala.fila.length - 1;
-                    }
-
-
-                    enviarFila(
-                        codigo
-                    );
-
-
-                    enviarEstadoPlayer(
-                        codigo
-                    );
-
-
-                    return;
-                }
-
-
-                // =================================
-                // MÚSICA TERMINOU
-                // =================================
-
-                if (
-                    tipo === "ended"
-                ) {
-
-                    const musicaAtual =
-                        sala.fila[
-                            sala.indiceAtual
-                        ];
-
-
-                    if (!musicaAtual) {
-                        return;
-                    }
-
-
-                    // --------------------------------
-                    // Evita evento de vídeo antigo
-                    // --------------------------------
-
-                    if (
-                        dados.videoId !==
-                        musicaAtual.videoId
-                    ) {
-
-                        return;
-                    }
-
-
-                    // --------------------------------
-                    // Próxima música
-                    // --------------------------------
-
-                    if (
-                        sala.indiceAtual <
-                        sala.fila.length - 1
-                    ) {
-
-                        sala.indiceAtual++;
-
-                        sala.posicao =
-                            0;
-
-                        sala.tocando =
-                            true;
-
-                        sala.atualizadoEm =
-                            Date.now();
-
-
-                        enviarFila(
-                            codigo
-                        );
-
-
-                        enviarEstadoPlayer(
-                            codigo
-                        );
-
-
-                        console.log(
-                            `Avançando música na sala ${codigo}`
-                        );
-
-
-                    // --------------------------------
-                    // Fim da fila
-                    // --------------------------------
-
-                    } else {
-
-                        sala.posicao =
-                            0;
-
-                        sala.tocando =
-                            false;
-
-                        sala.atualizadoEm =
-                            Date.now();
-
-
-                        enviarEstadoPlayer(
-                            codigo
-                        );
-
-
-                        console.log(
-                            `Fim da fila na sala ${codigo}`
-                        );
-                    }
-
-
-                    return;
-                }
-            }
-        );
-
-
-        // ====================================
-        // DESCONECTAR
-        // ====================================
-
-        socket.on(
-            "disconnect",
-            () => {
-
-                console.log(
-                    "Usuário desconectado:",
-                    socket.id
-                );
-
-
-                const codigo =
-                    socket.sala;
-
-
-                if (!codigo) {
-                    return;
-                }
-
-
-                atualizarQuantidadeUsuarios(
-                    codigo
-                );
-
-
-                removerSalaSeVazia(
-                    codigo
-                );
-            }
-        );
     }
-);
 
 
-// ========================================
-// QUANTIDADE DE USUÁRIOS
-// ========================================
+    const usuarios = [];
 
-function atualizarQuantidadeUsuarios(
-    codigo
-) {
 
-    const quantidade =
-        io.sockets.adapter
-            .rooms
-            .get(codigo)
-            ?.size || 0;
+    for (
+        const socketId of room
+    ) {
+
+        const socket =
+            io.sockets.sockets.get(
+                socketId
+            );
+
+
+        if (
+            socket &&
+            socket.usuario
+        ) {
+
+            usuarios.push({
+                id:
+                    socket.id,
+
+                nome:
+                    socket.usuario.nome,
+
+                avatar:
+                    socket.usuario.avatar
+            });
+
+        }
+
+    }
+
+
+    return usuarios;
+
+}
+
+
+function atualizarUsuarios(codigo) {
+
+    const usuarios =
+        obterUsuariosDaSala(
+            codigo
+        );
 
 
     io.to(codigo).emit(
         "usuarios-atualizados",
         {
+            quantidade:
+                usuarios.length,
 
-            quantidade
+            usuarios
         }
     );
+
 }
 
 
-// ========================================
-// REMOVER SALA VAZIA
-// ========================================
+/* 
+   SALA VAZIA
+ */
 
-function removerSalaSeVazia(
-    codigo
-) {
+function removerSalaSeVazia(codigo) {
 
     if (!codigo) {
+
         return;
+
     }
 
 
     const quantidade =
-        io.sockets.adapter
-            .rooms
-            .get(codigo)
-            ?.size || 0;
+        io.sockets.adapter.rooms.get(
+            codigo
+        )?.size || 0;
 
 
     if (
@@ -1485,32 +572,56 @@ function removerSalaSeVazia(
         salas.has(codigo)
     ) {
 
-        salas.delete(
-            codigo
-        );
-
+        salas.delete(codigo);
 
         console.log(
             `Sala ${codigo} removida.`
         );
+
     }
+
 }
 
 
-// ========================================
-// LIMPAR DADOS DA MÚSICA
-// ========================================
+/* 
+   LIMPAR MÚSICA
+ */
 
-function limparMusica(musica) {
+function limparMusica(
+    musica,
+    usuario
+) {
 
     if (!musica) {
+
         return null;
+
     }
 
 
     if (!musica.videoId) {
+
         return null;
+
     }
+
+
+    const autor =
+        usuario
+            ? {
+                nome:
+                    usuario.nome,
+
+                avatar:
+                    usuario.avatar
+            }
+            : {
+                nome:
+                    "Visitante",
+
+                avatar:
+                    "avatar01.png"
+            };
 
 
     return {
@@ -1538,35 +649,1074 @@ function limparMusica(musica) {
         imagem:
             String(
                 musica.imagem || ""
-            )
+            ),
+
+        adicionadoPor:
+            autor
+
     };
+
 }
 
 
-// ========================================
-// SINCRONIZAÇÃO PERIÓDICA
-// ========================================
-//
-// A cada 5 segundos o servidor manda
-// a posição atual para os usuários.
-//
-// Isso ajuda a corrigir pequenos atrasos.
-//
-// ========================================
+/* 
+   SOCKET.IO
+ */
+
+io.on(
+    "connection",
+    socket => {
+
+        console.log(
+            "Usuário conectado:",
+            socket.id
+        );
+
+
+        /* ==================================================
+           DEFINIR IDENTIDADE
+        ================================================== */
+
+        socket.on(
+            "definir-identidade",
+            usuarioRecebido => {
+
+                socket.usuario =
+                    normalizarUsuario(
+                        usuarioRecebido
+                    );
+
+
+                console.log(
+                    `Identidade definida: ${socket.usuario.nome}`
+                );
+
+
+                if (socket.sala) {
+
+                    atualizarUsuarios(
+                        socket.sala
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           CRIAR SALA
+        ================================================== */
+
+        socket.on(
+            "criar-sala",
+            usuarioRecebido => {
+
+                if (
+                    usuarioRecebido
+                ) {
+
+                    socket.usuario =
+                        normalizarUsuario(
+                            usuarioRecebido
+                        );
+
+                }
+
+
+                if (!socket.usuario) {
+
+                    socket.usuario =
+                        normalizarUsuario(
+                            null
+                        );
+
+                }
+
+
+                if (socket.sala) {
+
+                    const salaAnterior =
+                        socket.sala;
+
+
+                    socket.to(
+                        salaAnterior
+                    ).emit(
+                        "usuario-saiu",
+                        socket.usuario
+                    );
+
+
+                    socket.leave(
+                        salaAnterior
+                    );
+
+                    socket.sala =
+                        null;
+
+
+                    atualizarUsuarios(
+                        salaAnterior
+                    );
+
+
+                    removerSalaSeVazia(
+                        salaAnterior
+                    );
+
+                }
+
+
+                const codigo =
+                    criarSala();
+
+
+                const sala =
+                    salas.get(codigo);
+
+
+                socket.join(codigo);
+
+                socket.sala =
+                    codigo;
+
+
+                socket.emit(
+                    "sala-criada",
+                    {
+                        codigo,
+                        estado: sala
+                    }
+                );
+
+
+                atualizarUsuarios(
+                    codigo
+                );
+
+
+                console.log(
+                    `Sala criada: ${codigo} por ${socket.usuario.nome}`
+                );
+
+            }
+        );
+
+
+        /* ==================================================
+           ENTRAR NA SALA
+        ================================================== */
+
+        socket.on(
+            "entrar-sala",
+            dados => {
+
+                let codigo;
+
+                let usuarioRecebido;
+
+
+                if (
+                    typeof dados ===
+                    "string"
+                ) {
+
+                    codigo =
+                        String(
+                            dados
+                        )
+                        .trim()
+                        .toUpperCase();
+
+                } else {
+
+                    codigo =
+                        String(
+                            dados?.codigo ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase();
+
+
+                    usuarioRecebido =
+                        dados?.usuario;
+
+                }
+
+
+                if (
+                    usuarioRecebido
+                ) {
+
+                    socket.usuario =
+                        normalizarUsuario(
+                            usuarioRecebido
+                        );
+
+                }
+
+
+                if (!socket.usuario) {
+
+                    socket.usuario =
+                        normalizarUsuario(
+                            null
+                        );
+
+                }
+
+
+                if (!codigo) {
+
+                    socket.emit(
+                        "erro-sala",
+                        "Informe o código da sala."
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    !salas.has(codigo)
+                ) {
+
+                    socket.emit(
+                        "erro-sala",
+                        "Essa sala não existe."
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    socket.sala &&
+                    socket.sala !== codigo
+                ) {
+
+                    const salaAnterior =
+                        socket.sala;
+
+
+                    socket.to(
+                        salaAnterior
+                    ).emit(
+                        "usuario-saiu",
+                        socket.usuario
+                    );
+
+
+                    socket.leave(
+                        salaAnterior
+                    );
+
+                    socket.sala =
+                        null;
+
+
+                    atualizarUsuarios(
+                        salaAnterior
+                    );
+
+
+                    removerSalaSeVazia(
+                        salaAnterior
+                    );
+
+                }
+
+
+                socket.join(codigo);
+
+                socket.sala =
+                    codigo;
+
+
+                const sala =
+                    salas.get(codigo);
+
+
+                socket.emit(
+                    "entrou-sala",
+                    {
+                        codigo,
+
+                        estado: {
+                            fila:
+                                sala.fila,
+
+                            indiceAtual:
+                                sala.indiceAtual,
+
+                            tocando:
+                                sala.tocando,
+
+                            posicao:
+                                obterPosicaoAtual(
+                                    sala
+                                )
+                        }
+                    }
+                );
+
+
+                socket.to(
+                    codigo
+                ).emit(
+                    "usuario-entrou",
+                    socket.usuario
+                );
+
+
+                atualizarUsuarios(
+                    codigo
+                );
+
+
+                console.log(
+                    `Usuário ${socket.usuario.nome} entrou na sala ${codigo}`
+                );
+
+            }
+        );
+
+
+        /* ==================================================
+           CONTROLE DA SALA
+        ================================================== */
+
+        socket.on(
+            "controle-sala",
+            dados => {
+
+                const codigo =
+                    socket.sala;
+
+
+                if (!codigo) {
+
+                    return;
+
+                }
+
+
+                const sala =
+                    salas.get(codigo);
+
+
+                if (!sala) {
+
+                    return;
+
+                }
+
+
+                const tipo =
+                    dados?.tipo;
+
+
+                /* ==========================================
+                   ADICIONAR
+                ========================================== */
+
+                if (
+                    tipo === "adicionar"
+                ) {
+
+                    const musica =
+                        limparMusica(
+                            dados.musica,
+                            socket.usuario
+                        );
+
+
+                    if (!musica) {
+
+                        return;
+
+                    }
+
+
+                    const existe =
+                        sala.fila.some(
+                            item =>
+                                item.videoId ===
+                                musica.videoId
+                        );
+
+
+                    if (existe) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        sala.tocando
+                    ) {
+
+                        salvarPosicaoAtual(
+                            sala
+                        );
+
+                    }
+
+
+                    sala.fila.push(
+                        musica
+                    );
+
+
+                    if (
+                        sala.indiceAtual ===
+                        -1
+                    ) {
+
+                        sala.indiceAtual =
+                            0;
+
+                        sala.posicao =
+                            0;
+
+                        sala.tocando =
+                            false;
+
+                        sala.atualizadoEm =
+                            Date.now();
+
+                    }
+
+
+                    enviarFila(
+                        codigo
+                    );
+
+
+                    console.log(
+                        `Música adicionada por ${socket.usuario?.nome}: ${musica.titulo}`
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* ==========================================
+                   TOCAR AGORA
+                ========================================== */
+
+                if (
+                    tipo === "play-now"
+                ) {
+
+                    const musicaRecebida =
+                        dados.musica;
+
+
+                    if (
+                        !musicaRecebida
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const indiceExistente =
+                        sala.fila.findIndex(
+                            item =>
+                                item.videoId ===
+                                musicaRecebida.videoId
+                        );
+
+
+                    if (
+                        indiceExistente ===
+                        -1
+                    ) {
+
+                        const musica =
+                            limparMusica(
+                                musicaRecebida,
+                                socket.usuario
+                            );
+
+
+                        if (!musica) {
+
+                            return;
+
+                        }
+
+
+                        sala.fila.push(
+                            musica
+                        );
+
+
+                        sala.indiceAtual =
+                            sala.fila.length -
+                            1;
+
+                    } else {
+
+                        sala.indiceAtual =
+                            indiceExistente;
+
+                    }
+
+
+                    sala.posicao =
+                        0;
+
+                    sala.tocando =
+                        true;
+
+                    sala.atualizadoEm =
+                        Date.now();
+
+
+                    enviarFila(
+                        codigo
+                    );
+
+                    enviarEstadoPlayer(
+                        codigo
+                    );
+
+
+                    console.log(
+                        `Tocando agora na sala ${codigo}: ${sala.fila[sala.indiceAtual].titulo}`
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* ==========================================
+                   PLAY
+                ========================================== */
+
+                if (
+                    tipo === "play"
+                ) {
+
+                    if (
+                        sala.indiceAtual ===
+                        -1
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    sala.posicao =
+                        obterPosicaoAtual(
+                            sala
+                        );
+
+                    sala.tocando =
+                        true;
+
+                    sala.atualizadoEm =
+                        Date.now();
+
+
+                    enviarEstadoPlayer(
+                        codigo
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* ==========================================
+                   PAUSE
+                ========================================== */
+
+                if (
+                    tipo === "pause"
+                ) {
+
+                    salvarPosicaoAtual(
+                        sala
+                    );
+
+
+                    sala.tocando =
+                        false;
+
+
+                    enviarEstadoPlayer(
+                        codigo
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* ==========================================
+                   NEXT
+                ========================================== */
+
+                if (
+                    tipo === "next"
+                ) {
+
+                    if (
+                        sala.indiceAtual <
+                        sala.fila.length - 1
+                    ) {
+
+                        sala.indiceAtual++;
+
+                        sala.posicao =
+                            0;
+
+                        sala.tocando =
+                            true;
+
+                        sala.atualizadoEm =
+                            Date.now();
+
+
+                        enviarFila(
+                            codigo
+                        );
+
+                        enviarEstadoPlayer(
+                            codigo
+                        );
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                /* ==========================================
+                   PREVIOUS
+                ========================================== */
+
+                if (
+                    tipo === "previous"
+                ) {
+
+                    if (
+                        sala.indiceAtual >
+                        0
+                    ) {
+
+                        sala.indiceAtual--;
+
+                        sala.posicao =
+                            0;
+
+                        sala.tocando =
+                            true;
+
+                        sala.atualizadoEm =
+                            Date.now();
+
+
+                        enviarFila(
+                            codigo
+                        );
+
+                        enviarEstadoPlayer(
+                            codigo
+                        );
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                /* ==========================================
+                   PLAY INDEX
+                ========================================== */
+
+                if (
+                    tipo === "play-index"
+                ) {
+
+                    const index =
+                        Number(
+                            dados.index
+                        );
+
+
+                    if (
+                        !Number.isInteger(
+                            index
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        index < 0 ||
+                        index >=
+                        sala.fila.length
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    sala.indiceAtual =
+                        index;
+
+                    sala.posicao =
+                        0;
+
+                    sala.tocando =
+                        true;
+
+                    sala.atualizadoEm =
+                        Date.now();
+
+
+                    enviarFila(
+                        codigo
+                    );
+
+                    enviarEstadoPlayer(
+                        codigo
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* ==========================================
+                   REMOVE
+                ========================================== */
+
+                if (
+                    tipo === "remove"
+                ) {
+
+                    const index =
+                        Number(
+                            dados.index
+                        );
+
+
+                    if (
+                        !Number.isInteger(
+                            index
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        index < 0 ||
+                        index >=
+                        sala.fila.length
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const removendoAtual =
+                        index ===
+                        sala.indiceAtual;
+
+
+                    if (
+                        removendoAtual &&
+                        sala.tocando
+                    ) {
+
+                        salvarPosicaoAtual(
+                            sala
+                        );
+
+                    }
+
+
+                    sala.fila.splice(
+                        index,
+                        1
+                    );
+
+
+                    if (
+                        sala.fila.length ===
+                        0
+                    ) {
+
+                        sala.indiceAtual =
+                            -1;
+
+                        sala.tocando =
+                            false;
+
+                        sala.posicao =
+                            0;
+
+                        sala.atualizadoEm =
+                            Date.now();
+
+                    } else if (
+                        index <
+                        sala.indiceAtual
+                    ) {
+
+                        sala.indiceAtual--;
+
+                    } else if (
+                        removendoAtual
+                    ) {
+
+                        if (
+                            sala.indiceAtual >=
+                            sala.fila.length
+                        ) {
+
+                            sala.indiceAtual =
+                                sala.fila.length -
+                                1;
+
+                        }
+
+
+                        sala.posicao =
+                            0;
+
+                        sala.tocando =
+                            true;
+
+                        sala.atualizadoEm =
+                            Date.now();
+
+                    }
+
+
+                    if (
+                        sala.indiceAtual >=
+                        sala.fila.length
+                    ) {
+
+                        sala.indiceAtual =
+                            sala.fila.length -
+                            1;
+
+                    }
+
+
+                    enviarFila(
+                        codigo
+                    );
+
+                    enviarEstadoPlayer(
+                        codigo
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* ==========================================
+                   ENDED
+                ========================================== */
+
+                if (
+                    tipo === "ended"
+                ) {
+
+                    const musicaAtual =
+                        sala.fila[
+                            sala.indiceAtual
+                        ];
+
+
+                    if (!musicaAtual) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        dados.videoId !==
+                        musicaAtual.videoId
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        sala.indiceAtual <
+                        sala.fila.length - 1
+                    ) {
+
+                        sala.indiceAtual++;
+
+                        sala.posicao =
+                            0;
+
+                        sala.tocando =
+                            true;
+
+                        sala.atualizadoEm =
+                            Date.now();
+
+
+                        enviarFila(
+                            codigo
+                        );
+
+                        enviarEstadoPlayer(
+                            codigo
+                        );
+
+
+                        console.log(
+                            `Avançando música na sala ${codigo}`
+                        );
+
+                    } else {
+
+                        sala.posicao =
+                            0;
+
+                        sala.tocando =
+                            false;
+
+                        sala.atualizadoEm =
+                            Date.now();
+
+
+                        enviarEstadoPlayer(
+                            codigo
+                        );
+
+
+                        console.log(
+                            `Fim da fila na sala ${codigo}`
+                        );
+
+                    }
+
+
+                    return;
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           DESCONECTOU
+        ================================================== */
+
+        socket.on(
+            "disconnect",
+            () => {
+
+                console.log(
+                    "Usuário desconectado:",
+                    socket.id
+                );
+
+
+                const codigo =
+                    socket.sala;
+
+
+                if (!codigo) {
+
+                    return;
+
+                }
+
+
+                if (
+                    socket.usuario
+                ) {
+
+                    socket.to(
+                        codigo
+                    ).emit(
+                        "usuario-saiu",
+                        socket.usuario
+                    );
+
+                }
+
+
+                atualizarUsuarios(
+                    codigo
+                );
+
+
+                removerSalaSeVazia(
+                    codigo
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* 
+   SINCRONIZAÇÃO PERIÓDICA
+ */
 
 setInterval(
     () => {
 
         for (
-            const [codigo, sala]
-            of salas
+            const [
+                codigo,
+                sala
+            ] of salas
         ) {
 
             const quantidade =
-                io.sockets.adapter
-                    .rooms
-                    .get(codigo)
-                    ?.size || 0;
+                io.sockets.adapter.rooms.get(
+                    codigo
+                )?.size || 0;
 
 
             if (
@@ -1574,6 +1724,7 @@ setInterval(
             ) {
 
                 continue;
+
             }
 
 
@@ -1584,7 +1735,9 @@ setInterval(
                 enviarEstadoPlayer(
                     codigo
                 );
+
             }
+
         }
 
     },
@@ -1592,9 +1745,9 @@ setInterval(
 );
 
 
-// ========================================
-// INICIAR SERVIDOR
-// ========================================
+/* 
+   SERVIDOR
+ */
 
 server.listen(
     PORT,
@@ -1607,5 +1760,6 @@ server.listen(
         console.log(
             "Socket.IO ativo."
         );
+
     }
 );

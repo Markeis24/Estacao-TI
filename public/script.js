@@ -1,154 +1,595 @@
-// ==========================================================
-// ESTACAO-TI MUSIC NETWORK
-// SCRIPT PRINCIPAL
-// ==========================================================
+/* 
+   ESTACAO-TI MUSIC NETWORK
+   SCRIPT PRINCIPAL
+ */
 
 
-// ==========================================================
-// SOCKET.IO
-// ==========================================================
+/* 
+   SOCKET.IO
+ */
 
 let socket = null;
 
 
-// ==========================================================
-// YOUTUBE
-// ==========================================================
+/* 
+   YOUTUBE
+ */
 
 let player = null;
+
 let playerPronto = false;
+
 let aplicandoEstadoServidor = false;
 
 
-// ==========================================================
-// ESTADO DA SALA
-// ==========================================================
+/* 
+   IDENTIDADE
+ */
+
+let identidade = null;
+
+let avatarSelecionado = "avatar01.png";
+
+
+const AVATARES = [
+
+    "avatar01.png",
+    "avatar02.png",
+    "avatar03.png",
+    "avatar04.png",
+    "avatar05.png",
+    "avatar06.png",
+    "avatar07.png",
+    "avatar08.png",
+    "avatar09.png",
+    "avatar10.png"
+
+];
+
+
+/* 
+   ESTADO DA SALA
+ */
 
 let estadoSala = {
+
     fila: [],
+
     indiceAtual: -1,
+
     tocando: false,
+
     posicao: 0
+
 };
 
 
-// ==========================================================
-// ELEMENTOS
-// ==========================================================
+/* 
+   ELEMENTOS
+ */
+
+const identityOverlay =
+    document.getElementById(
+        "identity-overlay"
+    );
+
+
+const identityName =
+    document.getElementById(
+        "identity-name"
+    );
+
+
+const avatarSelection =
+    document.getElementById(
+        "avatar-selection"
+    );
+
+
+const identityConfirmButton =
+    document.getElementById(
+        "identity-confirm-button"
+    );
+
+
+const currentUserAvatar =
+    document.getElementById(
+        "current-user-avatar"
+    );
+
+
+const currentUserName =
+    document.getElementById(
+        "current-user-name"
+    );
+
 
 const searchInput =
-    document.getElementById("search-input");
+    document.getElementById(
+        "search-input"
+    );
+
 
 const searchButton =
-    document.getElementById("search-button");
+    document.getElementById(
+        "search-button"
+    );
+
 
 const searchResults =
-    document.getElementById("search-results");
+    document.getElementById(
+        "search-results"
+    );
+
 
 const queueList =
-    document.getElementById("queue-list");
+    document.getElementById(
+        "queue-list"
+    );
+
 
 const musicTitle =
-    document.getElementById("music-title");
+    document.getElementById(
+        "music-title"
+    );
+
 
 const musicArtist =
-    document.getElementById("music-artist");
+    document.getElementById(
+        "music-artist"
+    );
+
 
 const roomInput =
-    document.getElementById("room-input");
+    document.getElementById(
+        "room-input"
+    );
+
 
 const roomCode =
-    document.getElementById("room-code");
+    document.getElementById(
+        "room-code"
+    );
+
 
 const roomUsers =
-    document.getElementById("room-users");
+    document.getElementById(
+        "room-users"
+    );
+
+
+const roomUsersList =
+    document.getElementById(
+        "room-users-list"
+    );
+
+
+const roomActivity =
+    document.getElementById(
+        "room-activity"
+    );
+
 
 const connectionStatus =
-    document.getElementById("connection-status");
+    document.getElementById(
+        "connection-status"
+    );
+
 
 const createRoomButton =
-    document.getElementById("create-room-button");
+    document.getElementById(
+        "create-room-button"
+    );
+
 
 const joinRoomButton =
-    document.getElementById("join-room-button");
+    document.getElementById(
+        "join-room-button"
+    );
+
 
 const enableAudioButton =
-    document.getElementById("enable-audio-button");
+    document.getElementById(
+        "enable-audio-button"
+    );
+
 
 const previousButton =
-    document.getElementById("previous-button");
+    document.getElementById(
+        "previous-button"
+    );
+
 
 const playPauseButton =
-    document.getElementById("play-pause-button");
+    document.getElementById(
+        "play-pause-button"
+    );
+
 
 const nextButton =
-    document.getElementById("next-button");
-
-
-// ==========================================================
-// YOUTUBE API
-// ==========================================================
-
-window.onYouTubeIframeAPIReady = function () {
-
-    console.log(
-        "YouTube Player API carregada."
+    document.getElementById(
+        "next-button"
     );
 
-    player = new YT.Player(
-        "youtube-player",
-        {
-            height: "100%",
-            width: "100%",
-            videoId: "",
 
-            playerVars: {
-                autoplay: 0,
-                controls: 1,
-                rel: 0,
-                modestbranding: 1
-            },
+/* 
+   IDENTIDADE - AVATARES
+ */
 
-            events: {
+function montarAvatares() {
 
-                onReady: function () {
+    avatarSelection.innerHTML = "";
 
-                    console.log(
-                        "Player do YouTube pronto."
-                    );
 
-                    playerPronto = true;
+    AVATARES.forEach(
+        (avatar, index) => {
 
-                    tentarAplicarEstado();
-                },
+            const button =
+                document.createElement(
+                    "button"
+                );
 
-                onStateChange: function (event) {
 
-                    tratarEstadoPlayer(event);
-                },
+            button.type =
+                "button";
 
-                onError: function (event) {
 
-                    console.error(
-                        "Erro no player do YouTube:",
-                        event.data
-                    );
-                }
+            button.className =
+                "avatar-option";
+
+
+            if (
+                avatar ===
+                avatarSelecionado
+            ) {
+
+                button.classList.add(
+                    "selected"
+                );
+
             }
+
+
+            button.innerHTML = `
+
+                <img
+                    src="avatars/${escaparAtributo(avatar)}"
+                    alt="Avatar ${index + 1}"
+                >
+
+                <span>
+                    ${String(index + 1).padStart(2, "0")}
+                </span>
+
+            `;
+
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    avatarSelecionado =
+                        avatar;
+
+
+                    document
+                        .querySelectorAll(
+                            ".avatar-option"
+                        )
+                        .forEach(
+                            item => {
+
+                                item.classList.remove(
+                                    "selected"
+                                );
+
+                            }
+                        );
+
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+                }
+            );
+
+
+            avatarSelection.appendChild(
+                button
+            );
+
         }
     );
-};
+
+}
 
 
-// ==========================================================
-// ESTADO DO YOUTUBE
-// ==========================================================
+/* 
+   SALVAR IDENTIDADE
+ */
 
-function tratarEstadoPlayer(event) {
+function salvarIdentidade() {
 
-    if (aplicandoEstadoServidor) {
+    const nome =
+        identityName.value
+            .trim()
+            .replace(/\s+/g, " ")
+            .slice(0, 20);
+
+
+    if (!nome) {
+
+        identityName.focus();
+
+        identityName.classList.add(
+            "input-error"
+        );
+
+        setTimeout(
+            () => {
+
+                identityName.classList.remove(
+                    "input-error"
+                );
+
+            },
+            800
+        );
+
         return;
+
     }
+
+
+    identidade = {
+
+        nome,
+
+        avatar:
+            avatarSelecionado
+
+    };
+
+
+    sessionStorage.setItem(
+        "estacaoTI_identidade",
+        JSON.stringify(
+            identidade
+        )
+    );
+
+
+    atualizarIdentidadeVisual();
+
+
+    identityOverlay.classList.add(
+        "hidden"
+    );
+
+
+    console.log(
+        "Identidade:",
+        identidade
+    );
+
+}
+
+
+/* 
+   CARREGAR IDENTIDADE
+ */
+
+function carregarIdentidade() {
+
+    const salva =
+        sessionStorage.getItem(
+            "estacaoTI_identidade"
+        );
+
+
+    if (salva) {
+
+        try {
+
+            const dados =
+                JSON.parse(
+                    salva
+                );
+
+
+            if (
+                dados &&
+                dados.nome &&
+                dados.avatar &&
+                AVATARES.includes(
+                    dados.avatar
+                )
+            ) {
+
+                identidade = {
+
+                    nome:
+                        String(
+                            dados.nome
+                        )
+                        .trim()
+                        .slice(0, 20),
+
+                    avatar:
+                        dados.avatar
+
+                };
+
+
+                avatarSelecionado =
+                    identidade.avatar;
+
+
+                identityName.value =
+                    identidade.nome;
+
+
+                atualizarIdentidadeVisual();
+
+
+                identityOverlay.classList.add(
+                    "hidden"
+                );
+
+
+                return;
+
+            }
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar identidade:",
+                erro
+            );
+
+        }
+
+    }
+
+
+    identityOverlay.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* 
+   VISUAL DA IDENTIDADE
+ */
+
+function atualizarIdentidadeVisual() {
+
+    if (!identidade) {
+
+        return;
+
+    }
+
+
+    currentUserName.textContent =
+        identidade.nome;
+
+
+    currentUserAvatar.src =
+        `avatars/${identidade.avatar}`;
+
+
+    currentUserAvatar.alt =
+        identidade.nome;
+
+}
+
+
+/* 
+   YOUTUBE API
+ */
+
+window.onYouTubeIframeAPIReady =
+    function () {
+
+        console.log(
+            "YouTube Player API carregada."
+        );
+
+
+        player =
+            new YT.Player(
+                "youtube-player",
+                {
+
+                    height: "100%",
+
+                    width: "100%",
+
+                    videoId: "",
+
+                    playerVars: {
+
+                        autoplay: 0,
+
+                        controls: 1,
+
+                        rel: 0,
+
+                        modestbranding: 1
+
+                    },
+
+                    events: {
+
+                        onReady:
+                            function () {
+
+                                console.log(
+                                    "Player do YouTube pronto."
+                                );
+
+
+                                playerPronto =
+                                    true;
+
+
+                                tentarAplicarEstado();
+
+                            },
+
+
+                        onStateChange:
+                            function (
+                                event
+                            ) {
+
+                                tratarEstadoPlayer(
+                                    event
+                                );
+
+                            },
+
+
+                        onError:
+                            function (
+                                event
+                            ) {
+
+                                console.error(
+                                    "Erro no player do YouTube:",
+                                    event.data
+                                );
+
+                            }
+
+                    }
+
+                }
+            );
+
+    };
+
+
+/* 
+   ESTADO DO YOUTUBE
+ */
+
+function tratarEstadoPlayer(
+    event
+) {
+
+    if (
+        aplicandoEstadoServidor
+    ) {
+
+        return;
+
+    }
+
 
     if (
         event.data ===
@@ -156,9 +597,14 @@ function tratarEstadoPlayer(event) {
     ) {
 
         enviarControle({
-            tipo: "play"
+
+            tipo:
+                "play"
+
         });
+
     }
+
 
     if (
         event.data ===
@@ -166,9 +612,14 @@ function tratarEstadoPlayer(event) {
     ) {
 
         enviarControle({
-            tipo: "pause"
+
+            tipo:
+                "pause"
+
         });
+
     }
+
 
     if (
         event.data ===
@@ -178,34 +629,57 @@ function tratarEstadoPlayer(event) {
         const musicaAtual =
             obterMusicaAtual();
 
+
         if (!musicaAtual) {
+
             return;
+
         }
 
+
         enviarControle({
-            tipo: "ended",
-            videoId: musicaAtual.videoId
+
+            tipo:
+                "ended",
+
+            videoId:
+                musicaAtual.videoId
+
         });
+
     }
+
 }
 
 
-// ==========================================================
-// CRIAR SALA
-// ==========================================================
+/* 
+   CRIAR SALA
+ */
 
 createRoomButton.addEventListener(
     "click",
     function () {
 
+        if (!identidade) {
+
+            identityOverlay.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
         conectarSocket();
+
     }
 );
 
 
-// ==========================================================
-// ENTRAR EM SALA
-// ==========================================================
+/* 
+   ENTRAR EM SALA
+ */
 
 joinRoomButton.addEventListener(
     "click",
@@ -216,6 +690,7 @@ joinRoomButton.addEventListener(
                 .trim()
                 .toUpperCase();
 
+
         if (!codigo) {
 
             alert(
@@ -223,27 +698,48 @@ joinRoomButton.addEventListener(
             );
 
             return;
+
         }
 
-        conectarSocket(codigo);
+
+        if (!identidade) {
+
+            identityOverlay.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        conectarSocket(
+            codigo
+        );
+
     }
 );
 
 
-// ==========================================================
-// SOCKET
-// ==========================================================
+/* 
+   SOCKET
+ */
 
-function conectarSocket(codigoSala = null) {
+function conectarSocket(
+    codigoSala = null
+) {
 
     if (socket) {
 
         socket.disconnect();
 
         socket = null;
+
     }
 
+
     socket = io();
+
 
     connectionStatus.textContent =
         "🟡 CONECTANDO...";
@@ -258,26 +754,46 @@ function conectarSocket(codigoSala = null) {
                 socket.id
             );
 
+
             connectionStatus.textContent =
                 "🟢 ONLINE";
+
+
+            socket.emit(
+                "definir-identidade",
+                identidade
+            );
 
 
             if (codigoSala) {
 
                 socket.emit(
                     "entrar-sala",
-                    codigoSala
+                    {
+                        codigo:
+                            codigoSala,
+
+                        usuario:
+                            identidade
+                    }
                 );
 
             } else {
 
                 socket.emit(
-                    "criar-sala"
+                    "criar-sala",
+                    identidade
                 );
+
             }
+
         }
     );
 
+
+    /* ======================================================
+       SALA CRIADA
+    ====================================================== */
 
     socket.on(
         "sala-criada",
@@ -286,9 +802,20 @@ function conectarSocket(codigoSala = null) {
             entrarVisualmenteNaSala(
                 dados
             );
+
+
+            adicionarAtividade(
+                identidade,
+                "criou a sala"
+            );
+
         }
     );
 
+
+    /* ======================================================
+       ENTROU
+    ====================================================== */
 
     socket.on(
         "entrou-sala",
@@ -297,31 +824,34 @@ function conectarSocket(codigoSala = null) {
             entrarVisualmenteNaSala(
                 dados
             );
+
         }
     );
 
+
+    /* ======================================================
+       ERRO
+    ====================================================== */
 
     socket.on(
         "erro-sala",
         function (mensagem) {
 
-            alert(mensagem);
+            alert(
+                mensagem
+            );
+
 
             connectionStatus.textContent =
                 "🔴 ERRO";
+
         }
     );
 
 
-    // ======================================================
-    // ATUALIZAÇÃO DA FILA
-    //
-    // IMPORTANTE:
-    // Atualizar a fila NÃO sincroniza o player.
-    //
-    // Isso impede que adicionar uma música faça
-    // a música atual reiniciar ou voltar de posição.
-    // ======================================================
+    /* ======================================================
+       FILA
+    ====================================================== */
 
     socket.on(
         "fila-atualizada",
@@ -330,21 +860,32 @@ function conectarSocket(codigoSala = null) {
             estadoSala.fila =
                 dados.fila || [];
 
+
             estadoSala.indiceAtual =
                 dados.indiceAtual ?? -1;
 
+
             atualizarFila();
+
 
             atualizarMusicaAtual();
 
-            // NÃO chamar tentarAplicarEstado() aqui.
+            /*
+             * IMPORTANTE:
+             *
+             * NÃO sincronizar o player aqui.
+             *
+             * Adicionar música não deve
+             * reiniciar a música atual.
+             */
+
         }
     );
 
 
-    // ======================================================
-    // ESTADO DO PLAYER
-    // ======================================================
+    /* ======================================================
+       ESTADO PLAYER
+    ====================================================== */
 
     socket.on(
         "estado-player",
@@ -353,20 +894,30 @@ function conectarSocket(codigoSala = null) {
             estadoSala.tocando =
                 dados.tocando;
 
+
             estadoSala.posicao =
                 dados.posicao || 0;
+
 
             estadoSala.indiceAtual =
                 dados.indiceAtual ?? -1;
 
+
             atualizarFila();
+
 
             atualizarMusicaAtual();
 
+
             tentarAplicarEstado();
+
         }
     );
 
+
+    /* ======================================================
+       USUÁRIOS
+    ====================================================== */
 
     socket.on(
         "usuarios-atualizados",
@@ -374,9 +925,53 @@ function conectarSocket(codigoSala = null) {
 
             roomUsers.textContent =
                 dados.quantidade || 0;
+
+
+            atualizarUsuarios(
+                dados.usuarios || []
+            );
+
         }
     );
 
+
+    /* ======================================================
+       USUÁRIO ENTROU
+    ====================================================== */
+
+    socket.on(
+        "usuario-entrou",
+        function (usuario) {
+
+            adicionarAtividade(
+                usuario,
+                "entrou na sala"
+            );
+
+        }
+    );
+
+
+    /* ======================================================
+       USUÁRIO SAIU
+    ====================================================== */
+
+    socket.on(
+        "usuario-saiu",
+        function (usuario) {
+
+            adicionarAtividade(
+                usuario,
+                "saiu da sala"
+            );
+
+        }
+    );
+
+
+    /* ======================================================
+       DISCONNECT
+    ====================================================== */
 
     socket.on(
         "disconnect",
@@ -384,24 +979,30 @@ function conectarSocket(codigoSala = null) {
 
             connectionStatus.textContent =
                 "🔴 OFFLINE";
+
         }
     );
+
 }
 
 
-// ==========================================================
-// ENTRAR VISUALMENTE NA SALA
-// ==========================================================
+/* 
+   ENTRAR VISUALMENTE NA SALA
+ */
 
-function entrarVisualmenteNaSala(dados) {
+function entrarVisualmenteNaSala(
+    dados
+) {
 
     console.log(
         "Entrando na sala:",
         dados.codigo
     );
 
+
     roomCode.textContent =
         dados.codigo;
+
 
     roomInput.value =
         dados.codigo;
@@ -411,15 +1012,29 @@ function entrarVisualmenteNaSala(dados) {
         dados.estado || {
 
             fila: [],
+
             indiceAtual: -1,
+
             tocando: false,
+
             posicao: 0
+
         };
 
 
     atualizarFila();
 
+
     atualizarMusicaAtual();
+
+
+    roomActivity.innerHTML = "";
+
+
+    adicionarAtividade(
+        identidade,
+        "está na sala"
+    );
 
 
     const novaUrl =
@@ -434,42 +1049,226 @@ function entrarVisualmenteNaSala(dados) {
 
 
     tentarAplicarEstado();
+
 }
 
 
-// ==========================================================
-// SOCKET CONECTADO?
-// ==========================================================
+/* 
+   USUÁRIOS
+ */
+
+function atualizarUsuarios(
+    usuarios
+) {
+
+    roomUsersList.innerHTML = "";
+
+
+    if (
+        usuarios.length === 0
+    ) {
+
+        roomUsersList.innerHTML = `
+
+            <div class="community-empty">
+                ninguém na sala
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    usuarios.forEach(
+        usuario => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "room-user";
+
+
+            const souEu =
+                identidade &&
+                usuario.nome ===
+                identidade.nome &&
+                usuario.avatar ===
+                identidade.avatar;
+
+
+            if (souEu) {
+
+                item.classList.add(
+                    "me"
+                );
+
+            }
+
+
+            item.innerHTML = `
+
+                <img
+                    src="avatars/${escaparAtributo(usuario.avatar)}"
+                    alt="${escaparAtributo(usuario.nome)}"
+                >
+
+                <div class="room-user-info">
+
+                    <strong>
+                        ${escaparHTML(usuario.nome)}
+                    </strong>
+
+                    <span>
+                        ${souEu ? "VOCÊ" : "ONLINE"}
+                    </span>
+
+                </div>
+
+                <span class="user-online-dot">
+                    ●
+                </span>
+
+            `;
+
+
+            roomUsersList.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* 
+   ATIVIDADE DA SALA
+ */
+
+function adicionarAtividade(
+    usuario,
+    texto
+) {
+
+    if (!usuario) {
+
+        return;
+
+    }
+
+
+    const empty =
+        roomActivity.querySelector(
+            ".community-empty"
+        );
+
+
+    if (empty) {
+
+        empty.remove();
+
+    }
+
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+
+    item.className =
+        "activity-item";
+
+
+    item.innerHTML = `
+
+        <img
+            src="avatars/${escaparAtributo(usuario.avatar)}"
+            alt="${escaparAtributo(usuario.nome)}"
+        >
+
+        <div>
+
+            <strong>
+                ${escaparHTML(usuario.nome)}
+            </strong>
+
+            <span>
+                ${escaparHTML(texto)}
+            </span>
+
+        </div>
+
+    `;
+
+
+    roomActivity.prepend(
+        item
+    );
+
+
+    while (
+        roomActivity.children.length >
+        8
+    ) {
+
+        roomActivity.lastElementChild.remove();
+
+    }
+
+}
+
+
+/* 
+   SOCKET CONECTADO?
+ */
 
 function socketConectado() {
 
     return (
+
         socket &&
         socket.connected
+
     );
+
 }
 
 
-// ==========================================================
-// CONTROLE
-// ==========================================================
+/* 
+   CONTROLE
+ */
 
-function enviarControle(dados) {
+function enviarControle(
+    dados
+) {
 
-    if (!socketConectado()) {
+    if (
+        !socketConectado()
+    ) {
+
         return;
+
     }
+
 
     socket.emit(
         "controle-sala",
         dados
     );
+
 }
 
 
-// ==========================================================
-// PESQUISA
-// ==========================================================
+/* 
+   PESQUISA
+ */
 
 async function pesquisarMusicas() {
 
@@ -484,6 +1283,7 @@ async function pesquisarMusicas() {
         );
 
         return;
+
     }
 
 
@@ -504,6 +1304,7 @@ async function pesquisarMusicas() {
             </p>
 
         </div>
+
     `;
 
 
@@ -530,6 +1331,7 @@ async function pesquisarMusicas() {
                 dados.erro ||
                 "Erro ao pesquisar."
             );
+
         }
 
 
@@ -565,16 +1367,21 @@ async function pesquisarMusicas() {
                 </p>
 
             </div>
+
         `;
+
     }
+
 }
 
 
-// ==========================================================
-// MOSTRAR RESULTADOS
-// ==========================================================
+/* 
+   RESULTADOS
+ */
 
-function mostrarResultados(resultados) {
+function mostrarResultados(
+    resultados
+) {
 
     searchResults.innerHTML = "";
 
@@ -601,14 +1408,16 @@ function mostrarResultados(resultados) {
                 </p>
 
             </div>
+
         `;
 
         return;
+
     }
 
 
     resultados.forEach(
-        function (musica) {
+        musica => {
 
             const card =
                 document.createElement(
@@ -660,6 +1469,7 @@ function mostrarResultados(resultados) {
                     </button>
 
                 </div>
+
             `;
 
 
@@ -676,6 +1486,7 @@ function mostrarResultados(resultados) {
                     tocarMusica(
                         musica
                     );
+
                 }
             );
 
@@ -693,6 +1504,7 @@ function mostrarResultados(resultados) {
                     adicionarNaFila(
                         musica
                     );
+
                 }
             );
 
@@ -700,139 +1512,179 @@ function mostrarResultados(resultados) {
             searchResults.appendChild(
                 card
             );
+
         }
     );
+
 }
 
 
-// ==========================================================
-// TOCAR AGORA
-// ==========================================================
+/* 
+   TOCAR AGORA
+ */
 
-function tocarMusica(musica) {
+function tocarMusica(
+    musica
+) {
 
-    if (!socketConectado()) {
+    if (
+        !socketConectado()
+    ) {
 
         alert(
             "Entre em uma sala primeiro."
         );
 
         return;
+
     }
 
 
     enviarControle({
 
-        tipo: "play-now",
+        tipo:
+            "play-now",
 
-        musica: musica
+        musica:
+            musica
+
     });
+
 }
 
 
-// ==========================================================
-// ADICIONAR À FILA
-// ==========================================================
+/* 
+   ADICIONAR À FILA
+ */
 
-function adicionarNaFila(musica) {
+function adicionarNaFila(
+    musica
+) {
 
-    if (!socketConectado()) {
+    if (
+        !socketConectado()
+    ) {
 
         alert(
             "Entre em uma sala primeiro."
         );
 
         return;
+
     }
 
 
     enviarControle({
 
-        tipo: "adicionar",
+        tipo:
+            "adicionar",
 
-        musica: musica
+        musica:
+            musica
+
     });
+
 }
 
 
-// ==========================================================
-// TOCAR
-// ==========================================================
+/* 
+   TOCAR
+ */
 
 function tocarAtual() {
 
     enviarControle({
 
-        tipo: "play"
+        tipo:
+            "play"
+
     });
+
 }
 
 
-// ==========================================================
-// PAUSAR
-// ==========================================================
+/* 
+   PAUSAR
+ */
 
 function pausarAtual() {
 
     enviarControle({
 
-        tipo: "pause"
+        tipo:
+            "pause"
+
     });
+
 }
 
 
-// ==========================================================
-// PRÓXIMA
-// ==========================================================
+/* 
+   PRÓXIMA
+ */
 
 function proxima() {
 
     enviarControle({
 
-        tipo: "next"
+        tipo:
+            "next"
+
     });
+
 }
 
 
-// ==========================================================
-// ANTERIOR
-// ==========================================================
+/* 
+   ANTERIOR
+ */
 
 function anterior() {
 
     enviarControle({
 
-        tipo: "previous"
+        tipo:
+            "previous"
+
     });
+
 }
 
 
-// ==========================================================
-// REMOVER
-// ==========================================================
+/* 
+   REMOVER
+ */
 
-function remover(index) {
+function remover(
+    index
+) {
 
     enviarControle({
 
-        tipo: "remove",
+        tipo:
+            "remove",
 
-        index: index
+        index:
+            index
+
     });
+
 }
 
 
-// ==========================================================
-// MÚSICA ATUAL
-// ==========================================================
+/* 
+   MÚSICA ATUAL
+ */
 
 function obterMusicaAtual() {
 
     if (
-        estadoSala.indiceAtual < 0
+        estadoSala.indiceAtual <
+        0
     ) {
 
         return null;
+
     }
 
 
@@ -841,12 +1693,13 @@ function obterMusicaAtual() {
             estadoSala.indiceAtual
         ] || null
     );
+
 }
 
 
-// ==========================================================
-// ATUALIZAR MÚSICA
-// ==========================================================
+/* 
+   ATUALIZAR MÚSICA
+ */
 
 function atualizarMusicaAtual() {
 
@@ -859,18 +1712,23 @@ function atualizarMusicaAtual() {
         musicTitle.textContent =
             "Nenhuma música tocando";
 
+
         musicArtist.textContent =
             "Entre em uma sala para começar";
+
 
         playPauseButton.innerHTML =
             `▶ <small>TOCAR</small>`;
 
+
         return;
+
     }
 
 
     musicTitle.textContent =
         musica.titulo;
+
 
     musicArtist.textContent =
         musica.canal;
@@ -887,13 +1745,15 @@ function atualizarMusicaAtual() {
 
         playPauseButton.innerHTML =
             `▶ <small>TOCAR</small>`;
+
     }
+
 }
 
 
-// ==========================================================
-// ATUALIZAR FILA
-// ==========================================================
+/* 
+   ATUALIZAR FILA
+ */
 
 function atualizarFila() {
 
@@ -901,7 +1761,8 @@ function atualizarFila() {
 
 
     if (
-        estadoSala.fila.length === 0
+        estadoSala.fila.length ===
+        0
     ) {
 
         queueList.innerHTML = `
@@ -921,14 +1782,16 @@ function atualizarFila() {
                 </p>
 
             </div>
+
         `;
 
         return;
+
     }
 
 
     estadoSala.fila.forEach(
-        function (musica, index) {
+        (musica, index) => {
 
             const item =
                 document.createElement(
@@ -948,12 +1811,26 @@ function atualizarFila() {
                 item.classList.add(
                     "current"
                 );
+
             }
+
+
+            const autor =
+                musica.adicionadoPor || {
+
+                    nome:
+                        "Visitante",
+
+                    avatar:
+                        "avatar01.png"
+
+                };
 
 
             item.innerHTML = `
 
                 <img
+                    class="queue-thumbnail"
                     src="${escaparAtributo(
                         musica.imagem
                     )}"
@@ -974,7 +1851,31 @@ function atualizarFila() {
                         )}
                     </span>
 
+
+                    <div class="queue-author">
+
+                        <img
+                            src="avatars/${escaparAtributo(
+                                autor.avatar
+                            )}"
+                            alt="${escaparAtributo(
+                                autor.nome
+                            )}"
+                        >
+
+                        <span>
+                            adicionada por
+                            <strong>
+                                ${escaparHTML(
+                                    autor.nome
+                                )}
+                            </strong>
+                        </span>
+
+                    </div>
+
                 </div>
+
 
                 <button
                     class="queue-play-button"
@@ -983,12 +1884,14 @@ function atualizarFila() {
                     ▶
                 </button>
 
+
                 <button
                     class="queue-remove-button"
                     title="Remover"
                 >
                     ×
                 </button>
+
             `;
 
 
@@ -1004,10 +1907,14 @@ function atualizarFila() {
 
                     enviarControle({
 
-                        tipo: "play-index",
+                        tipo:
+                            "play-index",
 
-                        index: index
+                        index:
+                            index
+
                     });
+
                 }
             );
 
@@ -1022,7 +1929,10 @@ function atualizarFila() {
                 "click",
                 function () {
 
-                    remover(index);
+                    remover(
+                        index
+                    );
+
                 }
             );
 
@@ -1030,32 +1940,25 @@ function atualizarFila() {
             queueList.appendChild(
                 item
             );
+
         }
     );
+
 }
 
 
-// ==========================================================
-// APLICAR ESTADO NO YOUTUBE
-// ==========================================================
-//
-// sincronizarPosicao = true
-//     Sincroniza também o tempo da música.
-//
-// sincronizarPosicao = false
-//     Apenas atualiza play/pause sem alterar
-//     a posição atual.
-//
-// Isso é importante para não reiniciar a música
-// quando a fila recebe uma nova música.
-// ==========================================================
+/* 
+   APLICAR ESTADO NO YOUTUBE
+ */
 
 function tentarAplicarEstado(
     sincronizarPosicao = true
 ) {
 
     if (!playerPronto) {
+
         return;
+
     }
 
 
@@ -1064,13 +1967,16 @@ function tentarAplicarEstado(
 
 
     if (!musica) {
+
         return;
+
     }
 
 
     try {
 
-        aplicandoEstadoServidor = true;
+        aplicandoEstadoServidor =
+            true;
 
 
         let videoAtual = "";
@@ -1086,12 +1992,13 @@ function tentarAplicarEstado(
         } catch (erro) {
 
             videoAtual = "";
+
         }
 
 
-        // ==================================================
-        // VÍDEO DIFERENTE
-        // ==================================================
+        /* ==============================================
+           VÍDEO DIFERENTE
+        ============================================== */
 
         if (
             videoAtual !==
@@ -1109,6 +2016,7 @@ function tentarAplicarEstado(
 
                     startSeconds:
                         estadoSala.posicao || 0
+
                 });
 
             } else {
@@ -1120,15 +2028,14 @@ function tentarAplicarEstado(
 
                     startSeconds:
                         estadoSala.posicao || 0
+
                 });
+
             }
 
 
-        // ==================================================
-        // MESMO VÍDEO
-        // ==================================================
-
         } else {
+
 
             let tempoLocal = 0;
 
@@ -1141,19 +2048,13 @@ function tentarAplicarEstado(
             } catch (erro) {
 
                 tempoLocal = 0;
+
             }
 
 
             const tempoServidor =
                 estadoSala.posicao || 0;
 
-
-            // ==================================================
-            // SINCRONIZAÇÃO DE POSIÇÃO
-            //
-            // Só acontece quando realmente precisamos
-            // sincronizar com o servidor.
-            // ==================================================
 
             if (
                 sincronizarPosicao
@@ -1174,13 +2075,11 @@ function tentarAplicarEstado(
                         tempoServidor,
                         true
                     );
+
                 }
+
             }
 
-
-            // ==================================================
-            // PLAY / PAUSE
-            // ==================================================
 
             if (
                 estadoSala.tocando
@@ -1191,7 +2090,9 @@ function tentarAplicarEstado(
             } else {
 
                 player.pauseVideo();
+
             }
+
         }
 
 
@@ -1201,6 +2102,7 @@ function tentarAplicarEstado(
             "Erro ao sincronizar YouTube:",
             erro
         );
+
     }
 
 
@@ -1213,19 +2115,22 @@ function tentarAplicarEstado(
         },
         1200
     );
+
 }
 
 
-// ==========================================================
-// ATIVAR ÁUDIO
-// ==========================================================
+/* 
+   ATIVAR ÁUDIO
+ */
 
 enableAudioButton.addEventListener(
     "click",
     function () {
 
         if (!playerPronto) {
+
             return;
+
         }
 
 
@@ -1245,6 +2150,7 @@ enableAudioButton.addEventListener(
         } else {
 
             player.pauseVideo();
+
         }
 
 
@@ -1261,13 +2167,14 @@ enableAudioButton.addEventListener(
 
         enableAudioButton.hidden =
             true;
+
     }
 );
 
 
-// ==========================================================
-// PLAY / PAUSE
-// ==========================================================
+/* 
+   PLAY / PAUSE
+ */
 
 playPauseButton.addEventListener(
     "click",
@@ -1282,46 +2189,51 @@ playPauseButton.addEventListener(
         } else {
 
             tocarAtual();
+
         }
+
     }
 );
 
 
-// ==========================================================
-// PRÓXIMA
-// ==========================================================
+/* 
+   PRÓXIMA
+ */
 
 nextButton.addEventListener(
     "click",
     function () {
 
         proxima();
+
     }
 );
 
 
-// ==========================================================
-// ANTERIOR
-// ==========================================================
+/* 
+   ANTERIOR
+ */
 
 previousButton.addEventListener(
     "click",
     function () {
 
         anterior();
+
     }
 );
 
 
-// ==========================================================
-// PESQUISA
-// ==========================================================
+/* 
+   PESQUISA
+ */
 
 searchButton.addEventListener(
     "click",
     function () {
 
         pesquisarMusicas();
+
     }
 );
 
@@ -1331,18 +2243,52 @@ searchInput.addEventListener(
     function (event) {
 
         if (
-            event.key === "Enter"
+            event.key ===
+            "Enter"
         ) {
 
             pesquisarMusicas();
+
         }
+
     }
 );
 
 
-// ==========================================================
-// TECLADO
-// ==========================================================
+/* 
+   IDENTIDADE
+ */
+
+identityConfirmButton.addEventListener(
+    "click",
+    function () {
+
+        salvarIdentidade();
+
+    }
+);
+
+
+identityName.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            salvarIdentidade();
+
+        }
+
+    }
+);
+
+
+/* 
+   TECLADO
+ */
 
 document.addEventListener(
     "keydown",
@@ -1354,32 +2300,50 @@ document.addEventListener(
         ) {
 
             return;
+
         }
 
 
         if (
-            event.key === "ArrowRight"
+            document.activeElement ===
+            identityName
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            event.key ===
+            "ArrowRight"
         ) {
 
             proxima();
+
         }
 
 
         if (
-            event.key === "ArrowLeft"
+            event.key ===
+            "ArrowLeft"
         ) {
 
             anterior();
+
         }
+
     }
 );
 
 
-// ==========================================================
-// SEGURANÇA HTML
-// ==========================================================
+/* 
+   SEGURANÇA HTML
+ */
 
-function escaparHTML(texto) {
+function escaparHTML(
+    texto
+) {
 
     if (
         texto === null ||
@@ -1387,6 +2351,7 @@ function escaparHTML(texto) {
     ) {
 
         return "";
+
     }
 
 
@@ -1416,18 +2381,24 @@ function escaparHTML(texto) {
             /'/g,
             "&#039;"
         );
+
 }
 
 
-function escaparAtributo(texto) {
+function escaparAtributo(
+    texto
+) {
 
-    return escaparHTML(texto);
+    return escaparHTML(
+        texto
+    );
+
 }
 
 
-// ==========================================================
-// SALA PELA URL
-// ==========================================================
+/* 
+   SALA PELA URL
+ */
 
 const parametros =
     new URLSearchParams(
@@ -1436,19 +2407,26 @@ const parametros =
 
 
 const salaInicial =
-    parametros.get("room");
+    parametros.get(
+        "room"
+    );
 
 
 if (salaInicial) {
 
     roomInput.value =
         salaInicial.toUpperCase();
+
 }
 
 
-// ==========================================================
-// INICIALIZAÇÃO
-// ==========================================================
+/* 
+   INICIALIZAÇÃO
+ */
+
+montarAvatares();
+
+carregarIdentidade();
 
 atualizarFila();
 
