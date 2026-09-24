@@ -365,11 +365,21 @@ window.onYouTubeIframeAPIReady = function () {
                 fs: 0,
                 rel: 0,
                 modestbranding: 1,
-                playsinline: 1
+                playsinline: 1,
+                enablejsapi: 1,
+                origin: window.location.origin,
+                widget_referrer: window.location.origin
             },
+            host: "https://www.youtube-nocookie.com",
             events: {
                 onReady: () => {
                     playerPronto = true;
+
+                    const iframe = document.querySelector("#youtube-player iframe");
+                    if (iframe) {
+                        iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+                        iframe.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
+                    }
 
                     if (enableAudioButton) {
                         enableAudioButton.hidden = false;
@@ -383,7 +393,29 @@ window.onYouTubeIframeAPIReady = function () {
                 },
 
                 onStateChange:
-                    tratarEstadoPlayer
+                    tratarEstadoPlayer,
+
+                onError: (event) => {
+                    console.error("YouTube Player Error:", event.data);
+                    const codigo = Number(event.data);
+                    const mensagens = {
+                        2: "ID do vídeo inválido.",
+                        5: "O vídeo não pode ser reproduzido pelo player HTML5.",
+                        100: "O vídeo não existe ou é privado.",
+                        101: "Este vídeo não permite reprodução incorporada.",
+                        150: "Este vídeo não permite reprodução incorporada.",
+                        153: "O YouTube não recebeu a identificação de origem (Referer) necessária para o player."
+                    };
+                    console.error(mensagens[codigo] || "Erro desconhecido do YouTube.");
+                },
+
+                onAutoplayBlocked: () => {
+                    console.warn("O Chrome bloqueou o autoplay; aguardando interação do usuário.");
+                    reproducaoPendente = true;
+                    if (enableAudioButton) {
+                        enableAudioButton.hidden = false;
+                    }
+                }
             }
         }
     );
