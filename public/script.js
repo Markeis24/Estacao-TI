@@ -97,9 +97,9 @@ function escapeAttribute(value) {
 }
 
 
-/* ===
+/* 
    IDENTIDADE
-=== */
+ */
 
 function carregarIdentidade() {
     const salva = sessionStorage.getItem(
@@ -236,7 +236,7 @@ function salvarIdentidade() {
         socket.connected
     ) {
         socket.emit(
-            "atualizar-identidade",
+            "definir-identidade",
             identidade
         );
     }
@@ -346,9 +346,9 @@ if (changeIdentityButton) {
 }
 
 
-/* ===
+/* 
    YOUTUBE
-=== */
+ */
 
 window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player(
@@ -431,9 +431,9 @@ function tratarEstadoPlayer(event) {
 }
 
 
-/* ===
+/* 
    SOCKET
-=== */
+ */
 
 function conectarSocket(codigoSala = null) {
     if (!identidade) {
@@ -460,17 +460,11 @@ function conectarSocket(codigoSala = null) {
         if (salaDesejada) {
             socket.emit(
                 "entrar-sala",
-                {
-                    codigo: salaDesejada,
-                    usuario: identidade
-                }
+                salaDesejada
             );
         } else {
             socket.emit(
-                "criar-sala",
-                {
-                    usuario: identidade
-                }
+                "criar-sala"
             );
         }
     });
@@ -481,6 +475,12 @@ function conectarSocket(codigoSala = null) {
         dados => {
             salaDesejada = dados.codigo;
             entrarVisualmenteNaSala(dados);
+
+            renderizarAtividades([]);
+
+            if (identidade && socket?.connected) {
+                socket.emit("definir-identidade", identidade);
+            }
         }
     );
 
@@ -490,6 +490,16 @@ function conectarSocket(codigoSala = null) {
         dados => {
             salaDesejada = dados.codigo;
             entrarVisualmenteNaSala(dados);
+
+            renderizarAtividades(
+                Array.isArray(dados?.atividades)
+                    ? dados.atividades
+                    : []
+            );
+
+            if (identidade && socket?.connected) {
+                socket.emit("definir-identidade", identidade);
+            }
         }
     );
 
@@ -578,29 +588,19 @@ function conectarSocket(codigoSala = null) {
 
 
     socket.on(
-        "usuario-entrou",
+        "atividade-atualizada",
         dados => {
-            adicionarAtividade(
-                dados.usuario,
-                "entrou na sala"
+            renderizarAtividades(
+                Array.isArray(dados?.atividades)
+                    ? dados.atividades
+                    : []
             );
         }
     );
 
 
     socket.on(
-        "usuario-saiu",
-        dados => {
-            adicionarAtividade(
-                dados.usuario,
-                "saiu da sala"
-            );
-        }
-    );
-
-
-    socket.on(
-        "atualizar-identidade",
+        "identidade-atualizada",
         dados => {
             if (
                 dados &&
@@ -631,9 +631,9 @@ function conectarSocket(codigoSala = null) {
 }
 
 
-/* ===
+/* 
    STATUS
-=== */
+ */
 
 function atualizarStatus(status) {
     if (!connectionStatus) {
@@ -691,9 +691,9 @@ function atualizarStatus(status) {
 }
 
 
-/* ===
+/* 
    ENTRADA NA SALA
-=== */
+ */
 
 function entrarVisualmenteNaSala(dados) {
     roomCode.textContent =
@@ -756,9 +756,9 @@ function entrarVisualmenteNaSala(dados) {
 }
 
 
-/* ===
+/* 
    CONTROLE
-=== */
+ */
 
 function enviarControle(dados) {
     if (
@@ -775,9 +775,9 @@ function enviarControle(dados) {
 }
 
 
-/* ===
+/* 
    CRIAR SALA
-=== */
+ */
 
 if (createRoomButton) {
     createRoomButton.addEventListener(
@@ -789,9 +789,9 @@ if (createRoomButton) {
 }
 
 
-/* ===
+/* 
    ENTRAR
-=== */
+ */
 
 if (joinRoomButton) {
     joinRoomButton.addEventListener(
@@ -827,9 +827,9 @@ if (roomInput) {
 }
 
 
-/* ===
+/* 
    PESQUISA
-=== */
+ */
 
 if (searchButton) {
     searchButton.addEventListener(
@@ -927,9 +927,9 @@ async function pesquisar() {
 }
 
 
-/* ===
+/* 
    RESULTADOS
-=== */
+ */
 
 function renderizarResultados(resultados) {
     if (
@@ -1081,9 +1081,9 @@ window.adicionarFila = function (videoId) {
 };
 
 
-/* ===
+/* 
    FILA
-=== */
+ */
 
 function atualizarFila() {
     if (
@@ -1196,9 +1196,9 @@ window.removerIndice = function (index) {
 };
 
 
-/* ===
+/* 
    MÚSICA ATUAL
-=== */
+ */
 
 function atualizarMusicaAtual() {
     const musica =
@@ -1224,9 +1224,9 @@ function atualizarMusicaAtual() {
 }
 
 
-/* ===
+/* 
    PLAYER
-=== */
+ */
 
 function tentarAplicarEstado(sincronizarPosicao = true) {
     if (!playerPronto || !player) {
@@ -1317,9 +1317,9 @@ function tentarAplicarEstado(sincronizarPosicao = true) {
 // sem ficar fazendo a música voltar alguns segundos.
 
 
-/* ===
+/* 
    ÁUDIO / MUTE
-=== */
+ */
 
 if (enableAudioButton) {
     enableAudioButton.addEventListener(
@@ -1389,9 +1389,9 @@ function atualizarMuteVisual() {
 }
 
 
-/* ===
+/* 
    USUÁRIOS
-=== */
+ */
 
 function renderizarUsuarios(usuarios) {
     if (
@@ -1461,9 +1461,9 @@ function renderizarUsuarios(usuarios) {
 }
 
 
-/* ===
+/* 
    ATIVIDADE
-=== */
+ */
 
 function adicionarAtividade(
     usuario,
@@ -1505,10 +1505,39 @@ function adicionarAtividade(
     }
 }
 
+function renderizarAtividades(atividades) {
+    if (!activityList) {
+        return;
+    }
 
-/* ===
+    activityList.innerHTML = "";
+
+    atividades
+        .slice(-8)
+        .forEach(atividade => {
+            if (!atividade?.usuario) {
+                return;
+            }
+
+            const acao =
+                atividade.tipo === "entrou"
+                    ? "entrou na sala"
+                    : atividade.tipo === "saiu"
+                        ? "saiu da sala"
+                        : atividade.tipo || "atividade";
+
+            adicionarAtividade(
+                atividade.usuario,
+                acao
+            );
+        });
+}
+
+
+
+/* 
    INICIALIZAÇÃO
-=== */
+ */
 
 function iniciar() {
     atualizarFila();
