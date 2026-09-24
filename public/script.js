@@ -15,34 +15,17 @@ let estadoSala = {
 };
 
 let resultadosPesquisa = [];
-
 let audioMutado = false;
 
+const searchInput = document.getElementById("search-input");
+const searchButton = document.getElementById("search-button");
+const searchResults = document.getElementById("search-results");
 
-// ============================================================
-// ELEMENTOS
-// ============================================================
+const queueList = document.getElementById("queue-list");
 
-const searchInput =
-    document.getElementById("search-input");
-
-const searchButton =
-    document.getElementById("search-button");
-
-const searchResults =
-    document.getElementById("search-results");
-
-const queueList =
-    document.getElementById("queue-list");
-
-const roomInput =
-    document.getElementById("room-input");
-
-const roomCode =
-    document.getElementById("room-code");
-
-const roomUsers =
-    document.getElementById("room-users");
+const roomInput = document.getElementById("room-input");
+const roomCode = document.getElementById("room-code");
+const roomUsers = document.getElementById("room-users");
 
 const connectionStatus =
     document.getElementById("connection-status");
@@ -77,9 +60,6 @@ const identityModal =
 const identityNameInput =
     document.getElementById("identity-name");
 
-const avatarList =
-    document.getElementById("avatar-list");
-
 const identityError =
     document.getElementById("identity-error");
 
@@ -102,16 +82,29 @@ const activityList =
     document.getElementById("activity-list");
 
 
-// ============================================================
-// IDENTIDADE
-// ============================================================
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function escapeAttribute(value) {
+    return escapeHtml(value);
+}
+
+
+/* ===
+   IDENTIDADE
+=== */
 
 function carregarIdentidade() {
-
-    const salva =
-        sessionStorage.getItem(
-            "estacao-ti-identidade"
-        );
+    const salva = sessionStorage.getItem(
+        "estacao-ti-identidade"
+    );
 
     if (!salva) {
         mostrarModalIdentidade();
@@ -119,32 +112,23 @@ function carregarIdentidade() {
     }
 
     try {
-
-        const dados =
-            JSON.parse(salva);
+        const dados = JSON.parse(salva);
 
         if (
             dados &&
             dados.nome &&
             dados.avatar
         ) {
-
             identidade = {
                 nome: String(dados.nome),
                 avatar: String(dados.avatar)
             };
 
             atualizarIdentidadeVisual();
-
-            selecionarAvatar(
-                identidade.avatar
-            );
-
+            selecionarAvatar(identidade.avatar);
             return;
         }
-
     } catch (error) {
-
         console.warn(
             "Identidade salva inválida.",
             error
@@ -160,7 +144,6 @@ function carregarIdentidade() {
 
 
 function mostrarModalIdentidade() {
-
     if (!identityModal) {
         return;
     }
@@ -168,17 +151,14 @@ function mostrarModalIdentidade() {
     identityModal.hidden = false;
 
     setTimeout(() => {
-
         if (identityNameInput) {
             identityNameInput.focus();
         }
-
     }, 100);
 }
 
 
 function esconderModalIdentidade() {
-
     if (!identityModal) {
         return;
     }
@@ -188,22 +168,18 @@ function esconderModalIdentidade() {
 
 
 function selecionarAvatar(avatar) {
-
     document
         .querySelectorAll(".avatar-option")
         .forEach(option => {
-
             option.classList.toggle(
                 "selected",
                 option.dataset.avatar === avatar
             );
-
         });
 }
 
 
 function obterAvatarSelecionado() {
-
     const selecionado =
         document.querySelector(
             ".avatar-option.selected"
@@ -216,7 +192,6 @@ function obterAvatarSelecionado() {
 
 
 function salvarIdentidade() {
-
     const nome =
         identityNameInput
             ? identityNameInput.value
@@ -229,18 +204,14 @@ function salvarIdentidade() {
         obterAvatarSelecionado();
 
     if (!nome) {
-
         identityError.textContent =
             "Digite seu nome.";
-
         return false;
     }
 
     if (!avatar) {
-
         identityError.textContent =
             "Escolha um avatar.";
-
         return false;
     }
 
@@ -264,7 +235,6 @@ function salvarIdentidade() {
         socket &&
         socket.connected
     ) {
-
         socket.emit(
             "atualizar-identidade",
             identidade
@@ -276,7 +246,6 @@ function salvarIdentidade() {
 
 
 function atualizarIdentidadeVisual() {
-
     if (
         !currentIdentity ||
         !identidade
@@ -286,9 +255,7 @@ function atualizarIdentidadeVisual() {
 
     currentIdentity.innerHTML = `
         <img
-            src="/avatars/${encodeURIComponent(
-                identidade.avatar
-            )}"
+            src="/avatars/${escapeAttribute(identidade.avatar)}"
             width="42"
             height="42"
             alt=""
@@ -296,9 +263,7 @@ function atualizarIdentidadeVisual() {
 
         <div>
             <strong>
-                ${escapeHtml(
-                    identidade.nome
-                )}
+                ${escapeHtml(identidade.nome)}
             </strong>
 
             <span>
@@ -307,87 +272,60 @@ function atualizarIdentidadeVisual() {
         </div>
     `;
 
-    currentIdentity.classList.add(
-        "visible"
-    );
+    currentIdentity.classList.add("visible");
 }
 
-
-// ============================================================
-// AVATARES
-// ============================================================
 
 document
     .querySelectorAll(".avatar-option")
     .forEach(option => {
-
         option.addEventListener(
             "click",
             () => {
-
                 selecionarAvatar(
                     option.dataset.avatar
                 );
-
             }
         );
-
     });
 
 
 if (saveIdentityButton) {
-
     saveIdentityButton.addEventListener(
         "click",
-        () => {
-
-            salvarIdentidade();
-
-        }
+        salvarIdentidade
     );
 }
 
 
 if (closeIdentityButton) {
-
     closeIdentityButton.addEventListener(
         "click",
         () => {
-
             if (identidade) {
                 esconderModalIdentidade();
             }
-
         }
     );
 }
 
 
 if (identityNameInput) {
-
     identityNameInput.addEventListener(
         "keydown",
         event => {
-
-            if (
-                event.key === "Enter"
-            ) {
-
+            if (event.key === "Enter") {
                 salvarIdentidade();
-
             }
-
         }
     );
 }
 
 
 if (changeIdentityButton) {
-
     changeIdentityButton.addEventListener(
         "click",
         () => {
-
             if (!identidade) {
                 mostrarModalIdentidade();
                 return;
@@ -403,73 +341,50 @@ if (changeIdentityButton) {
             );
 
             mostrarModalIdentidade();
-
         }
     );
 }
 
 
-// ============================================================
-// YOUTUBE
-// ============================================================
+/* ===
+   YOUTUBE
+=== */
 
-window.onYouTubeIframeAPIReady =
-    function () {
+window.onYouTubeIframeAPIReady = function () {
+    player = new YT.Player(
+        "youtube-player",
+        {
+            height: "100%",
+            width: "100%",
+            videoId: "",
+            playerVars: {
+                controls: 0,
+                disablekb: 1,
+                fs: 0,
+                rel: 0,
+                modestbranding: 1,
+                playsinline: 1
+            },
+            events: {
+                onReady: () => {
+                    playerPronto = true;
 
-        player =
-            new YT.Player(
-                "youtube-player",
-                {
-
-                    height: "100%",
-                    width: "100%",
-
-                    videoId: "",
-
-                    playerVars: {
-
-                        controls: 0,
-
-                        disablekb: 1,
-
-                        fs: 0,
-
-                        rel: 0,
-
-                        modestbranding: 1,
-
-                        playsinline: 1
-
-                    },
-
-                    events: {
-
-                        onReady: () => {
-
-                            playerPronto = true;
-
-                            if (enableAudioButton) {
-                                enableAudioButton.hidden =
-                                    false;
-                            }
-
-                            tentarAplicarEstado();
-
-                        },
-
-                        onStateChange:
-                            tratarEstadoPlayer
-
+                    if (enableAudioButton) {
+                        enableAudioButton.hidden = false;
                     }
 
-                }
-            );
+                    tentarAplicarEstado();
+                },
 
-    };
+                onStateChange:
+                    tratarEstadoPlayer
+            }
+        }
+    );
+};
 
 
 function tratarEstadoPlayer(event) {
-
     if (aplicandoEstadoServidor) {
         return;
     }
@@ -491,131 +406,81 @@ function tratarEstadoPlayer(event) {
         event.data ===
         YT.PlayerState.PLAYING
     ) {
-
-        enviarControle({
-            tipo: "play"
-        });
+        socket.emit(
+            "controle-sala",
+            {
+                tipo: "play"
+            }
+        );
 
         return;
     }
-
 
     if (
         event.data ===
         YT.PlayerState.ENDED
     ) {
-
-        enviarControle({
-
-            tipo: "ended",
-
-            videoId:
-                musicaAtual.videoId
-
-        });
-
-        return;
+        socket.emit(
+            "controle-sala",
+            {
+                tipo: "ended",
+                videoId: musicaAtual.videoId
+            }
+        );
     }
-
-    /*
-     * Não enviamos PAUSE para o servidor.
-     *
-     * O usuário não possui mais botão de pause.
-     * Se o navegador pausar automaticamente,
-     * a sincronização do servidor corrige o player.
-     */
-
 }
 
 
-// ============================================================
-// SOCKET
-// ============================================================
+/* ===
+   SOCKET
+=== */
 
-function conectarSocket(
-    codigoSala = null
-) {
-
+function conectarSocket(codigoSala = null) {
     if (!identidade) {
-
         mostrarModalIdentidade();
-
         return;
     }
 
-
     salaDesejada =
         codigoSala
-            ? codigoSala
-                .trim()
-                .toUpperCase()
+            ? codigoSala.trim().toUpperCase()
             : null;
 
-
     if (socket) {
-
         socket.disconnect();
-
     }
-
 
     socket = io();
 
+    atualizarStatus("conectando");
 
-    atualizarStatus(
-        "conectando"
-    );
+    socket.on("connect", () => {
+        atualizarStatus("online");
 
-
-    socket.on(
-        "connect",
-        () => {
-
-            atualizarStatus(
-                "online"
+        if (salaDesejada) {
+            socket.emit(
+                "entrar-sala",
+                {
+                    codigo: salaDesejada,
+                    usuario: identidade
+                }
             );
-
-
-            if (salaDesejada) {
-
-                socket.emit(
-                    "entrar-sala",
-                    {
-                        codigo:
-                            salaDesejada,
-
-                        usuario:
-                            identidade
-                    }
-                );
-
-            } else {
-
-                socket.emit(
-                    "criar-sala",
-                    {
-                        usuario:
-                            identidade
-                    }
-                );
-
-            }
-
+        } else {
+            socket.emit(
+                "criar-sala",
+                {
+                    usuario: identidade
+                }
+            );
         }
-    );
+    });
 
 
     socket.on(
         "sala-criada",
         dados => {
-
-            salaDesejada =
-                dados.codigo;
-
-            entrarVisualmenteNaSala(
-                dados
-            );
-
+            salaDesejada = dados.codigo;
+            entrarVisualmenteNaSala(dados);
         }
     );
 
@@ -623,14 +488,8 @@ function conectarSocket(
     socket.on(
         "entrou-sala",
         dados => {
-
-            salaDesejada =
-                dados.codigo;
-
-            entrarVisualmenteNaSala(
-                dados
-            );
-
+            salaDesejada = dados.codigo;
+            entrarVisualmenteNaSala(dados);
         }
     );
 
@@ -638,15 +497,8 @@ function conectarSocket(
     socket.on(
         "erro-sala",
         mensagem => {
-
-            alert(
-                mensagem
-            );
-
-            atualizarStatus(
-                "erro"
-            );
-
+            alert(mensagem);
+            atualizarStatus("erro");
         }
     );
 
@@ -654,12 +506,9 @@ function conectarSocket(
     socket.on(
         "erro-identidade",
         mensagem => {
-
             identityError.textContent =
                 mensagem;
-
             mostrarModalIdentidade();
-
         }
     );
 
@@ -667,14 +516,10 @@ function conectarSocket(
     socket.on(
         "fila-atualizada",
         dados => {
-
             estadoSala.fila =
-                Array.isArray(
-                    dados.fila
-                )
+                Array.isArray(dados.fila)
                     ? dados.fila
                     : [];
-
 
             estadoSala.indiceAtual =
                 Number.isInteger(
@@ -683,13 +528,9 @@ function conectarSocket(
                     ? dados.indiceAtual
                     : -1;
 
-
             atualizarFila();
-
             atualizarMusicaAtual();
-
             tentarAplicarEstado();
-
         }
     );
 
@@ -697,35 +538,23 @@ function conectarSocket(
     socket.on(
         "estado-player",
         dados => {
-
             estadoSala.tocando =
-                Boolean(
-                    dados.tocando
-                );
-
+                Boolean(dados.tocando);
 
             estadoSala.posicao =
-                Number(
-                    dados.posicao || 0
-                );
-
+                Number(dados.posicao || 0);
 
             if (
                 Number.isInteger(
                     dados.indiceAtual
                 )
             ) {
-
                 estadoSala.indiceAtual =
                     dados.indiceAtual;
-
             }
 
-
             atualizarMusicaAtual();
-
             tentarAplicarEstado();
-
         }
     );
 
@@ -733,25 +562,17 @@ function conectarSocket(
     socket.on(
         "usuarios-atualizados",
         dados => {
-
             const usuarios =
-                Array.isArray(
-                    dados.usuarios
-                )
+                Array.isArray(dados.usuarios)
                     ? dados.usuarios
                     : [];
-
 
             roomUsers.textContent =
                 usuarios.length ||
                 dados.quantidade ||
                 0;
 
-
-            renderizarUsuarios(
-                usuarios
-            );
-
+            renderizarUsuarios(usuarios);
         }
     );
 
@@ -759,12 +580,10 @@ function conectarSocket(
     socket.on(
         "usuario-entrou",
         dados => {
-
             adicionarAtividade(
                 dados.usuario,
                 "entrou na sala"
             );
-
         }
     );
 
@@ -772,12 +591,33 @@ function conectarSocket(
     socket.on(
         "usuario-saiu",
         dados => {
-
             adicionarAtividade(
                 dados.usuario,
                 "saiu da sala"
             );
+        }
+    );
 
+
+    socket.on(
+        "atualizar-identidade",
+        dados => {
+            if (
+                dados &&
+                dados.usuario
+            ) {
+                identidade =
+                    dados.usuario;
+
+                sessionStorage.setItem(
+                    "estacao-ti-identidade",
+                    JSON.stringify(
+                        identidade
+                    )
+                );
+
+                atualizarIdentidadeVisual();
+            }
         }
     );
 
@@ -785,32 +625,22 @@ function conectarSocket(
     socket.on(
         "disconnect",
         () => {
-
-            atualizarStatus(
-                "offline"
-            );
-
+            atualizarStatus("offline");
         }
     );
-
 }
 
 
-// ============================================================
-// STATUS
-// ============================================================
+/* ===
+   STATUS
+=== */
 
-function atualizarStatus(
-    status
-) {
-
+function atualizarStatus(status) {
     if (!connectionStatus) {
         return;
     }
 
-
     if (status === "online") {
-
         connectionStatus.innerHTML = `
             <img
                 src="https://api.iconify.design/tabler/wifi.svg?color=%23C084FC"
@@ -820,13 +650,10 @@ function atualizarStatus(
             >
             ONLINE
         `;
-
         return;
     }
 
-
     if (status === "conectando") {
-
         connectionStatus.innerHTML = `
             <img
                 src="https://api.iconify.design/tabler/loader-2.svg?color=%23C084FC"
@@ -836,13 +663,10 @@ function atualizarStatus(
             >
             CONECTANDO...
         `;
-
         return;
     }
 
-
     if (status === "erro") {
-
         connectionStatus.innerHTML = `
             <img
                 src="https://api.iconify.design/tabler/alert-circle.svg?color=%23C084FC"
@@ -852,10 +676,8 @@ function atualizarStatus(
             >
             ERRO
         `;
-
         return;
     }
-
 
     connectionStatus.innerHTML = `
         <img
@@ -866,52 +688,37 @@ function atualizarStatus(
         >
         OFFLINE
     `;
-
 }
 
 
-// ============================================================
-// ENTRADA VISUAL NA SALA
-// ============================================================
+/* ===
+   ENTRADA NA SALA
+=== */
 
-function entrarVisualmenteNaSala(
-    dados
-) {
-
+function entrarVisualmenteNaSala(dados) {
     roomCode.textContent =
         dados.codigo;
 
     roomInput.value =
         dados.codigo;
 
-
     if (dados.usuario) {
-
-        identidade =
-            dados.usuario;
+        identidade = dados.usuario;
 
         sessionStorage.setItem(
             "estacao-ti-identidade",
-            JSON.stringify(
-                identidade
-            )
+            JSON.stringify(identidade)
         );
 
         atualizarIdentidadeVisual();
-
     }
-
 
     const estado =
         dados.estado || {};
 
-
     estadoSala = {
-
         fila:
-            Array.isArray(
-                estado.fila
-            )
+            Array.isArray(estado.fila)
                 ? estado.fila
                 : [],
 
@@ -923,55 +730,37 @@ function entrarVisualmenteNaSala(
                 : -1,
 
         tocando:
-            Boolean(
-                estado.tocando
-            ),
+            Boolean(estado.tocando),
 
         posicao:
-            Number(
-                estado.posicao || 0
-            )
-
+            Number(estado.posicao || 0)
     };
 
-
     atualizarFila();
-
     atualizarMusicaAtual();
-
+    tentarAplicarEstado();
 
     const url =
-        new URL(
-            window.location.href
-        );
-
+        new URL(window.location.href);
 
     url.searchParams.set(
         "room",
         dados.codigo
     );
 
-
     window.history.replaceState(
         {},
         "",
         url
     );
-
-
-    tentarAplicarEstado();
-
 }
 
 
-// ============================================================
-// CONTROLE DA SALA
-// ============================================================
+/* ===
+   CONTROLE
+=== */
 
-function enviarControle(
-    dados
-) {
-
+function enviarControle(dados) {
     if (
         !socket ||
         !socket.connected
@@ -979,600 +768,407 @@ function enviarControle(
         return;
     }
 
-
     socket.emit(
         "controle-sala",
         dados
     );
-
 }
 
 
-// ============================================================
-// CRIAR SALA
-// ============================================================
+/* ===
+   CRIAR SALA
+=== */
 
 if (createRoomButton) {
-
     createRoomButton.addEventListener(
         "click",
         () => {
-
             conectarSocket();
-
         }
     );
-
 }
 
 
-// ============================================================
-// ENTRAR NA SALA
-// ============================================================
+/* ===
+   ENTRAR
+=== */
 
 if (joinRoomButton) {
-
     joinRoomButton.addEventListener(
         "click",
         () => {
-
             const codigo =
                 roomInput.value
                     .trim()
                     .toUpperCase();
 
-
             if (!codigo) {
-
                 alert(
                     "Digite o código da sala."
                 );
-
                 return;
             }
 
-
-            conectarSocket(
-                codigo
-            );
-
+            conectarSocket(codigo);
         }
     );
-
 }
 
 
-// ============================================================
-// ENTER NO CAMPO DA SALA
-// ============================================================
-
 if (roomInput) {
-
     roomInput.addEventListener(
         "keydown",
         event => {
-
-            if (
-                event.key === "Enter"
-            ) {
-
+            if (event.key === "Enter") {
                 joinRoomButton.click();
-
             }
-
         }
     );
-
 }
 
 
-// ============================================================
-// PESQUISA
-// ============================================================
+/* ===
+   PESQUISA
+=== */
 
 if (searchButton) {
-
     searchButton.addEventListener(
         "click",
         pesquisar
     );
-
 }
 
 
 if (searchInput) {
-
     searchInput.addEventListener(
         "keydown",
         event => {
-
-            if (
-                event.key === "Enter"
-            ) {
-
+            if (event.key === "Enter") {
                 pesquisar();
-
             }
-
         }
     );
-
 }
 
 
 async function pesquisar() {
-
     const query =
         searchInput.value.trim();
-
 
     if (!query) {
         return;
     }
 
-
     searchResults.innerHTML = `
-
         <div class="empty-message">
-
             <span class="empty-icon">
-
                 <img
                     src="https://api.iconify.design/tabler/loader-2.svg?color=%23C084FC"
                     width="38"
                     height="38"
                     alt=""
                 >
-
             </span>
 
-            <strong>
-                PESQUISANDO...
-            </strong>
+            <strong>PESQUISANDO...</strong>
 
             <p>
                 procurando no YouTube
             </p>
-
         </div>
-
     `;
 
-
     try {
-
         const response =
             await fetch(
-                `/api/search?q=${encodeURIComponent(
-                    query
-                )}`
+                `/api/search?q=${encodeURIComponent(query)}`
             );
-
 
         const data =
             await response.json();
 
-
         if (!data.sucesso) {
-
             throw new Error(
                 data.erro ||
                 "Erro na pesquisa."
             );
-
         }
 
-
         resultadosPesquisa =
-            Array.isArray(
-                data.resultados
-            )
+            Array.isArray(data.resultados)
                 ? data.resultados
                 : [];
-
 
         renderizarResultados(
             resultadosPesquisa
         );
-
-
     } catch (error) {
-
-        console.error(
-            error
-        );
-
+        console.error(error);
 
         searchResults.innerHTML = `
-
             <div class="empty-message">
-
                 <span class="empty-icon">
-
                     <img
                         src="https://api.iconify.design/tabler/alert-triangle.svg?color=%23C084FC"
                         width="38"
                         height="38"
                         alt=""
                     >
-
                 </span>
 
-                <strong>
-                    ERRO
-                </strong>
+                <strong>ERRO</strong>
 
                 <p>
-                    ${escapeHtml(
-                        error.message
-                    )}
+                    ${escapeHtml(error.message)}
                 </p>
-
             </div>
-
         `;
-
     }
-
 }
 
 
-// ============================================================
-// RESULTADOS
-// ============================================================
+/* ===
+   RESULTADOS
+=== */
 
-function renderizarResultados(
-    resultados
-) {
-
+function renderizarResultados(resultados) {
     if (
         !resultados ||
         !resultados.length
     ) {
-
         searchResults.innerHTML = `
-
             <div class="empty-message">
-
                 <span class="empty-icon">
-
                     <img
                         src="https://api.iconify.design/tabler/music-search.svg?color=%23C084FC"
                         width="38"
                         height="38"
                         alt=""
                     >
-
                 </span>
 
-                <strong>
-                    NENHUM RESULTADO
-                </strong>
+                <strong>NENHUM RESULTADO</strong>
 
                 <p>
                     Não encontramos essa música.
                 </p>
-
             </div>
-
         `;
 
         return;
     }
 
-
     searchResults.innerHTML =
         resultados
             .map(
                 musica => `
-
                     <div class="result-card">
 
                         <img
                             class="result-image"
-                            src="${escapeAttribute(
-                                musica.imagem
-                            )}"
+                            src="${escapeAttribute(musica.imagem)}"
                             alt=""
                         >
-
 
                         <div class="result-info">
 
                             <strong>
-                                ${escapeHtml(
-                                    musica.titulo
-                                )}
+                                ${escapeHtml(musica.titulo)}
                             </strong>
 
                             <span>
-                                ${escapeHtml(
-                                    musica.canal
-                                )}
+                                ${escapeHtml(musica.canal)}
                             </span>
 
                         </div>
-
 
                         <div class="result-actions">
 
                             <button
                                 class="small-metro-button"
-                                onclick="tocarAgora('${escapeAttribute(
-                                    musica.videoId
-                                )}')"
+                                onclick="tocarAgora('${escapeAttribute(musica.videoId)}')"
                             >
-
                                 <img
                                     src="https://api.iconify.design/tabler/player-play.svg?color=%23ffffff"
                                     width="18"
                                     height="18"
                                     alt=""
                                 >
-
                                 TOCAR
-
                             </button>
-
 
                             <button
                                 class="small-metro-button"
-                                onclick="adicionarFila('${escapeAttribute(
-                                    musica.videoId
-                                )}')"
+                                onclick="adicionarFila('${escapeAttribute(musica.videoId)}')"
                             >
-
                                 <img
                                     src="https://api.iconify.design/tabler/playlist-add.svg?color=%23ffffff"
                                     width="18"
                                     height="18"
                                     alt=""
                                 >
-
                                 FILA
-
                             </button>
 
                         </div>
 
                     </div>
-
                 `
             )
             .join("");
-
 }
 
 
-// ============================================================
-// TOCAR AGORA
-// ============================================================
+window.tocarAgora = function (videoId) {
+    const musica =
+        resultadosPesquisa.find(
+            item =>
+                item.videoId === videoId
+        );
 
-window.tocarAgora =
-    function (videoId) {
+    if (!musica) {
+        return;
+    }
 
-        const musica =
-            resultadosPesquisa.find(
-                item =>
-                    item.videoId ===
-                    videoId
-            );
+    if (
+        !socket ||
+        !socket.connected
+    ) {
+        alert(
+            "Entre em uma sala primeiro."
+        );
+        return;
+    }
 
-
-        if (!musica) {
-            return;
+    enviarControle({
+        tipo: "play-now",
+        musica: {
+            ...musica,
+            adicionadoPor: identidade
         }
+    });
+};
 
 
-        if (
-            !socket ||
-            !socket.connected
-        ) {
+window.adicionarFila = function (videoId) {
+    const musica =
+        resultadosPesquisa.find(
+            item =>
+                item.videoId === videoId
+        );
 
-            alert(
-                "Entre em uma sala primeiro."
-            );
+    if (!musica) {
+        return;
+    }
 
-            return;
+    if (
+        !socket ||
+        !socket.connected
+    ) {
+        alert(
+            "Entre em uma sala primeiro."
+        );
+        return;
+    }
+
+    enviarControle({
+        tipo: "adicionar",
+        musica: {
+            ...musica,
+            adicionadoPor: identidade
         }
+    });
+};
 
 
-        enviarControle({
-
-            tipo: "play-now",
-
-            musica: {
-                ...musica,
-
-                adicionadoPor:
-                    identidade
-            }
-
-        });
-
-    };
-
-
-// ============================================================
-// ADICIONAR À FILA
-// ============================================================
-
-window.adicionarFila =
-    function (videoId) {
-
-        const musica =
-            resultadosPesquisa.find(
-                item =>
-                    item.videoId ===
-                    videoId
-            );
-
-
-        if (!musica) {
-            return;
-        }
-
-
-        if (
-            !socket ||
-            !socket.connected
-        ) {
-
-            alert(
-                "Entre em uma sala primeiro."
-            );
-
-            return;
-        }
-
-
-        enviarControle({
-
-            tipo: "adicionar",
-
-            musica: {
-                ...musica,
-
-                adicionadoPor:
-                    identidade
-            }
-
-        });
-
-    };
-
-
-// ============================================================
-// FILA
-// ============================================================
+/* ===
+   FILA
+=== */
 
 function atualizarFila() {
-
     if (
         !estadoSala.fila.length
     ) {
-
         queueList.innerHTML = `
-
             <div class="empty-message">
 
                 <span class="empty-icon">
-
                     <img
                         src="https://api.iconify.design/tabler/playlist-x.svg?color=%23C084FC"
                         width="38"
                         height="38"
                         alt=""
                     >
-
                 </span>
 
-                <strong>
-                    A FILA ESTÁ VAZIA
-                </strong>
+                <strong>A FILA ESTÁ VAZIA</strong>
 
                 <p>
                     Adicione músicas para criar sua playlist
                 </p>
 
             </div>
-
         `;
 
         return;
     }
 
-
     queueList.innerHTML =
         estadoSala.fila
             .map(
                 (musica, index) => {
-
                     const atual =
                         index ===
                         estadoSala.indiceAtual;
 
-
                     const autor =
                         musica.adicionadoPor;
-
 
                     const autorHtml =
                         autor
                             ? `
-
                                 <div class="queue-author">
-
                                     <img
-                                        src="/avatars/${encodeURIComponent(
-                                            autor.avatar
-                                        )}"
+                                        src="/avatars/${escapeAttribute(autor.avatar)}"
                                         alt=""
                                     >
 
                                     <span>
                                         por
                                         <strong>
-                                            ${escapeHtml(
-                                                autor.nome
-                                            )}
+                                            ${escapeHtml(autor.nome)}
                                         </strong>
                                     </span>
-
                                 </div>
-
                             `
                             : "";
 
-
                     return `
-
                         <div
-                            class="queue-item ${
-                                atual
-                                    ? "active"
-                                    : ""
-                            }"
+                            class="queue-item ${atual ? "active" : ""}"
                         >
 
                             <img
                                 class="queue-thumbnail"
-                                src="${escapeAttribute(
-                                    musica.imagem
-                                )}"
+                                src="${escapeAttribute(musica.imagem)}"
                                 alt=""
                             >
-
 
                             <div class="queue-info">
 
                                 <strong>
-                                    ${escapeHtml(
-                                        musica.titulo
-                                    )}
+                                    ${escapeHtml(musica.titulo)}
                                 </strong>
 
                                 <span>
-                                    ${escapeHtml(
-                                        musica.canal
-                                    )}
+                                    ${escapeHtml(musica.canal)}
                                 </span>
 
                                 ${autorHtml}
 
                             </div>
 
-
                             <div class="queue-actions">
-
-                                <button
-                                    class="small-metro-button"
-                                    onclick="tocarIndice(${index})"
-                                    title="Tocar esta música"
-                                >
-                                    ▶
-                                </button>
-
 
                                 <button
                                     class="small-metro-button danger"
@@ -1585,66 +1181,32 @@ function atualizarFila() {
                             </div>
 
                         </div>
-
                     `;
-
                 }
             )
             .join("");
-
 }
 
 
-// ============================================================
-// TOCAR MÚSICA DA FILA
-// ============================================================
-
-window.tocarIndice =
-    function (index) {
-
-        enviarControle({
-
-            tipo: "play-index",
-
-            index: Number(index)
-
-        });
-
-    };
+window.removerIndice = function (index) {
+    enviarControle({
+        tipo: "remove",
+        index: Number(index)
+    });
+};
 
 
-// ============================================================
-// REMOVER DA FILA
-// ============================================================
-
-window.removerIndice =
-    function (index) {
-
-        enviarControle({
-
-            tipo: "remove",
-
-            index: Number(index)
-
-        });
-
-    };
-
-
-// ============================================================
-// MÚSICA ATUAL
-// ============================================================
+/* ===
+   MÚSICA ATUAL
+=== */
 
 function atualizarMusicaAtual() {
-
     const musica =
         estadoSala.fila[
             estadoSala.indiceAtual
         ];
 
-
     if (!musica) {
-
         musicTitle.textContent =
             "Nenhuma música tocando";
 
@@ -1654,556 +1216,320 @@ function atualizarMusicaAtual() {
         return;
     }
 
-
     musicTitle.textContent =
         musica.titulo;
 
     musicArtist.textContent =
         musica.canal;
-
 }
 
 
-// ============================================================
-// SINCRONIZAÇÃO DO PLAYER
-// ============================================================
+/* ===
+   PLAYER
+=== */
 
-function tentarAplicarEstado(
-    sincronizarPosicao = true
-) {
-
-    if (!playerPronto) {
+function tentarAplicarEstado(sincronizarPosicao = true) {
+    if (!playerPronto || !player) {
         return;
     }
-
-    if (!player) {
-        return;
-    }
-
 
     const musica =
         estadoSala.fila[
             estadoSala.indiceAtual
         ];
 
-
     if (!musica) {
         return;
     }
 
-
     const videoAtual =
-        player
-            .getVideoData?.()
-            ?.video_id || "";
+        player.getVideoData?.()?.video_id ||
+        "";
 
+    aplicandoEstadoServidor = true;
 
-    aplicandoEstadoServidor =
-        true;
+    // Troca de música: aqui sim carregamos o vídeo novo.
+    if (videoAtual !== musica.videoId) {
+        const inicio = Math.max(
+            0,
+            Number(estadoSala.posicao || 0)
+        );
 
-
-    if (
-        videoAtual !==
-        musica.videoId
-    ) {
-
-        if (
-            estadoSala.tocando
-        ) {
-
+        if (estadoSala.tocando) {
             player.loadVideoById({
-
-                videoId:
-                    musica.videoId,
-
-                startSeconds:
-                    Math.max(
-                        0,
-                        estadoSala.posicao
-                    )
-
+                videoId: musica.videoId,
+                startSeconds: inicio
             });
-
         } else {
-
             player.cueVideoById({
-
-                videoId:
-                    musica.videoId,
-
-                startSeconds:
-                    Math.max(
-                        0,
-                        estadoSala.posicao
-                    )
-
+                videoId: musica.videoId,
+                startSeconds: inicio
             });
-
         }
-
     } else {
+        const estadoYoutube =
+            typeof player.getPlayerState === "function"
+                ? player.getPlayerState()
+                : -1;
 
-        if (
-            sincronizarPosicao
-        ) {
-
+        // NÃO reposiciona por diferenças pequenas.
+        // O servidor envia atualizações periodicamente e a posição
+        // pode estar alguns segundos atrás por causa da rede.
+        // Só corrige uma divergência realmente grande.
+        if (sincronizarPosicao && estadoSala.tocando) {
             const posicaoAtual =
-                player.getCurrentTime();
+                Number(player.getCurrentTime?.() || 0);
 
+            const posicaoServidor =
+                Number(estadoSala.posicao || 0);
 
             const diferenca =
                 Math.abs(
                     posicaoAtual -
-                    estadoSala.posicao
+                    posicaoServidor
                 );
 
-
-            if (
-                diferenca > 2
-            ) {
-
+            if (diferenca > 8) {
                 player.seekTo(
-
-                    Math.max(
-                        0,
-                        estadoSala.posicao
-                    ),
-
+                    Math.max(0, posicaoServidor),
                     true
-
                 );
-
             }
-
         }
 
-
+        // Só manda tocar se o YouTube estiver realmente parado/pausado.
+        // Se já estiver tocando, não chama playVideo() novamente.
         if (
-            estadoSala.tocando
+            estadoSala.tocando &&
+            estadoYoutube !== 1
         ) {
-
             player.playVideo();
-
         }
-
     }
 
-
-    setTimeout(
-        () => {
-
-            aplicandoEstadoServidor =
-                false;
-
-        },
-        700
-    );
-
+    setTimeout(() => {
+        aplicandoEstadoServidor = false;
+    }, 700);
 }
 
-
-// ============================================================
-// SINCRONIZAÇÃO PERIÓDICA
-// ============================================================
-
-setInterval(
-    () => {
-
-        if (
-            socket &&
-            socket.connected &&
-            playerPronto &&
-            estadoSala.tocando
-        ) {
-
-            tentarAplicarEstado(
-                true
-            );
-
-        }
-
-    },
-    5000
-);
+// Não existe mais um setInterval chamando seekTo/playVideo a cada 5 segundos.
+// O estado recebido pelo Socket.IO é suficiente para manter a sala sincronizada
+// sem ficar fazendo a música voltar alguns segundos.
 
 
-// ============================================================
-// ATIVAR ÁUDIO
-// ============================================================
+/* ===
+   ÁUDIO / MUTE
+=== */
 
 if (enableAudioButton) {
-
     enableAudioButton.addEventListener(
         "click",
         () => {
-
             if (!player) {
                 return;
             }
 
-
             player.unMute();
+            player.setVolume(100);
 
-            player.setVolume(
-                100
-            );
-
-
-            audioMutado =
-                false;
-
+            audioMutado = false;
 
             atualizarMuteVisual();
 
-
             tentarAplicarEstado();
 
-
-            enableAudioButton.hidden =
-                true;
-
+            enableAudioButton.hidden = true;
         }
     );
-
 }
 
 
-// ============================================================
-// MUTE INDIVIDUAL
-// ============================================================
-
 if (muteButton) {
-
     muteButton.addEventListener(
         "click",
         () => {
-
             if (!player) {
                 return;
             }
-
 
             audioMutado =
                 !audioMutado;
 
-
             if (audioMutado) {
-
                 player.mute();
-
             } else {
-
                 player.unMute();
-
-                player.setVolume(
-                    100
-                );
-
+                player.setVolume(100);
             }
 
-
             atualizarMuteVisual();
-
         }
     );
-
 }
 
 
 function atualizarMuteVisual() {
-
-    if (
-        !muteIcon ||
-        !muteText
-    ) {
+    if (!muteIcon || !muteText) {
         return;
     }
 
-
     if (audioMutado) {
-
         muteIcon.src =
             "https://api.iconify.design/tabler/volume-off.svg?color=%23C084FC";
 
         muteText.textContent =
             "DESMUTAR";
-
     } else {
-
         muteIcon.src =
             "https://api.iconify.design/tabler/volume.svg?color=%23C084FC";
 
         muteText.textContent =
             "MUTAR";
-
     }
-
 }
 
 
-// ============================================================
-// USUÁRIOS
-// ============================================================
+/* ===
+   USUÁRIOS
+=== */
 
-function renderizarUsuarios(
-    usuarios
-) {
-
+function renderizarUsuarios(usuarios) {
     if (
         !usuarios ||
         !usuarios.length
     ) {
-
         usersList.innerHTML = `
-
             <div class="empty-message">
 
                 <span class="empty-icon">
-
                     <img
                         src="https://api.iconify.design/tabler/user-off.svg?color=%23C084FC"
                         width="34"
                         height="34"
                         alt=""
                     >
-
                 </span>
 
-                <strong>
-                    NENHUM USUÁRIO
-                </strong>
+                <strong>NENHUM USUÁRIO</strong>
 
                 <p>
                     Entre em uma sala para aparecer aqui
                 </p>
 
             </div>
-
         `;
 
         return;
     }
 
-
     usersList.innerHTML =
         usuarios
             .map(
                 usuario => {
-
                     const souEu =
                         socket &&
-                        usuario.id ===
-                        socket.id;
-
+                        usuario.id === socket.id;
 
                     return `
-
                         <div class="user-card">
 
                             <div class="user-avatar">
-
                                 <img
-                                    src="/avatars/${encodeURIComponent(
-                                        usuario.avatar
-                                    )}"
+                                    src="/avatars/${escapeAttribute(usuario.avatar)}"
                                     alt=""
                                 >
-
                             </div>
-
 
                             <div class="user-info">
 
                                 <strong>
-                                    ${escapeHtml(
-                                        usuario.nome
-                                    )}
+                                    ${escapeHtml(usuario.nome)}
                                 </strong>
 
-
                                 <span class="user-online">
-
                                     <span></span>
-
-                                    ${
-                                        souEu
-                                            ? "VOCÊ"
-                                            : "ONLINE"
-                                    }
-
+                                    ${souEu ? "VOCÊ" : "ONLINE"}
                                 </span>
 
                             </div>
 
                         </div>
-
                     `;
-
                 }
             )
             .join("");
-
 }
 
 
-// ============================================================
-// ATIVIDADE
-// ============================================================
+/* ===
+   ATIVIDADE
+=== */
 
 function adicionarAtividade(
     usuario,
     acao
 ) {
-
     if (!usuario) {
         return;
     }
 
-
     const item =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     item.className =
         "activity-item";
 
-
     item.innerHTML = `
-
         <img
-            src="/avatars/${encodeURIComponent(
-                usuario.avatar
-            )}"
+            src="/avatars/${escapeAttribute(usuario.avatar)}"
             alt=""
         >
 
-
         <div>
-
             <strong>
-                ${escapeHtml(
-                    usuario.nome
-                )}
+                ${escapeHtml(usuario.nome)}
             </strong>
 
             <span>
-                ${escapeHtml(
-                    acao
-                )}
+                ${escapeHtml(acao)}
             </span>
-
         </div>
-
     `;
 
-
-    activityList.prepend(
-        item
-    );
-
+    activityList.prepend(item);
 
     while (
-        activityList.children.length >
-        8
+        activityList.children.length > 8
     ) {
-
         activityList.lastElementChild.remove();
-
     }
-
 }
 
 
-// ============================================================
-// ESCAPE
-// ============================================================
-
-function escapeHtml(
-    valor
-) {
-
-    return String(
-        valor ?? ""
-    )
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-function escapeAttribute(
-    valor
-) {
-
-    return escapeHtml(
-        valor
-    );
-
-}
-
-
-// ============================================================
-// INICIALIZAÇÃO
-// ============================================================
+/* ===
+   INICIALIZAÇÃO
+=== */
 
 function iniciar() {
-
     atualizarFila();
-
     atualizarMusicaAtual();
-
     atualizarMuteVisual();
-
     carregarIdentidade();
-
 
     const params =
         new URLSearchParams(
             window.location.search
         );
 
-
     const sala =
         params.get("room");
-
 
     if (
         sala &&
         identidade
     ) {
-
-        conectarSocket(
-            sala
-        );
-
+        conectarSocket(sala);
     }
-
 }
-
 
 iniciar();
