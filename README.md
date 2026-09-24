@@ -18,13 +18,16 @@
 
 </div>
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 <div align="center">
 
 <img src="https://api.iconify.design/tabler/line.svg?color=%23C084FC" width="50%" />
 
 </div>
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+
 
 ## <img src="https://api.iconify.design/tabler/list-details.svg?color=%23C084FC" width="20" /> SOBRE O PROJETO
 
@@ -34,7 +37,7 @@ A proposta é unir **música, tecnologia e interação em tempo real**, permitin
 
 O sistema utiliza a API do YouTube para realizar pesquisas e o **Socket.IO** para manter as informações da sala sincronizadas entre os usuários.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/target.svg?color=%23F472B6" width="20" /> OBJETIVO
 
@@ -52,7 +55,7 @@ Criar um player de música online com salas compartilhadas, permitindo que os us
 
 A ideia principal é fazer com que todos os usuários conectados à mesma sala tenham uma experiência sincronizada.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/player-play.svg?color=%23A855F7" width="20" /> FUNCIONALIDADES
 
@@ -82,7 +85,7 @@ Os usuários podem controlar a reprodução através dos comandos:
 
 O sistema mantém informações sobre os usuários presentes na sala.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 <div align="center">
 
@@ -104,7 +107,7 @@ Render
 GitHub
 ````
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/stack-2.svg?color=%23F472B6" width="20" /> STACK
 
@@ -137,7 +140,7 @@ GitHub
 * Git
 * GitHub
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/folder.svg?color=%23C084FC" width="20" /> ESTRUTURA
 
@@ -158,7 +161,7 @@ my-player/
 └── package-lock.json
 ```
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/settings.svg?color=%23F472B6" width="20" /> FUNCIONAMENTO
 
@@ -185,7 +188,7 @@ Usuários conectados
 
 O servidor envia as alterações para os usuários conectados através do Socket.IO.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/brand-youtube.svg?color=%23F472B6" width="20" /> YOUTUBE
 
@@ -202,7 +205,7 @@ A reprodução é feita através do **YouTube IFrame Player API**.
 
 O projeto não realiza download ou extração do áudio dos vídeos.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/brand-socket-io.svg?color=%23C084FC" width="20" /> SOCKET.IO
 
@@ -224,7 +227,7 @@ controle-sala
 
 Dessa forma, quando uma alteração acontece na sala, os outros usuários podem receber a atualização.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 <div align="center">
 
@@ -254,7 +257,7 @@ A proposta visual busca transmitir uma sensação de tecnologia, música e nosta
 #A855F7
 ```
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/code.svg?color=%23F472B6" width="20" /> HARD SKILLS
 
@@ -274,7 +277,7 @@ Durante o desenvolvimento do projeto são utilizados conhecimentos relacionados 
 * Integração com APIs externas
 * Desenvolvimento de aplicações web
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/download.svg?color=%23C084FC" width="20" /> INSTALAÇÃO
 
@@ -322,7 +325,7 @@ npm run dev
 
 O servidor ficará disponível localmente através da porta configurada no projeto.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/shield-check.svg?color=%23F472B6" width="20" /> SEGURANÇA
 
@@ -332,7 +335,7 @@ O arquivo `.env` não deve ser enviado para o GitHub.
 
 O projeto utiliza o `.gitignore` para impedir que arquivos sensíveis sejam adicionados ao repositório.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/cloud-upload.svg?color=%23C084FC" width="20" /> DEPLOY
 
@@ -352,7 +355,7 @@ https://estacao-ti.onrender.com/
 https://github.com/Markeis24/Estacao-TI
 </a>
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/activity.svg?color=%23F472B6" width="20" /> STATUS
 
@@ -360,7 +363,7 @@ https://github.com/Markeis24/Estacao-TI
 
 O projeto encontra-se em desenvolvimento e novas funcionalidades podem ser adicionadas futuramente.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/flag.svg?color=%23C084FC" width="20" /> MISSÃO
 
@@ -378,13 +381,13 @@ Programação
 Interação
 ```
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/users-group.svg?color=%23F472B6" width="20" /> GRUPO
 
 Projeto desenvolvido pelo grupo **Estação TI**.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 ## <img src="https://api.iconify.design/tabler/link.svg?color=%23C084FC" width="20" /> LINKS
 
@@ -396,7 +399,7 @@ Projeto desenvolvido pelo grupo **Estação TI**.
 
 [https://github.com/Markeis24/Estacao-TI](https://github.com/Markeis24/Estacao-TI)
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
 
 <div align="center">
 
