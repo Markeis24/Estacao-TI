@@ -16,6 +16,8 @@ let estadoSala = {
 
 let resultadosPesquisa = [];
 let audioMutado = false;
+let audioSalaAtivado = false;
+let reproducaoPendente = false;
 
 const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
@@ -373,7 +375,11 @@ window.onYouTubeIframeAPIReady = function () {
                         enableAudioButton.hidden = false;
                     }
 
-                    tentarAplicarEstado();
+                    if (reproducaoPendente || estadoSala.tocando) {
+                        iniciarReproducaoSegura();
+                    } else {
+                        tentarAplicarEstado();
+                    }
                 },
 
                 onStateChange:
@@ -1058,10 +1064,15 @@ window.tocarAgora = function (videoId) {
 
     estadoSala.tocando = true;
     estadoSala.posicao = 0;
+    reproducaoPendente = true;
 
     atualizarFila();
     atualizarMusicaAtual();
-    tentarAplicarEstado(false);
+
+    // O Chrome pode bloquear autoplay com som.
+    // Primeiro garantimos que o vídeo carregue e toque mutado;
+    // o áudio é liberado pelo botão ATIVAR ÁUDIO DA SALA.
+    iniciarReproducaoSegura();
 
     enviarControle({
         tipo: "play-now",
@@ -1248,6 +1259,48 @@ function atualizarMusicaAtual() {
    PLAYER
 === */
 
+function iniciarReproducaoSegura() {
+    if (!playerPronto || !player) {
+        return;
+    }
+
+    const musica =
+        estadoSala.fila[estadoSala.indiceAtual];
+
+    if (!musica) {
+        return;
+    }
+
+    const inicio = Math.max(
+        0,
+        Number(estadoSala.posicao || 0)
+    );
+
+    const videoAtual =
+        player.getVideoData?.()?.video_id || "";
+
+    aplicandoEstadoServidor = true;
+
+    // Mantemos o vídeo mutado para o Chrome permitir autoplay.
+    // O usuário pode liberar o áudio no botão dedicado.
+    player.mute();
+
+    if (videoAtual !== musica.videoId) {
+        player.loadVideoById({
+            videoId: musica.videoId,
+            startSeconds: inicio
+        });
+    } else {
+        player.playVideo();
+    }
+
+    setTimeout(() => {
+        aplicandoEstadoServidor = false;
+        reproducaoPendente = false;
+    }, 700);
+}
+
+
 function tentarAplicarEstado(sincronizarPosicao = true) {
     if (!playerPronto || !player) {
         return;
@@ -1323,6 +1376,9 @@ function tentarAplicarEstado(sincronizarPosicao = true) {
             estadoSala.tocando &&
             estadoYoutube !== 1
         ) {
+            if (!audioSalaAtivado) {
+                player.mute();
+            }
             player.playVideo();
         }
     }
@@ -1349,15 +1405,32 @@ if (enableAudioButton) {
                 return;
             }
 
+            audioSalaAtivado = true;
+            audioMutado = false;
+
+            // Este clique é uma ação real do usuário, então o Chrome
+            // permite liberar o áudio e iniciar o vídeo com som.
             player.unMute();
             player.setVolume(100);
 
-            audioMutado = false;
+            const musica =
+                estadoSala.fila[estadoSala.indiceAtual];
+
+            if (musica) {
+                const videoAtual =
+                    player.getVideoData?.()?.video_id || "";
+
+                if (videoAtual !== musica.videoId) {
+                    player.loadVideoById({
+                        videoId: musica.videoId,
+                        startSeconds: Math.max(0, Number(estadoSala.posicao || 0))
+                    });
+                } else if (estadoSala.tocando) {
+                    player.playVideo();
+                }
+            }
 
             atualizarMuteVisual();
-
-            tentarAplicarEstado();
-
             enableAudioButton.hidden = true;
         }
     );
