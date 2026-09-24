@@ -97,9 +97,9 @@ function escapeAttribute(value) {
 }
 
 
-/* 
+/* ===
    IDENTIDADE
- */
+=== */
 
 function carregarIdentidade() {
     const salva = sessionStorage.getItem(
@@ -346,9 +346,9 @@ if (changeIdentityButton) {
 }
 
 
-/* 
+/* ===
    YOUTUBE
- */
+=== */
 
 window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player(
@@ -431,9 +431,9 @@ function tratarEstadoPlayer(event) {
 }
 
 
-/* 
+/* ===
    SOCKET
- */
+=== */
 
 function conectarSocket(codigoSala = null) {
     if (!identidade) {
@@ -463,9 +463,7 @@ function conectarSocket(codigoSala = null) {
                 salaDesejada
             );
         } else {
-            socket.emit(
-                "criar-sala"
-            );
+            socket.emit("criar-sala");
         }
     });
 
@@ -476,11 +474,7 @@ function conectarSocket(codigoSala = null) {
             salaDesejada = dados.codigo;
             entrarVisualmenteNaSala(dados);
 
-            renderizarAtividades([]);
-
-            if (identidade && socket?.connected) {
-                socket.emit("definir-identidade", identidade);
-            }
+            socket.emit("definir-identidade", identidade);
         }
     );
 
@@ -497,9 +491,7 @@ function conectarSocket(codigoSala = null) {
                     : []
             );
 
-            if (identidade && socket?.connected) {
-                socket.emit("definir-identidade", identidade);
-            }
+            socket.emit("definir-identidade", identidade);
         }
     );
 
@@ -604,6 +596,7 @@ function conectarSocket(codigoSala = null) {
         dados => {
             if (
                 dados &&
+                dados.socketId === socket.id &&
                 dados.usuario
             ) {
                 identidade =
@@ -618,6 +611,9 @@ function conectarSocket(codigoSala = null) {
 
                 atualizarIdentidadeVisual();
             }
+
+            // A lista "QUEM ESTÁ AQUI" já é atualizada
+            // pelo evento usuarios-atualizados.
         }
     );
 
@@ -631,9 +627,9 @@ function conectarSocket(codigoSala = null) {
 }
 
 
-/* 
+/* ===
    STATUS
- */
+=== */
 
 function atualizarStatus(status) {
     if (!connectionStatus) {
@@ -691,9 +687,9 @@ function atualizarStatus(status) {
 }
 
 
-/* 
+/* ===
    ENTRADA NA SALA
- */
+=== */
 
 function entrarVisualmenteNaSala(dados) {
     roomCode.textContent =
@@ -756,9 +752,9 @@ function entrarVisualmenteNaSala(dados) {
 }
 
 
-/* 
+/* ===
    CONTROLE
- */
+=== */
 
 function enviarControle(dados) {
     if (
@@ -775,9 +771,9 @@ function enviarControle(dados) {
 }
 
 
-/* 
+/* ===
    CRIAR SALA
- */
+=== */
 
 if (createRoomButton) {
     createRoomButton.addEventListener(
@@ -789,9 +785,9 @@ if (createRoomButton) {
 }
 
 
-/* 
+/* ===
    ENTRAR
- */
+=== */
 
 if (joinRoomButton) {
     joinRoomButton.addEventListener(
@@ -827,9 +823,9 @@ if (roomInput) {
 }
 
 
-/* 
+/* ===
    PESQUISA
- */
+=== */
 
 if (searchButton) {
     searchButton.addEventListener(
@@ -927,9 +923,9 @@ async function pesquisar() {
 }
 
 
-/* 
+/* ===
    RESULTADOS
- */
+=== */
 
 function renderizarResultados(resultados) {
     if (
@@ -1081,9 +1077,9 @@ window.adicionarFila = function (videoId) {
 };
 
 
-/* 
+/* ===
    FILA
- */
+=== */
 
 function atualizarFila() {
     if (
@@ -1196,9 +1192,9 @@ window.removerIndice = function (index) {
 };
 
 
-/* 
+/* ===
    MÚSICA ATUAL
- */
+=== */
 
 function atualizarMusicaAtual() {
     const musica =
@@ -1224,9 +1220,9 @@ function atualizarMusicaAtual() {
 }
 
 
-/* 
+/* ===
    PLAYER
- */
+=== */
 
 function tentarAplicarEstado(sincronizarPosicao = true) {
     if (!playerPronto || !player) {
@@ -1317,9 +1313,9 @@ function tentarAplicarEstado(sincronizarPosicao = true) {
 // sem ficar fazendo a música voltar alguns segundos.
 
 
-/* 
+/* ===
    ÁUDIO / MUTE
- */
+=== */
 
 if (enableAudioButton) {
     enableAudioButton.addEventListener(
@@ -1389,9 +1385,9 @@ function atualizarMuteVisual() {
 }
 
 
-/* 
+/* ===
    USUÁRIOS
- */
+=== */
 
 function renderizarUsuarios(usuarios) {
     if (
@@ -1428,7 +1424,7 @@ function renderizarUsuarios(usuarios) {
                 usuario => {
                     const souEu =
                         socket &&
-                        usuario.id === socket.id;
+                        (usuario.id === socket.id || usuario.socketId === socket.id);
 
                     return `
                         <div class="user-card">
@@ -1461,49 +1457,9 @@ function renderizarUsuarios(usuarios) {
 }
 
 
-/* 
+/* ===
    ATIVIDADE
- */
-
-function adicionarAtividade(
-    usuario,
-    acao
-) {
-    if (!usuario) {
-        return;
-    }
-
-    const item =
-        document.createElement("div");
-
-    item.className =
-        "activity-item";
-
-    item.innerHTML = `
-        <img
-            src="/avatars/${escapeAttribute(usuario.avatar)}"
-            alt=""
-        >
-
-        <div>
-            <strong>
-                ${escapeHtml(usuario.nome)}
-            </strong>
-
-            <span>
-                ${escapeHtml(acao)}
-            </span>
-        </div>
-    `;
-
-    activityList.prepend(item);
-
-    while (
-        activityList.children.length > 8
-    ) {
-        activityList.lastElementChild.remove();
-    }
-}
+=== */
 
 function renderizarAtividades(atividades) {
     if (!activityList) {
@@ -1512,32 +1468,46 @@ function renderizarAtividades(atividades) {
 
     activityList.innerHTML = "";
 
-    atividades
-        .slice(-8)
-        .forEach(atividade => {
-            if (!atividade?.usuario) {
-                return;
-            }
+    const lista = Array.isArray(atividades)
+        ? atividades.slice(-8)
+        : [];
 
-            const acao =
-                atividade.tipo === "entrou"
-                    ? "entrou na sala"
-                    : atividade.tipo === "saiu"
-                        ? "saiu da sala"
-                        : atividade.tipo || "atividade";
+    lista.forEach(atividade => {
+        if (!atividade || !atividade.usuario) {
+            return;
+        }
 
-            adicionarAtividade(
-                atividade.usuario,
-                acao
-            );
-        });
+        const item = document.createElement("div");
+        item.className = "activity-item";
+
+        const acao =
+            atividade.tipo === "entrou"
+                ? "entrou na sala"
+                : atividade.tipo === "saiu"
+                    ? "saiu da sala"
+                    : String(atividade.tipo || "atividade");
+
+        item.innerHTML = `
+            <img
+                src="/avatars/${escapeAttribute(atividade.usuario.avatar)}"
+                alt=""
+            >
+
+            <div>
+                <strong>${escapeHtml(atividade.usuario.nome)}</strong>
+                <span>${escapeHtml(acao)}</span>
+            </div>
+        `;
+
+        activityList.appendChild(item);
+    });
 }
 
 
 
-/* 
+/* ===
    INICIALIZAÇÃO
- */
+=== */
 
 function iniciar() {
     atualizarFila();

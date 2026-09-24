@@ -508,6 +508,19 @@ button {
     display: none;
 }
 
+.enable-audio-button.attention {
+    animation: audioAttention 1.2s ease-in-out infinite;
+}
+
+@keyframes audioAttention {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
 .search-box {
     display: flex;
     gap: 8px;
