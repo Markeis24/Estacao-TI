@@ -1036,12 +1036,36 @@ window.tocarAgora = function (videoId) {
         return;
     }
 
+    const musicaSala = {
+        ...musica,
+        adicionadoPor: identidade
+    };
+
+    // Aplica imediatamente no navegador de quem clicou em TOCAR.
+    // Isso evita depender do autoplay depois que o evento do Socket.IO chega,
+    // especialmente no navegador de quem criou a sala.
+    const indiceExistente = estadoSala.fila.findIndex(
+        item => item.videoId === videoId
+    );
+
+    if (indiceExistente === -1) {
+        estadoSala.fila.push(musicaSala);
+        estadoSala.indiceAtual =
+            estadoSala.fila.length - 1;
+    } else {
+        estadoSala.indiceAtual = indiceExistente;
+    }
+
+    estadoSala.tocando = true;
+    estadoSala.posicao = 0;
+
+    atualizarFila();
+    atualizarMusicaAtual();
+    tentarAplicarEstado(false);
+
     enviarControle({
         tipo: "play-now",
-        musica: {
-            ...musica,
-            adicionadoPor: identidade
-        }
+        musica: musicaSala
     });
 };
 

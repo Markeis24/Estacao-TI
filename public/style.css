@@ -131,7 +131,7 @@ button {
 .site {
     position: relative;
     z-index: 1;
-    width: min(1180px, calc(100% - 28px));
+    width: min(1280px, calc(100% - 28px));
     margin: 0 auto;
     padding: 28px 0 45px;
 }
@@ -317,7 +317,7 @@ button {
 .community-grid,
 .content-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
     gap: 14px;
     margin-bottom: 14px;
 }
@@ -611,17 +611,25 @@ button {
 .queue-author {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 7px;
     margin-top: 6px;
     color: var(--muted);
     font-size: 9px;
+    line-height: 1.2;
 }
 
 .queue-author img {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
     object-fit: cover;
     border: 1px solid var(--line);
+}
+
+.queue-author strong {
+    display: inline;
+    color: var(--text);
+    font-weight: 700;
 }
 
 .empty-message {
