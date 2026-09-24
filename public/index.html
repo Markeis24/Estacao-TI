@@ -2,176 +2,35 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>Estacao-TI // Music Network</title>
 
-    <title>
-        Estacao-TI // Music Network
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
-
 <body>
-
-
-    <!-- =====================================================
-         TELA DE IDENTIDADE
-    ====================================================== -->
-
-    <div
-        id="identity-overlay"
-        class="identity-overlay"
-    >
-
-        <div class="identity-window">
-
-            <div class="identity-topbar">
-
-                <span>
-                    ESTACAO-TI // USER.EXE
-                </span>
-
-                <span>
-                    ● ONLINE
-                </span>
-
-            </div>
-
-
-            <div class="identity-content">
-
-                <div class="identity-symbol">
-                    ✦
-                </div>
-
-
-                <div class="identity-title">
-
-                    <span>
-                        WELCOME TO
-                    </span>
-
-                    <h1>
-                        ESTACAO-TI
-                    </h1>
-
-                    <p>
-                        escolha sua identidade temporária
-                    </p>
-
-                </div>
-
-
-                <div class="identity-field">
-
-                    <label for="identity-name">
-                        SEU NOME
-                    </label>
-
-                    <input
-                        type="text"
-                        id="identity-name"
-                        maxlength="20"
-                        autocomplete="off"
-                        placeholder="Digite seu nome..."
-                    >
-
-                </div>
-
-
-                <div class="identity-field">
-
-                    <label>
-                        ESCOLHA SEU AVATAR
-                    </label>
-
-
-                    <div
-                        id="avatar-selection"
-                        class="avatar-selection"
-                    >
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    id="identity-confirm-button"
-                    class="identity-confirm-button"
-                >
-                    ✦ ENTRAR NA ESTAÇÃO ✦
-                </button>
-
-
-                <p class="identity-note">
-                    identidade temporária • sem senha • sem cadastro
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         FUNDO METRO
-    ====================================================== -->
 
     <div class="metro-background">
 
         <div class="metro-circle circle-1"></div>
-
         <div class="metro-circle circle-2"></div>
-
         <div class="metro-circle circle-3"></div>
 
-        <div class="metro-star star-1">
-            ★
-        </div>
+        <div class="metro-star star-1">★</div>
+        <div class="metro-star star-2">★</div>
+        <div class="metro-star star-3">★</div>
 
-        <div class="metro-star star-2">
-            ★
-        </div>
-
-        <div class="metro-star star-3">
-            ★
-        </div>
-
-        <div class="metro-spark spark-1">
-            ✦
-        </div>
-
-        <div class="metro-spark spark-2">
-            ✦
-        </div>
-
-        <div class="metro-spark spark-3">
-            ✦
-        </div>
+        <div class="metro-spark spark-1">✦</div>
+        <div class="metro-spark spark-2">✦</div>
+        <div class="metro-spark spark-3">✦</div>
 
         <div class="metro-orbit orbit-1"></div>
-
         <div class="metro-orbit orbit-2"></div>
 
     </div>
 
-
-    <!-- =====================================================
-         SITE
-    ====================================================== -->
 
     <main class="site">
 
@@ -183,41 +42,23 @@
             <div class="brand">
 
                 <div class="brand-symbol">
-                    ✦
+
+                    <img
+                        src="https://api.iconify.design/tabler/headphones.svg?color=%23C084FC"
+                        width="38"
+                        height="38"
+                        alt="Headphones"
+                    >
+
                 </div>
 
                 <div class="brand-text">
 
-                    <h1>
-                        ESTACAO-TI
-                    </h1>
+                    <h1>ESTACAO-TI</h1>
 
                     <span>
                         MUSIC NETWORK
                     </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="header-user">
-
-                <img
-                    id="current-user-avatar"
-                    src="avatars/avatar01.png"
-                    alt="Seu avatar"
-                >
-
-                <div>
-
-                    <span>
-                        LOGGED AS
-                    </span>
-
-                    <strong id="current-user-name">
-                        Visitante
-                    </strong>
 
                 </div>
 
@@ -256,16 +97,21 @@
         </div>
 
 
-        <!-- =================================================
-             SALA
-        ================================================== -->
+        <!-- SALA -->
 
         <section class="room-panel">
 
             <div class="section-title">
 
                 <span class="title-icon">
-                    ♫
+
+                    <img
+                        src="https://api.iconify.design/tabler/radio.svg?color=%23C084FC"
+                        width="32"
+                        height="32"
+                        alt="Radio"
+                    >
+
                 </span>
 
                 <div>
@@ -285,14 +131,22 @@
 
             <div class="room-content">
 
-
                 <div class="room-buttons">
 
                     <button
                         id="create-room-button"
                         class="metro-button primary"
                     >
-                        ✦ CRIAR SALA
+
+                        <img
+                            src="https://api.iconify.design/tabler/plus.svg?color=%23ffffff"
+                            width="20"
+                            height="20"
+                            alt=""
+                        >
+
+                        CRIAR SALA
+
                     </button>
 
 
@@ -319,7 +173,6 @@
 
 
                 <div class="room-info">
-
 
                     <div class="info-box">
 
@@ -352,7 +205,16 @@
                     <div class="connection-box">
 
                         <span id="connection-status">
-                            ⚪ OFFLINE
+
+                            <img
+                                src="https://api.iconify.design/tabler/wifi-off.svg?color=%23C084FC"
+                                width="18"
+                                height="18"
+                                alt=""
+                            >
+
+                            OFFLINE
+
                         </span>
 
                     </div>
@@ -365,88 +227,181 @@
                     class="audio-button"
                     hidden
                 >
-                    🔊 ATIVAR REPRODUÇÃO
+
+                    <img
+                        src="https://api.iconify.design/tabler/volume.svg?color=%23C084FC"
+                        width="20"
+                        height="20"
+                        alt=""
+                    >
+
+                    ATIVAR REPRODUÇÃO
+
+                </button>
+
+            </div>
+
+
+            <!-- QUEM ESTÁ AQUI -->
+
+            <div class="presence-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+
+                        <span>
+                            LIVE USERS.EXE
+                        </span>
+
+                        <h2>
+                            QUEM ESTÁ AQUI
+                        </h2>
+
+                    </div>
+
+                    <div class="heading-decoration">
+
+                        <img
+                            src="https://api.iconify.design/tabler/users.svg?color=%23C084FC"
+                            width="26"
+                            height="26"
+                            alt=""
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="users-list"
+                    class="users-list"
+                >
+
+                    <div class="empty-message">
+
+                        <span class="empty-icon">
+
+                            <img
+                                src="https://api.iconify.design/tabler/user-off.svg?color=%23C084FC"
+                                width="34"
+                                height="34"
+                                alt=""
+                            >
+
+                        </span>
+
+                        <strong>
+                            NENHUM USUÁRIO
+                        </strong>
+
+                        <p>
+                            Entre em uma sala para aparecer aqui
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ATIVIDADE -->
+
+            <div class="activity-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+
+                        <span>
+                            ROOM ACTIVITY.EXE
+                        </span>
+
+                        <h2>
+                            ATIVIDADE
+                        </h2>
+
+                    </div>
+
+                    <div class="heading-decoration">
+
+                        <img
+                            src="https://api.iconify.design/tabler/activity.svg?color=%23C084FC"
+                            width="26"
+                            height="26"
+                            alt=""
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="activity-list"
+                    class="activity-list"
+                >
+
+                    <div class="empty-message">
+
+                        <span class="empty-icon">
+
+                            <img
+                                src="https://api.iconify.design/tabler/clock.svg?color=%23C084FC"
+                                width="34"
+                                height="34"
+                                alt=""
+                            >
+
+                        </span>
+
+                        <strong>
+                            SEM ATIVIDADE
+                        </strong>
+
+                        <p>
+                            As atividades da sala aparecerão aqui
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IDENTIDADE -->
+
+            <div class="identity-shortcut">
+
+                <button
+                    id="change-identity-button"
+                    class="metro-button"
+                    type="button"
+                >
+
+                    <img
+                        src="https://api.iconify.design/tabler/user-edit.svg?color=%23C084FC"
+                        width="20"
+                        height="20"
+                        alt=""
+                    >
+
+                    MINHA IDENTIDADE
+
                 </button>
 
 
-                <!-- USUÁRIOS -->
+                <div
+                    id="current-identity"
+                    class="current-identity"
+                >
 
-                <div class="room-community">
-
-
-                    <div class="community-column">
-
-                        <div class="community-header">
-
-                            <div>
-
-                                <span>
-                                    ROOM USERS
-                                </span>
-
-                                <strong>
-                                    QUEM ESTÁ AQUI
-                                </strong>
-
-                            </div>
-
-                            <span class="community-icon">
-                                👥
-                            </span>
-
-                        </div>
-
-
-                        <div
-                            id="room-users-list"
-                            class="room-users-list"
-                        >
-
-                            <div class="community-empty">
-                                entre em uma sala
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="community-column">
-
-                        <div class="community-header">
-
-                            <div>
-
-                                <span>
-                                    ROOM ACTIVITY
-                                </span>
-
-                                <strong>
-                                    ATIVIDADE
-                                </strong>
-
-                            </div>
-
-                            <span class="community-icon">
-                                ✦
-                            </span>
-
-                        </div>
-
-
-                        <div
-                            id="room-activity"
-                            class="room-activity"
-                        >
-
-                            <div class="community-empty">
-                                nenhuma atividade
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                    <span>
+                        Não identificado
+                    </span>
 
                 </div>
 
@@ -455,16 +410,21 @@
         </section>
 
 
-        <!-- =================================================
-             PLAYER
-        ================================================== -->
+        <!-- PLAYER -->
 
         <section class="player-panel">
 
             <div class="section-title player-title">
 
                 <span class="title-icon">
-                    ◉
+
+                    <img
+                        src="https://api.iconify.design/tabler/disc.svg?color=%23C084FC"
+                        width="32"
+                        height="32"
+                        alt="Disc"
+                    >
+
                 </span>
 
                 <div>
@@ -493,9 +453,7 @@
                     <div class="window-buttons">
 
                         <span>—</span>
-
                         <span>□</span>
-
                         <span>×</span>
 
                     </div>
@@ -516,13 +474,18 @@
                 <div class="music-disc">
 
                     <div class="disc-ring ring-one"></div>
-
                     <div class="disc-ring ring-two"></div>
-
                     <div class="disc-ring ring-three"></div>
 
                     <div class="disc-center">
-                        ♪
+
+                        <img
+                            src="https://api.iconify.design/tabler/music.svg?color=%23C084FC"
+                            width="34"
+                            height="34"
+                            alt=""
+                        >
+
                     </div>
 
                 </div>
@@ -564,35 +527,23 @@
             <div class="player-controls">
 
                 <button
-                    id="previous-button"
-                    class="control-button"
-                >
-                    ◀◀
-                    <small>
-                        ANTERIOR
-                    </small>
-                </button>
-
-
-                <button
-                    id="play-pause-button"
+                    id="mute-button"
                     class="control-button main-control"
+                    type="button"
                 >
-                    ▶
-                    <small>
-                        TOCAR
-                    </small>
-                </button>
 
+                    <img
+                        id="mute-icon"
+                        src="https://api.iconify.design/tabler/volume.svg?color=%23C084FC"
+                        width="26"
+                        height="26"
+                        alt=""
+                    >
 
-                <button
-                    id="next-button"
-                    class="control-button"
-                >
-                    ▶▶
-                    <small>
-                        PRÓXIMA
+                    <small id="mute-text">
+                        MUTAR
                     </small>
+
                 </button>
 
             </div>
@@ -600,16 +551,21 @@
         </section>
 
 
-        <!-- =================================================
-             PESQUISA
-        ================================================== -->
+        <!-- PESQUISA -->
 
         <section class="search-panel">
 
             <div class="section-title">
 
                 <span class="title-icon">
-                    ✧
+
+                    <img
+                        src="https://api.iconify.design/tabler/search.svg?color=%23C084FC"
+                        width="32"
+                        height="32"
+                        alt="Search"
+                    >
+
                 </span>
 
                 <div>
@@ -639,8 +595,18 @@
                 <button
                     id="search-button"
                     class="search-button"
+                    type="button"
                 >
-                    🔎 BUSCAR
+
+                    <img
+                        src="https://api.iconify.design/tabler/search.svg?color=%23ffffff"
+                        width="20"
+                        height="20"
+                        alt=""
+                    >
+
+                    BUSCAR
+
                 </button>
 
             </div>
@@ -648,9 +614,7 @@
         </section>
 
 
-        <!-- =================================================
-             RESULTADOS
-        ================================================== -->
+        <!-- RESULTADOS -->
 
         <section class="results-panel">
 
@@ -680,7 +644,14 @@
                 <div class="empty-message">
 
                     <span class="empty-icon">
-                        ♪
+
+                        <img
+                            src="https://api.iconify.design/tabler/music-search.svg?color=%23C084FC"
+                            width="38"
+                            height="38"
+                            alt=""
+                        >
+
                     </span>
 
                     <strong>
@@ -698,9 +669,7 @@
         </section>
 
 
-        <!-- =================================================
-             FILA
-        ================================================== -->
+        <!-- FILA -->
 
         <section class="queue-panel">
 
@@ -719,7 +688,14 @@
                 </div>
 
                 <div class="heading-decoration">
-                    ♫ ♫ ♫
+
+                    <img
+                        src="https://api.iconify.design/tabler/playlist.svg?color=%23C084FC"
+                        width="28"
+                        height="28"
+                        alt=""
+                    >
+
                 </div>
 
             </div>
@@ -730,7 +706,14 @@
                 <div class="empty-message">
 
                     <span class="empty-icon">
-                        ♬
+
+                        <img
+                            src="https://api.iconify.design/tabler/playlist-x.svg?color=%23C084FC"
+                            width="38"
+                            height="38"
+                            alt=""
+                        >
+
                     </span>
 
                     <strong>
@@ -748,9 +731,7 @@
         </section>
 
 
-        <!-- =================================================
-             RODAPÉ
-        ================================================== -->
+        <!-- RODAPÉ -->
 
         <footer class="footer">
 
@@ -772,24 +753,247 @@
 
         </footer>
 
-
     </main>
 
 
-    <!-- SOCKET -->
+    <!-- =====================================================
+         MODAL DE IDENTIDADE
+    ====================================================== -->
+
+    <div
+        id="identity-modal"
+        class="identity-modal"
+        hidden
+    >
+
+        <div class="identity-modal-backdrop"></div>
+
+
+        <div class="identity-modal-window">
+
+            <div class="identity-modal-header">
+
+                <div>
+
+                    <span>
+                        USER PROFILE.EXE
+                    </span>
+
+                    <h2>
+                        QUEM É VOCÊ?
+                    </h2>
+
+                </div>
+
+
+                <button
+                    id="close-identity-button"
+                    class="identity-close-button"
+                    type="button"
+                    aria-label="Fechar"
+                >
+
+                    <img
+                        src="https://api.iconify.design/tabler/x.svg?color=%23C084FC"
+                        width="24"
+                        height="24"
+                        alt=""
+                    >
+
+                </button>
+
+            </div>
+
+
+            <div class="identity-modal-content">
+
+
+                <label
+                    for="identity-name"
+                    class="identity-label"
+                >
+                    NOME
+                </label>
+
+
+                <input
+                    id="identity-name"
+                    class="identity-input"
+                    type="text"
+                    maxlength="30"
+                    placeholder="Digite seu nome..."
+                    autocomplete="off"
+                >
+
+
+                <div class="identity-label avatar-label">
+                    ESCOLHA SEU AVATAR
+                </div>
+
+
+                <div
+                    id="avatar-list"
+                    class="avatar-list"
+                >
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="01.png"
+                    >
+                        <img
+                            src="/avatars/01.png"
+                            alt="Avatar 01"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="02.png"
+                    >
+                        <img
+                            src="/avatars/02.png"
+                            alt="Avatar 02"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="03.png"
+                    >
+                        <img
+                            src="/avatars/03.png"
+                            alt="Avatar 03"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="04.png"
+                    >
+                        <img
+                            src="/avatars/04.png"
+                            alt="Avatar 04"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="05.png"
+                    >
+                        <img
+                            src="/avatars/05.png"
+                            alt="Avatar 05"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="06.png"
+                    >
+                        <img
+                            src="/avatars/06.png"
+                            alt="Avatar 06"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="07.png"
+                    >
+                        <img
+                            src="/avatars/07.png"
+                            alt="Avatar 07"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="08.png"
+                    >
+                        <img
+                            src="/avatars/08.png"
+                            alt="Avatar 08"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="09.png"
+                    >
+                        <img
+                            src="/avatars/09.png"
+                            alt="Avatar 09"
+                        >
+                    </button>
+
+
+                    <button
+                        class="avatar-option"
+                        type="button"
+                        data-avatar="10.png"
+                    >
+                        <img
+                            src="/avatars/10.png"
+                            alt="Avatar 10"
+                        >
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="identity-error"
+                    class="identity-error"
+                    hidden
+                ></div>
+
+
+                <button
+                    id="save-identity-button"
+                    class="metro-button primary identity-save-button"
+                    type="button"
+                >
+
+                    <img
+                        src="https://api.iconify.design/tabler/login.svg?color=%23ffffff"
+                        width="22"
+                        height="22"
+                        alt=""
+                    >
+
+                    ENTRAR NA ESTAÇÃO
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
     <script src="/socket.io/socket.io.js"></script>
 
-
-    <!-- YOUTUBE -->
-
     <script src="https://www.youtube.com/iframe_api"></script>
 
-
-    <!-- SCRIPT -->
-
     <script src="script.js"></script>
-
 
 </body>
 
