@@ -1,217 +1,218 @@
-
 <div align="center">
 
-# <img src="https://api.iconify.design/tabler/headphones.svg?color=%23C084FC" width="32" /> ESTAÇÃO TI
+# <img src="https://api.iconify.design/tabler/headphones.svg?color=%2300A6D6" width="34" /> ESTAÇÃO TI
 
-### <img src="https://api.iconify.design/tabler/music.svg?color=%23F472B6" width="18" /> Música • Tecnologia • Conexão
+### <img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /> Música compartilhada • Tecnologia • Conexão
 
-<br>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:00B4D8,45:48CAE4,75:90E0EF,100:80ED99&height=130&section=header&text=ESTA%C3%87%C3%83O%20TI&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=38" />
 
-<img src="https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-C084FC?style=for-the-badge&labelColor=0D0B12" />
-<img src="https://img.shields.io/badge/NODE.JS-22.23.2-F472B6?style=for-the-badge&labelColor=0D0B12" />
-<img src="https://img.shields.io/badge/RENDER-ONLINE-A855F7?style=for-the-badge&labelColor=0D0B12" />
+<img src="https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-00A6D6?style=for-the-badge&labelColor=E8FBFF" />
+<img src="https://img.shields.io/badge/NODE.JS-24.x-00B894?style=for-the-badge&labelColor=E8FBFF" />
+<img src="https://img.shields.io/badge/EXPRESS-5.x-00A6D6?style=for-the-badge&labelColor=E8FBFF" />
+<img src="https://img.shields.io/badge/SOCKET.IO-4.x-00B894?style=for-the-badge&labelColor=E8FBFF" />
 
 <br><br>
 
-<img src="https://api.iconify.design/tabler/player-play.svg?color=%23C084FC" width="16" />
-<a href="https://estacao-ti.onrender.com/">ACESSE O PROJETO</a>
+<img src="https://api.iconify.design/tabler/player-play.svg?color=%2300A6D6" width="16" />
+<a href="https://estacao-ti.onrender.com/"><strong> ACESSE O ESTAÇÃO TI </strong></a>
+&nbsp;&nbsp;•&nbsp;&nbsp;
+<a href="https://github.com/Markeis24/Estacao-TI"><strong> GITHUB </strong></a>
+
+<br><br>
+
+<sub>☁️ Um player musical colaborativo com salas em tempo real, visual Frutiger Aero e pesquisa pelo YouTube.</sub>
 
 </div>
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-<div align="center">
+## <img src="https://api.iconify.design/tabler/sparkles.svg?color=%2300A6D6" width="22" /> SOBRE O PROJETO
 
-<img src="https://api.iconify.design/tabler/line.svg?color=%23C084FC" width="50%" />
+O **Estação TI** é uma aplicação web de música compartilhada criada para transformar a reprodução musical em uma experiência coletiva.
 
-</div>
+A proposta é simples: **criar uma sala, escolher um avatar, compartilhar o código da sala e ouvir músicas junto com outras pessoas**.
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+O projeto combina:
 
+- 🎵 Pesquisa de músicas através da **YouTube Data API v3**
+- 🌊 Salas compartilhadas em tempo real
+- 👤 Identidade temporária com nome e avatar
+- 📋 Fila de reprodução compartilhada
+- ⚡ Sincronização através do **Socket.IO**
+- ▶️ Reprodução utilizando o **YouTube IFrame Player API**
+- 🔇 Controle de áudio local, sem interromper a reprodução dos outros participantes
+- 🔑 Cada usuário utiliza sua própria chave da YouTube Data API
+- 🌱 Interface inspirada na estética **Frutiger Aero / Aquatic**
 
-## <img src="https://api.iconify.design/tabler/list-details.svg?color=%23C084FC" width="20" /> SOBRE O PROJETO
+> **A ideia:** é como uma Jam de música, mas com identidade própria, gratuita e sem anúncios adicionados pelo projeto.
 
-O **Estação TI** é um projeto desenvolvido para criar uma experiência de música compartilhada entre os integrantes do grupo.
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-A proposta é unir **música, tecnologia e interação em tempo real**, permitindo que diferentes usuários entrem em uma mesma sala e compartilhem uma fila de músicas.
+## <img src="https://api.iconify.design/tabler/target-arrow.svg?color=%2300B894" width="22" /> PROPOSTA
 
-O sistema utiliza a API do YouTube para realizar pesquisas e o **Socket.IO** para manter as informações da sala sincronizadas entre os usuários.
+O Estação TI foi pensado para facilitar momentos em que várias pessoas querem participar da mesma seleção musical.
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
-
-## <img src="https://api.iconify.design/tabler/target.svg?color=%23F472B6" width="20" /> OBJETIVO
-
-Criar um player de música online com salas compartilhadas, permitindo que os usuários:
-
-- Pesquisem músicas
-- Adicionem músicas à fila
-- Reproduzam músicas
-- Pausem e continuem a reprodução
-- Avancem ou voltem músicas
-- Removam músicas da fila
-- Criem salas
-- Entrem em salas existentes
-- Compartilhem a mesma fila de reprodução
-
-A ideia principal é fazer com que todos os usuários conectados à mesma sala tenham uma experiência sincronizada.
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
-
-## <img src="https://api.iconify.design/tabler/player-play.svg?color=%23A855F7" width="20" /> FUNCIONALIDADES
-
-### <img src="https://api.iconify.design/tabler/search.svg?color=%23C084FC" width="18" /> Pesquisa de músicas
-
-O usuário pode pesquisar músicas diretamente pelo sistema utilizando a API do YouTube.
-
-### <img src="https://api.iconify.design/tabler/playlist.svg?color=%23F472B6" width="18" /> Fila compartilhada
-
-As músicas adicionadas ficam disponíveis para todos os usuários conectados à mesma sala.
-
-### <img src="https://api.iconify.design/tabler/door-enter.svg?color=%23C084FC" width="18" /> Salas
-
-Cada sala possui um código próprio que pode ser compartilhado com outras pessoas.
-
-### <img src="https://api.iconify.design/tabler/player-pause.svg?color=%23F472B6" width="18" /> Controles
-
-Os usuários podem controlar a reprodução através dos comandos:
-
-- Play
-- Pause
-- Próxima música
-- Música anterior
-- Remover música
-
-### <img src="https://api.iconify.design/tabler/users.svg?color=%23C084FC" width="18" /> Usuários conectados
-
-O sistema mantém informações sobre os usuários presentes na sala.
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
-
-<div align="center">
-
-<img src="https://api.iconify.design/tabler/line.svg?color=%23F472B6" width="50%" />
-
-</div>
-
-## <img src="https://api.iconify.design/tabler/tool.svg?color=%23C084FC" width="20" /> ARSENAL
+Cada sala mantém um estado compartilhado, permitindo que os participantes acompanhem:
 
 ```text
-YouTube
-Socket.IO
-Node.js
-Express
-JavaScript
-HTML
-CSS
-Render
-GitHub
-````
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
-
-## <img src="https://api.iconify.design/tabler/stack-2.svg?color=%23F472B6" width="20" /> STACK
-
-### Backend
-
-* Node.js
-* Express
-* Socket.IO
-* CORS
-* dotenv
-
-### Frontend
-
-* HTML
-* CSS
-* JavaScript
-* YouTube IFrame Player API
-
-### APIs
-
-* YouTube Data API v3
-* YouTube IFrame Player API
-
-### Deploy
-
-* Render
-
-### Versionamento
-
-* Git
-* GitHub
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
-
-## <img src="https://api.iconify.design/tabler/folder.svg?color=%23C084FC" width="20" /> ESTRUTURA
-
-```text
-my-player/
-│
-├── backend/
-│   └── server.js
-│
-├── public/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-│
-├── .env
-├── .gitignore
-├── package.json
-└── package-lock.json
+SALA
+ │
+ ├── Usuários conectados
+ │    ├── Nome
+ │    └── Avatar
+ │
+ ├── Fila de músicas
+ │
+ ├── Música atual
+ │
+ ├── Posição da reprodução
+ │
+ └── Estado do player
 ```
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+As alterações da sala são transmitidas em tempo real pelo servidor para os usuários conectados.
 
-## <img src="https://api.iconify.design/tabler/settings.svg?color=%23F472B6" width="20" /> FUNCIONAMENTO
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-O funcionamento do sistema é dividido entre frontend e backend.
+## <img src="https://api.iconify.design/tabler/player-play.svg?color=%2300A6D6" width="22" /> FUNCIONALIDADES
 
-### Frontend
+### <img src="https://api.iconify.design/tabler/door-enter.svg?color=%2300B894" width="18" /> Salas compartilhadas
 
-O navegador é responsável pela interface e pela reprodução do vídeo utilizando o player do YouTube.
+- Criar uma nova sala.
+- Entrar em uma sala através do código.
+- Compartilhar o código da sala com outras pessoas.
+- Atualizar os participantes conectados em tempo real.
 
-### Backend
+### <img src="https://api.iconify.design/tabler/user-circle.svg?color=%2300A6D6" width="18" /> Identidade e avatares
 
-O servidor Node.js controla as salas e mantém o estado compartilhado.
+Ao entrar no sistema, o usuário pode configurar:
 
-Cada sala possui informações como:
+- Nome de exibição.
+- Avatar.
+- Chave pessoal da YouTube Data API.
+
+Os avatares são carregados a partir de `public/avatars/`.
+
+### <img src="https://api.iconify.design/tabler/search.svg?color=%2300B894" width="18" /> Pesquisa de músicas
+
+A pesquisa utiliza a **YouTube Data API v3**.
+
+O usuário informa sua própria chave da API no sistema e a chave é enviada ao backend através do cabeçalho:
 
 ```text
-Fila de músicas
-Música atual
-Índice da música atual
-Estado de reprodução
-Posição atual
-Usuários conectados
+X-YouTube-API-Key
 ```
 
-O servidor envia as alterações para os usuários conectados através do Socket.IO.
+A chave não faz parte da URL da pesquisa e não é compartilhada com os demais usuários da sala.
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+### <img src="https://api.iconify.design/tabler/list.svg?color=%2300A6D6" width="18" /> Fila colaborativa
 
-## <img src="https://api.iconify.design/tabler/brand-youtube.svg?color=%23F472B6" width="20" /> YOUTUBE
+Os participantes podem adicionar músicas à fila da sala.
 
-O projeto utiliza a **YouTube Data API v3** para realizar as pesquisas de músicas.
+A fila é compartilhada entre todos os usuários conectados à mesma sala.
 
-A API retorna informações utilizadas pelo sistema, como:
+### <img src="https://api.iconify.design/tabler/player-skip-forward.svg?color=%2300B894" width="18" /> Reprodução
 
-* Título
-* Thumbnail
-* ID do vídeo
-* Informações necessárias para reprodução
+A sala mantém informações sobre:
 
-A reprodução é feita através do **YouTube IFrame Player API**.
+- Música atual.
+- Índice da música.
+- Posição da reprodução.
+- Estado do player.
+- Fila de músicas.
 
-O projeto não realiza download ou extração do áudio dos vídeos.
+### <img src="https://api.iconify.design/tabler/volume-3.svg?color=%2300A6D6" width="18" /> Áudio individual
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+O botão central de áudio controla **somente o player local do usuário**.
 
-## <img src="https://api.iconify.design/tabler/brand-socket-io.svg?color=%23C084FC" width="20" /> SOCKET.IO
+Isso significa que:
 
-O Socket.IO é utilizado para comunicação em tempo real entre o servidor e os navegadores.
+> 🔊 Se uma pessoa silenciar o próprio player, a música continua normalmente para os outros participantes da sala.
 
-Entre os eventos utilizados estão:
+O estado de reprodução da sala não é pausado apenas porque um usuário silenciou o próprio áudio.
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
+
+## <img src="https://api.iconify.design/tabler/api.svg?color=%2300A6D6" width="22" /> YOUTUBE DATA API
+
+O Estação TI utiliza a **YouTube Data API v3** para pesquisar conteúdos do YouTube.
+
+### Cada usuário utiliza sua própria chave
+
+A chave da API não é mais uma configuração compartilhada do servidor.
+
+O fluxo funciona assim:
+
+```text
+USUÁRIO
+   │
+   ├── informa sua chave da YouTube Data API
+   │
+   ▼
+NAVEGADOR
+   │
+   │  X-YouTube-API-Key
+   ▼
+BACKEND
+   │
+   ▼
+YOUTUBE DATA API v3
+```
+
+A aplicação bloqueia pesquisas quando nenhuma chave foi configurada e trata respostas relacionadas a chave inválida ou limite de cota.
+
+### 🔐 Segurança da chave
+
+A chave informada pelo usuário:
+
+- Fica armazenada localmente no navegador.
+- É enviada ao backend somente quando necessário para pesquisar.
+- Não é colocada na URL da aplicação.
+- Não é enviada como parte do estado da sala.
+- Não é compartilhada com os outros usuários.
+- Não deve ser colocada no código-fonte do projeto.
+
+### 📘 Guia para criar a chave
+
+O projeto possui um guia em PDF para configurar uma chave da **YouTube Data API v3**:
+
+<a href="https://github.com/Markeis24/Estacao-TI/blob/main/public/docs/Guia_Criar_Chave_YouTube_Estacao_TI.pdf">
+<strong>📄 Abrir Guia — Criar Chave da YouTube API</strong>
+</a>
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
+
+## <img src="https://api.iconify.design/tabler/brand-youtube.svg?color=%23FF0000" width="22" /> REPRODUÇÃO
+
+A reprodução é realizada através da **YouTube IFrame Player API**.
+
+O projeto utiliza o player incorporado do YouTube e não realiza download ou extração do áudio dos vídeos.
+
+```text
+Pesquisa
+   ↓
+YouTube Data API v3
+   ↓
+Resultado da pesquisa
+   ↓
+Usuário adiciona à fila
+   ↓
+Sala compartilha a fila
+   ↓
+YouTube IFrame Player API
+   ↓
+Reprodução
+```
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
+
+## <img src="https://api.iconify.design/tabler/brand-socket-io.svg?color=%2300B894" width="22" /> COMUNICAÇÃO EM TEMPO REAL
+
+O **Socket.IO** é responsável pela comunicação entre o navegador e o servidor.
+
+Ele permite que alterações realizadas em uma sala sejam transmitidas aos demais participantes.
+
+Entre os eventos utilizados pelo sistema estão:
 
 ```text
 criar-sala
@@ -225,196 +226,309 @@ usuarios-atualizados
 controle-sala
 ```
 
-Dessa forma, quando uma alteração acontece na sala, os outros usuários podem receber a atualização.
+O servidor mantém o estado das salas e distribui as atualizações para os clientes conectados.
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-<div align="center">
+## <img src="https://api.iconify.design/tabler/stack-2.svg?color=%2300A6D6" width="22" /> TECNOLOGIAS
 
-<img src="https://api.iconify.design/tabler/line.svg?color=%23A855F7" width="50%" />
+### 🌐 Frontend
 
-</div>
+- HTML5
+- CSS3
+- JavaScript
+- YouTube IFrame Player API
 
-## <img src="https://api.iconify.design/tabler/palette.svg?color=%23C084FC" width="20" /> IDENTIDADE VISUAL
+### ⚙️ Backend
 
-O projeto possui uma identidade visual inspirada em:
+- Node.js
+- Express
+- Socket.IO
+- CORS
+- dotenv
 
-* Estética digital
-* Roxo
-* Rosa
-* Preto
-* Brilhos
-* Elementos tecnológicos
+### ☁️ Serviços
 
-A proposta visual busca transmitir uma sensação de tecnologia, música e nostalgia.
+- YouTube Data API v3
+- YouTube IFrame Player API
+- Render
+- GitHub
 
-### Paleta utilizada
+### 🛠️ Desenvolvimento
+
+- Git
+- GitHub
+- Nodemon
+- npm
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
+
+## <img src="https://api.iconify.design/tabler/folder.svg?color=%2300B894" width="22" /> ESTRUTURA DO PROJETO
 
 ```text
-#0D0B12
-#C084FC
-#F472B6
-#A855F7
+Estacao-TI/
+│
+├── backend/
+│   └── server.js
+│
+├── public/
+│   ├── assets/
+│   │   └── frutiger-aero-bg.png
+│   │
+│   ├── avatars/
+│   │   ├── avatar01.png
+│   │   ├── avatar02.png
+│   │   ├── ...
+│   │   └── avatar10.png
+│   │
+│   ├── docs/
+│   │   └── Guia_Criar_Chave_YouTube_Estacao_TI.pdf
+│   │
+│   ├── index.html
+│   ├── script.js
+│   ├── style.css
+│   └── style-backup.css
+│
+├── .gitignore
+├── package.json
+└── package-lock.json
 ```
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-## <img src="https://api.iconify.design/tabler/code.svg?color=%23F472B6" width="20" /> HARD SKILLS
+## <img src="https://api.iconify.design/tabler/activity.svg?color=%2300A6D6" width="22" /> COMO O SISTEMA FUNCIONA
 
-Durante o desenvolvimento do projeto são utilizados conhecimentos relacionados a:
+### 1. 🌊 Entrada
 
-* JavaScript
-* Node.js
-* Express
-* APIs
-* WebSockets
-* Socket.IO
-* HTML
-* CSS
-* Git
-* GitHub
-* Deploy
-* Integração com APIs externas
-* Desenvolvimento de aplicações web
+O usuário acessa o Estação TI e informa seu nome e avatar.
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+### 2. 🔑 Configuração da API
 
-## <img src="https://api.iconify.design/tabler/download.svg?color=%23C084FC" width="20" /> INSTALAÇÃO
+O usuário informa sua própria chave da YouTube Data API v3.
 
-Clone o projeto:
+### 3. 🏠 Sala
+
+O usuário pode criar uma sala ou entrar em uma sala existente utilizando o código.
+
+### 4. 🎵 Pesquisa
+
+A busca de músicas é realizada através da chave configurada pelo próprio usuário.
+
+### 5. 📋 Fila
+
+As músicas escolhidas são adicionadas à fila compartilhada.
+
+### 6. ⚡ Sincronização
+
+O servidor utiliza Socket.IO para manter os usuários da sala atualizados.
+
+### 7. ▶️ Reprodução
+
+O vídeo atual é reproduzido através do YouTube IFrame Player API.
+
+### 8. 🔇 Controle local
+
+O usuário pode silenciar ou ativar o próprio áudio sem pausar a reprodução compartilhada da sala.
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
+
+## <img src="https://api.iconify.design/tabler/shield-check.svg?color=%2300B894" width="22" /> SEGURANÇA E PRIVACIDADE
+
+O projeto foi estruturado para evitar que chaves pessoais da API sejam tratadas como informação compartilhada da sala.
+
+### A chave da API não deve ser:
+
+- Commitada no Git.
+- Colocada no `server.js`.
+- Colocada no HTML.
+- Colocada no CSS.
+- Colocada na URL.
+- Enviada pelo Socket.IO como parte do estado da sala.
+
+### O que deve ser feito
+
+Cada usuário deve criar sua própria chave da **YouTube Data API v3** e configurá-la no próprio navegador.
+
+Recomenda-se restringir a chave no Google Cloud para utilização com a **YouTube Data API v3**, conforme o guia disponibilizado no projeto.
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
+
+## <img src="https://api.iconify.design/tabler/download.svg?color=%2300A6D6" width="22" /> INSTALAÇÃO LOCAL
+
+### Pré-requisitos
+
+- Node.js
+- npm
+- Uma chave da YouTube Data API v3 para realizar pesquisas
+
+### 1. Clonar o projeto
 
 ```bash
 git clone https://github.com/Markeis24/Estacao-TI.git
 ```
 
-Entre na pasta:
+### 2. Entrar na pasta
 
 ```bash
 cd Estacao-TI
 ```
 
-Instale as dependências:
+### 3. Instalar as dependências
 
 ```bash
 npm install
 ```
 
-Crie o arquivo:
-
-```text
-.env
-```
-
-Adicione a chave da API do YouTube:
-
-```env
-YOUTUBE_API_KEY=SUA_CHAVE_AQUI
-```
-
-Para iniciar o projeto:
+### 4. Iniciar o servidor
 
 ```bash
 npm start
 ```
 
-Durante o desenvolvimento:
+### 5. Desenvolvimento com Nodemon
 
 ```bash
 npm run dev
 ```
 
-O servidor ficará disponível localmente através da porta configurada no projeto.
+O servidor utiliza a porta definida pela configuração do ambiente e, quando executado localmente, pode ser acessado pelo endereço local correspondente.
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+> **Importante:** a chave da YouTube Data API é configurada pelo usuário na própria interface. Ela não precisa ser colocada em um `.env` para o funcionamento da pesquisa.
 
-## <img src="https://api.iconify.design/tabler/shield-check.svg?color=%23F472B6" width="20" /> SEGURANÇA
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-A chave da API do YouTube deve permanecer armazenada no arquivo `.env`.
+## <img src="https://api.iconify.design/tabler/palette.svg?color=%2300B894" width="22" /> IDENTIDADE VISUAL — FRUTIGER AERO
 
-O arquivo `.env` não deve ser enviado para o GitHub.
+A identidade visual atual do Estação TI foi construída em torno da estética **Frutiger Aero**, trazendo referências de interfaces e tecnologias dos anos 2000 com elementos naturais e digitais.
 
-O projeto utiliza o `.gitignore` para impedir que arquivos sensíveis sejam adicionados ao repositório.
+### 🌐 Elementos visuais
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+- Céu e água
+- Bolhas
+- Brilhos
+- Reflexos
+- Gradientes suaves
+- Tons de azul e ciano
+- Verde aquático
+- Elementos translúcidos
+- Formas arredondadas
+- Atmosfera leve e tecnológica
 
-## <img src="https://api.iconify.design/tabler/cloud-upload.svg?color=%23C084FC" width="20" /> DEPLOY
-
-O projeto está hospedado utilizando o **Render**.
-
-Sempre que novas alterações são enviadas para o GitHub, o Render pode realizar um novo deploy automaticamente de acordo com a configuração do serviço.
-
-### Projeto online
-
-<a href="https://estacao-ti.onrender.com/">
-https://estacao-ti.onrender.com/
-</a>
-
-### Repositório
-
-<a href="https://github.com/Markeis24/Estacao-TI">
-https://github.com/Markeis24/Estacao-TI
-</a>
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
-
-## <img src="https://api.iconify.design/tabler/activity.svg?color=%23F472B6" width="20" /> STATUS
-
-<img src="https://img.shields.io/badge/PROJETO-EM%20DESENVOLVIMENTO-C084FC?style=for-the-badge&labelColor=0D0B12" />
-
-O projeto encontra-se em desenvolvimento e novas funcionalidades podem ser adicionadas futuramente.
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
-
-## <img src="https://api.iconify.design/tabler/flag.svg?color=%23C084FC" width="20" /> MISSÃO
-
-Criar uma experiência de música compartilhada utilizando tecnologia web, comunicação em tempo real e uma interface com identidade visual própria.
-
-A ideia é transformar o projeto em uma experiência que una:
+### 🎨 Paleta aproximada
 
 ```text
-Música
-+
-Tecnologia
-+
-Programação
-+
-Interação
+Azul céu       #48CAE4
+Ciano          #00B4D8
+Azul profundo  #0077B6
+Verde água     #80ED99
+Branco         #F7FEFF
 ```
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+O projeto utiliza uma composição visual inspirada em **água + natureza + tecnologia**, mantendo a interface leve, colorida e nostálgica.
 
-## <img src="https://api.iconify.design/tabler/users-group.svg?color=%23F472B6" width="20" /> GRUPO
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-Projeto desenvolvido pelo grupo **Estação TI**.
+## <img src="https://api.iconify.design/tabler/code.svg?color=%2300A6D6" width="22" /> CONHECIMENTOS DESENVOLVIDOS
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+O projeto envolve conhecimentos práticos de:
 
-## <img src="https://api.iconify.design/tabler/link.svg?color=%23C084FC" width="20" /> LINKS
+- JavaScript
+- Node.js
+- Express
+- Socket.IO
+- APIs REST
+- YouTube Data API
+- YouTube IFrame Player API
+- WebSockets
+- HTML
+- CSS
+- Git
+- GitHub
+- Deploy
+- Render
+- Armazenamento local no navegador
+- Integração entre frontend e backend
+- Comunicação em tempo real
+- Desenvolvimento de aplicações web
 
-### <img src="https://api.iconify.design/tabler/world.svg?color=%23F472B6" width="16" /> Projeto
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-[https://estacao-ti.onrender.com/](https://estacao-ti.onrender.com/)
+## <img src="https://api.iconify.design/tabler/cloud-upload.svg?color=%2300B894" width="22" /> DEPLOY
 
-### <img src="https://api.iconify.design/tabler/brand-github.svg?color=%23C084FC" width="16" /> GitHub
+O projeto está hospedado no **Render**.
 
-[https://github.com/Markeis24/Estacao-TI](https://github.com/Markeis24/Estacao-TI)
+### 🌎 Aplicação online
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:7f00b2,100:fc6998&height=4" />
+<a href="https://estacao-ti.onrender.com/">
+<strong>https://estacao-ti.onrender.com/</strong>
+</a>
+
+### 🐙 Repositório
+
+<a href="https://github.com/Markeis24/Estacao-TI">
+<strong>https://github.com/Markeis24/Estacao-TI</strong>
+</a>
+
+O serviço utiliza:
+
+```text
+GitHub
+  ↓
+Render
+  ↓
+Node.js
+  ↓
+Express
+  ↓
+Estação TI
+```
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
+
+## <img src="https://api.iconify.design/tabler/heart-handshake.svg?color=%2300A6D6" width="22" /> MISSÃO
+
+Criar uma experiência musical colaborativa que una:
+
+```text
+🎵 MÚSICA
+   +
+💻 TECNOLOGIA
+   +
+🌊 DESIGN
+   +
+⚡ TEMPO REAL
+   +
+👥 CONEXÃO
+```
+
+O Estação TI busca transformar uma simples fila de músicas em um espaço compartilhado, com identidade visual própria e participação coletiva.
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
+
+## <img src="https://api.iconify.design/tabler/info-circle.svg?color=%2300B894" width="22" /> STATUS
+
+<img src="https://img.shields.io/badge/PROJETO-EM%20DESENVOLVIMENTO-00A6D6?style=for-the-badge&labelColor=E8FBFF" />
+
+O projeto está em desenvolvimento. A estrutura atual já contempla salas compartilhadas, usuários com identidade temporária, avatares, fila colaborativa, sincronização em tempo real, pesquisa através da YouTube Data API e configuração individual da chave da API.
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:80ED99,45:48CAE4,75:00B4D8,100:0077B6&height=120&section=footer" />
 
 <div align="center">
 
-<img src="https://api.iconify.design/tabler/line.svg?color=%23A855F7" width="50%" />
-
-<br>
-
-<img src="https://api.iconify.design/tabler/headphones.svg?color=%23C084FC" width="28" />
+<img src="https://api.iconify.design/tabler/headphones.svg?color=%23FFFFFF" width="30" />
 
 ### ESTAÇÃO TI
 
-<sub>Música • Tecnologia • Conexão</sub>
+<sub>☁️ Música • Tecnologia • Conexão • 🌊</sub>
 
 <br><br>
 
-<img src="https://img.shields.io/badge/MADE%20WITH-LOVE-F472B6?style=for-the-badge&labelColor=0D0B12" />
+<sub>Projeto desenvolvido por <strong>Giovanna Marques Rodrigues</strong></sub>
+
+<br><br>
+
+<a href="https://estacao-ti.onrender.com/">🌐 Projeto online</a>
+&nbsp;&nbsp;•&nbsp;&nbsp;
+<a href="https://github.com/Markeis24/Estacao-TI">🐙 GitHub</a>
 
 </div>
