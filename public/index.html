@@ -107,6 +107,82 @@
                 </div>
 
 
+                <div class="identity-api">
+
+                    <div class="identity-api-heading">
+
+                        <span>
+                            YOUTUBE DATA API
+                        </span>
+
+                        <strong>
+                            SUA CHAVE • SUA COTA
+                        </strong>
+
+                    </div>
+
+                    <p class="identity-api-description">
+                        O Estacao-TI usa a YouTube Data API para pesquisar músicas.
+                        Crie sua própria chave gratuita no Google Cloud e use a sua cota.
+                        Você poderá trocar a chave quando quiser.
+                    </p>
+
+                    <div class="identity-api-actions">
+
+                        <a
+                            class="identity-api-link"
+                            href="https://console.cloud.google.com/apis/credentials"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            ☁ CRIAR MINHA CHAVE
+                        </a>
+
+                        <a
+                            class="identity-api-guide"
+                            href="https://developers.google.com/youtube/v3/getting-started"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            VER GUIA DO GOOGLE
+                        </a>
+
+                    </div>
+
+                    <label for="youtube-api-key">
+                        CHAVE DA API
+                    </label>
+
+                    <div class="api-key-row">
+
+                        <input
+                            type="password"
+                            id="youtube-api-key"
+                            autocomplete="off"
+                            placeholder="Cole sua chave aqui..."
+                        >
+
+                        <button
+                            type="button"
+                            id="clear-api-key-button"
+                            class="clear-api-key-button"
+                            title="Apagar chave salva"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+                    <span
+                        id="api-key-status"
+                        class="api-key-status"
+                    >
+                        nenhuma chave configurada
+                    </span>
+
+                </div>
+
+
                 <button
                     id="identity-confirm-button"
                     class="identity-confirm-button"
@@ -116,7 +192,7 @@
 
 
                 <p class="identity-note">
-                    identidade temporária • sem senha • sem cadastro
+                    identidade temporária • sua chave não é salva no servidor
                 </p>
 
             </div>
