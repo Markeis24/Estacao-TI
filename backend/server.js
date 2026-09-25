@@ -74,24 +74,9 @@ app.get("/api/search", async (req, res) => {
         }
 
 
-        /*
-           CADA USUÁRIO USA SUA PRÓPRIA CHAVE
-
-           A chave vem pelo header:
-           X-YouTube-API-Key
-
-           Ela não fica na URL da busca do navegador.
-        */
-
-        const chaveApi =
-            String(
-                req.get(
-                    "X-YouTube-API-Key"
-                ) || ""
-            ).trim();
-
-
-        if (!chaveApi) {
+        const apiKey = String(
+            req.get("X-YouTube-API-Key") || ""
+        ).trim();
 
             return res.status(401).json({
                 sucesso: false,
@@ -151,7 +136,7 @@ app.get("/api/search", async (req, res) => {
 
         url.searchParams.set(
             "key",
-            chaveApi
+            apiKey
         );
 
 
@@ -233,17 +218,26 @@ app.get("/api/search", async (req, res) => {
 
             console.error(
                 "Erro da YouTube API:",
-                {
-                    status:
-                        response.status,
-
-                    motivo,
-
-                    mensagem:
-                        data?.error?.message
-                }
+                data.error?.code || response.status,
+                data.error?.message || ""
             );
 
+            const motivo =
+                data.error?.errors?.[0]?.reason || "";
+
+            if (
+                motivo === "quotaExceeded" ||
+                motivo === "dailyLimitExceeded"
+            ) {
+
+                return res.status(429).json({
+                    sucesso: false,
+                    codigo: "QUOTA_EXCEDIDA",
+                    erro:
+                        "A cota desta chave da YouTube API foi atingida. Troque sua chave e tente novamente."
+                });
+
+            }
 
             return res.status(
                 response.status
