@@ -74,12 +74,31 @@ app.get("/api/search", async (req, res) => {
         }
 
 
-        if (!process.env.YOUTUBE_API_KEY) {
+        /*
+           CADA USUÁRIO USA SUA PRÓPRIA CHAVE
 
-            return res.status(500).json({
+           A chave vem pelo header:
+           X-YouTube-API-Key
+
+           Ela não fica na URL da busca do navegador.
+        */
+
+        const chaveApi =
+            String(
+                req.get(
+                    "X-YouTube-API-Key"
+                ) || ""
+            ).trim();
+
+
+        if (!chaveApi) {
+
+            return res.status(401).json({
                 sucesso: false,
+                codigo:
+                    "CHAVE_API_NAO_INFORMADA",
                 erro:
-                    "A chave da YouTube API não foi configurada."
+                    "Configure sua chave da YouTube Data API para pesquisar músicas."
             });
 
         }
@@ -125,13 +144,20 @@ app.get("/api/search", async (req, res) => {
             "pt"
         );
 
+        /*
+           A chave só é usada internamente
+           para fazer a chamada ao Google.
+        */
+
         url.searchParams.set(
             "key",
-            process.env.YOUTUBE_API_KEY
+            chaveApi
         );
 
 
-        const response = await fetch(url);
+        const response =
+            await fetch(url);
+
 
         const data =
             await response.json();
@@ -139,18 +165,94 @@ app.get("/api/search", async (req, res) => {
 
         if (!response.ok) {
 
+            const motivo =
+                data?.error?.errors?.[0]?.reason ||
+                "";
+
+            const statusApi =
+                data?.error?.status ||
+                "";
+
+
+            /*
+               QUOTA DA CHAVE ESGOTADA
+
+               O frontend poderá identificar esse código
+               e pedir para o usuário trocar a chave.
+            */
+
+            const quotaExcedida =
+                motivo === "quotaExceeded" ||
+                motivo === "dailyLimitExceeded" ||
+                statusApi === "RESOURCE_EXHAUSTED";
+
+
+            if (quotaExcedida) {
+
+                return res.status(429).json({
+                    sucesso: false,
+                    codigo:
+                        "QUOTA_EXCEDIDA",
+                    erro:
+                        "A cota desta chave da YouTube API foi excedida. Troque a chave para continuar."
+                });
+
+            }
+
+
+            /*
+               CHAVE INVÁLIDA / ACESSO NEGADO
+            */
+
+            const chaveRecusada =
+                motivo === "keyInvalid" ||
+                motivo === "ipRefererBlocked" ||
+                response.status === 401;
+
+
+            if (chaveRecusada) {
+
+                return res.status(401).json({
+                    sucesso: false,
+                    codigo:
+                        "CHAVE_API_INVALIDA",
+                    erro:
+                        "A chave da YouTube API foi recusada. Confira sua chave e as configurações da YouTube Data API."
+                });
+
+            }
+
+
+            /*
+               Não enviamos para o navegador
+               a mensagem completa retornada pelo Google.
+
+               Isso evita expor informações
+               desnecessárias da API.
+            */
+
             console.error(
                 "Erro da YouTube API:",
-                data
+                {
+                    status:
+                        response.status,
+
+                    motivo,
+
+                    mensagem:
+                        data?.error?.message
+                }
             );
+
 
             return res.status(
                 response.status
             ).json({
                 sucesso: false,
+                codigo:
+                    "YOUTUBE_API_ERRO",
                 erro:
-                    data.error?.message ||
-                    "Erro ao pesquisar no YouTube."
+                    "Não foi possível pesquisar no YouTube. Verifique sua chave e as configurações da API."
             });
 
         }
@@ -197,11 +299,15 @@ app.get("/api/search", async (req, res) => {
 
         console.error(
             "Erro no servidor:",
+            error?.message ||
             error
         );
 
+
         res.status(500).json({
             sucesso: false,
+            codigo:
+                "ERRO_INTERNO",
             erro:
                 "Erro interno do servidor."
         });
@@ -471,6 +577,12 @@ function enviarFila(codigo) {
 
 /* 
    LISTA DE USUÁRIOS
+
+   MANTIDO:
+   - nome
+   - avatar
+   - id do socket
+   - quantidade de usuários
  */
 
 function obterUsuariosDaSala(codigo) {
@@ -526,6 +638,13 @@ function obterUsuariosDaSala(codigo) {
 
 }
 
+
+/* 
+   ATUALIZAR USUÁRIOS
+
+   Esse evento continua sendo enviado
+   para todos que estão na sala.
+ */
 
 function atualizarUsuarios(codigo) {
 
@@ -740,6 +859,11 @@ io.on(
                         socket.sala;
 
 
+                    /*
+                       ATIVIDADE DE SAÍDA
+                       MANTIDA
+                    */
+
                     socket.to(
                         salaAnterior
                     ).emit(
@@ -903,6 +1027,11 @@ io.on(
                         socket.sala;
 
 
+                    /*
+                       ATIVIDADE DE SAÍDA
+                       MANTIDA
+                    */
+
                     socket.to(
                         salaAnterior
                     ).emit(
@@ -965,6 +1094,14 @@ io.on(
                 );
 
 
+                /*
+                   ATIVIDADE DE ENTRADA
+                   MANTIDA
+
+                   Todos os outros usuários
+                   recebem quem acabou de entrar.
+                */
+
                 socket.to(
                     codigo
                 ).emit(
@@ -972,6 +1109,11 @@ io.on(
                     socket.usuario
                 );
 
+
+                /*
+                   ATUALIZA A LISTA E A QUANTIDADE
+                   DE USUÁRIOS PARA TODOS.
+                */
 
                 atualizarUsuarios(
                     codigo
@@ -1243,33 +1385,6 @@ io.on(
 
 
                 /* ==========================================
-                   PAUSE
-                ========================================== */
-
-                if (
-                    tipo === "pause"
-                ) {
-
-                    salvarPosicaoAtual(
-                        sala
-                    );
-
-
-                    sala.tocando =
-                        false;
-
-
-                    enviarEstadoPlayer(
-                        codigo
-                    );
-
-
-                    return;
-
-                }
-
-
-                /* ==========================================
                    NEXT
                 ========================================== */
 
@@ -1278,7 +1393,7 @@ io.on(
                 ) {
 
                     if (
-                        sala.indiceAtual <
+                        sala.indiceAtual 
                         sala.fila.length - 1
                     ) {
 
@@ -1491,7 +1606,7 @@ io.on(
                             Date.now();
 
                     } else if (
-                        index <
+                        index 
                         sala.indiceAtual
                     ) {
 
@@ -1583,7 +1698,7 @@ io.on(
 
 
                     if (
-                        sala.indiceAtual <
+                        sala.indiceAtual 
                         sala.fila.length - 1
                     ) {
 
@@ -1669,6 +1784,16 @@ io.on(
                 }
 
 
+                /*
+                   ATIVIDADE DE SAÍDA
+                   MANTIDA
+
+                   Quando alguém fecha a página,
+                   sai da sala ou perde a conexão,
+                   os outros usuários recebem
+                   o evento "usuario-saiu".
+                */
+
                 if (
                     socket.usuario
                 ) {
@@ -1682,6 +1807,11 @@ io.on(
 
                 }
 
+
+                /*
+                   Atualiza a lista e a quantidade
+                   de pessoas restantes.
+                */
 
                 atualizarUsuarios(
                     codigo

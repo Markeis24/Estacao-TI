@@ -21,6 +21,12 @@ let playerPronto = false;
 
 let aplicandoEstadoServidor = false;
 
+/* MUDO INDIVIDUAL */
+let mutadoLocalmente = false;
+
+/* YOUTUBE API - CHAVE POR USUÁRIO */
+const YOUTUBE_API_KEY_STORAGE = "estacaoTI_youtube_api_key";
+
 
 /* 
    IDENTIDADE
@@ -212,11 +218,133 @@ const nextButton =
     );
 
 
+const youtubeApiKeyInput =
+    document.getElementById(
+        "youtube-api-key"
+    );
+
+
+const clearApiKeyButton =
+    document.getElementById(
+        "clear-api-key-button"
+    );
+
+
+const apiKeyStatus =
+    document.getElementById(
+        "api-key-status"
+    );
+
+
+/*
+   YOUTUBE API - CHAVE LOCAL
+*/
+
+function obterChaveYouTube() {
+
+    return localStorage.getItem(
+        YOUTUBE_API_KEY_STORAGE
+    ) || "";
+}
+
+
+function atualizarStatusChaveApi() {
+
+    const chave =
+        obterChaveYouTube();
+
+    if (!apiKeyStatus) {
+        return;
+    }
+
+    if (chave) {
+        apiKeyStatus.textContent =
+            "chave salva neste navegador";
+        apiKeyStatus.classList.add("active");
+    } else {
+        apiKeyStatus.textContent =
+            "nenhuma chave salva neste navegador";
+        apiKeyStatus.classList.remove("active");
+    }
+}
+
+
+function salvarChaveYouTube() {
+
+    if (!youtubeApiKeyInput) {
+        return "";
+    }
+
+    const chave =
+        youtubeApiKeyInput.value.trim();
+
+    if (!chave) {
+        return "";
+    }
+
+    localStorage.setItem(
+        YOUTUBE_API_KEY_STORAGE,
+        chave
+    );
+
+    atualizarStatusChaveApi();
+
+    return chave;
+}
+
+
+function limparChaveYouTube() {
+
+    localStorage.removeItem(
+        YOUTUBE_API_KEY_STORAGE
+    );
+
+    if (youtubeApiKeyInput) {
+        youtubeApiKeyInput.value = "";
+    }
+
+    atualizarStatusChaveApi();
+}
+
+
+function carregarChaveYouTube() {
+
+    const chave =
+        obterChaveYouTube();
+
+    if (youtubeApiKeyInput && chave) {
+        youtubeApiKeyInput.value = chave;
+    }
+
+    atualizarStatusChaveApi();
+}
+
+
+if (youtubeApiKeyInput) {
+    youtubeApiKeyInput.addEventListener(
+        "change",
+        salvarChaveYouTube
+    );
+}
+
+
+if (clearApiKeyButton) {
+    clearApiKeyButton.addEventListener(
+        "click",
+        limparChaveYouTube
+    );
+}
+
+
 /* 
    IDENTIDADE - AVATARES
  */
 
 function montarAvatares() {
+
+    if (!avatarSelection) {
+        return;
+    }
 
     avatarSelection.innerHTML = "";
 
@@ -310,6 +438,21 @@ function montarAvatares() {
  */
 
 function salvarIdentidade() {
+
+    const chaveYouTube =
+        salvarChaveYouTube();
+
+    if (!chaveYouTube) {
+        if (youtubeApiKeyInput) {
+            youtubeApiKeyInput.focus();
+            youtubeApiKeyInput.classList.add("input-error");
+            setTimeout(
+                () => youtubeApiKeyInput.classList.remove("input-error"),
+                800
+            );
+        }
+        return;
+    }
 
     const nome =
         identityName.value
@@ -600,21 +743,6 @@ function tratarEstadoPlayer(
 
             tipo:
                 "play"
-
-        });
-
-    }
-
-
-    if (
-        event.data ===
-        YT.PlayerState.PAUSED
-    ) {
-
-        enviarControle({
-
-            tipo:
-                "pause"
 
         });
 
@@ -1314,7 +1442,13 @@ async function pesquisarMusicas() {
             await fetch(
                 `/api/search?q=${encodeURIComponent(
                     consulta
-                )}`
+                )}`,
+                {
+                    headers: {
+                        "X-YouTube-API-Key":
+                            obterChaveYouTube()
+                    }
+                }
             );
 
 
@@ -1588,38 +1722,6 @@ function adicionarNaFila(
 
 
 /* 
-   TOCAR
- */
-
-function tocarAtual() {
-
-    enviarControle({
-
-        tipo:
-            "play"
-
-    });
-
-}
-
-
-/* 
-   PAUSAR
- */
-
-function pausarAtual() {
-
-    enviarControle({
-
-        tipo:
-            "pause"
-
-    });
-
-}
-
-
-/* 
    PRÓXIMA
  */
 
@@ -1697,6 +1799,45 @@ function obterMusicaAtual() {
 }
 
 
+/*
+   MUDO INDIVIDUAL
+*/
+
+function atualizarBotaoMudo() {
+
+    if (!playPauseButton) {
+        return;
+    }
+
+    if (mutadoLocalmente) {
+        playPauseButton.innerHTML =
+            `✕ <small>DESMUTAR</small>`;
+    } else {
+        playPauseButton.innerHTML =
+            `▶ <small>MUTAR</small>`;
+    }
+}
+
+
+function alternarMudo() {
+
+    if (!playerPronto || !player) {
+        return;
+    }
+
+    mutadoLocalmente =
+        !mutadoLocalmente;
+
+    if (mutadoLocalmente) {
+        player.mute();
+    } else {
+        player.unMute();
+    }
+
+    atualizarBotaoMudo();
+}
+
+
 /* 
    ATUALIZAR MÚSICA
  */
@@ -1734,19 +1875,7 @@ function atualizarMusicaAtual() {
         musica.canal;
 
 
-    if (
-        estadoSala.tocando
-    ) {
-
-        playPauseButton.innerHTML =
-            `⏸ <small>PAUSAR</small>`;
-
-    } else {
-
-        playPauseButton.innerHTML =
-            `▶ <small>TOCAR</small>`;
-
-    }
+    atualizarBotaoMudo();
 
 }
 
@@ -2033,6 +2162,10 @@ function tentarAplicarEstado(
 
             }
 
+            if (mutadoLocalmente) {
+                player.mute();
+            }
+
 
         } else {
 
@@ -2138,6 +2271,8 @@ enableAudioButton.addEventListener(
             true;
 
 
+        mutadoLocalmente = false;
+
         player.unMute();
 
 
@@ -2165,6 +2300,8 @@ enableAudioButton.addEventListener(
         );
 
 
+        atualizarBotaoMudo();
+
         enableAudioButton.hidden =
             true;
 
@@ -2179,19 +2316,7 @@ enableAudioButton.addEventListener(
 playPauseButton.addEventListener(
     "click",
     function () {
-
-        if (
-            estadoSala.tocando
-        ) {
-
-            pausarAtual();
-
-        } else {
-
-            tocarAtual();
-
-        }
-
+        alternarMudo();
     }
 );
 
@@ -2425,6 +2550,8 @@ if (salaInicial) {
  */
 
 montarAvatares();
+
+carregarChaveYouTube();
 
 carregarIdentidade();
 
