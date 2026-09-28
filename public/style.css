@@ -1850,10 +1850,10 @@ body::after {
 }
 
 
-.metro-button.primary {
+ .metro-button.primary {
     min-width: 170px;
 
-    color: white;
+    color: #003b4d;
 
     background:
         linear-gradient(
@@ -1980,7 +1980,7 @@ body::after {
 }
 
 
-.audio-button {
+ .audio-button {
     margin-top: 15px;
 
     padding:
@@ -1999,7 +1999,7 @@ body::after {
             #1abf6b
         );
 
-    color: white;
+    color: #003b4d;
 
     font-family: inherit;
 
@@ -2623,7 +2623,7 @@ body::after {
 .main-control {
     min-width: 125px;
 
-    color: white;
+    color: #003b4d;
 
     background:
         linear-gradient(
@@ -2705,7 +2705,7 @@ body::after {
             #009ed4
         );
 
-    color: white;
+    color: #003b4d;
 
     cursor: pointer;
 
@@ -3137,7 +3137,7 @@ body::after {
 
     text-align: center;
 
-    color: #39778a;
+    color: #245d70;
 
     font-size: 10px;
 
@@ -3163,7 +3163,7 @@ body::after {
 
     margin-bottom: 6px;
 
-    color: #075c79;
+    color: #03445b;
 
     font-size: 12px;
 }
