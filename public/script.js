@@ -199,8 +199,23 @@ if (toggleChatButton) {
 if (roomChatForm) {
     roomChatForm.addEventListener("submit", function (evento) {
         evento.preventDefault();
+
         const texto = roomChatInput.value.trim();
-        if (!texto || !socket || !socket.connected || !salaAtual) return;
+
+        if (!texto) {
+            return;
+        }
+
+        if (!salaAtual) {
+            alert("Entre em uma sala primeiro.");
+            return;
+        }
+
+        if (!socket || !socket.connected) {
+            alert("A conexão com a sala está offline. Aguarde a reconexão.");
+            return;
+        }
+
         socket.emit("chat-mensagem", texto);
         roomChatInput.value = "";
         roomChatInput.focus();
@@ -1005,6 +1020,10 @@ createRoomButton.addEventListener(
 
         }
 
+        if (salaAtual) {
+            alert("Você já está em uma sala. Saia da sala atual antes de criar outra.");
+            return;
+        }
 
         conectarSocket();
 
@@ -1059,14 +1078,17 @@ function sairDaSala() {
 
     salaAtual = null;
 
-    if (
-        socket &&
-        socket.connected &&
-        salaParaSair
-    ) {
-        socket.emit(
-            "sair-sala"
-        );
+    if (socket && salaParaSair) {
+        if (socket.connected) {
+            socket.emit(
+                "sair-sala"
+            );
+        } else {
+            // Saída intencional enquanto offline: interrompe
+            // a reconexão automática do Socket.IO.
+            socket.disconnect();
+            socket = null;
+        }
     }
 
     roomCode.textContent =
@@ -1293,6 +1315,22 @@ function conectarSocket(
                 mensagem
             );
 
+            roomCode.textContent = "------";
+            roomInput.value = "";
+            estadoSala = {
+                fila: [],
+                indiceAtual: -1,
+                tocando: false,
+                posicao: 0
+            };
+            atualizarFila();
+            atualizarMusicaAtual();
+            limparChat();
+            roomActivity.innerHTML = "";
+            roomUsersList.innerHTML = "";
+            roomUsers.textContent = "0";
+            atualizarBotaoSala(false);
+
 
             connectionStatus.innerHTML =
                 `<img class="ui-icon" src="https://api.iconify.design/tabler/circle-x.svg?color=%23FF4D6D" width="16" alt="" aria-hidden="true"> ERRO`;
@@ -1432,7 +1470,8 @@ function conectarSocket(
             connectionStatus.innerHTML =
                 `<img class="ui-icon" src="https://api.iconify.design/tabler/circle.svg?color=%23FF4D6D" width="16" alt="" aria-hidden="true"> OFFLINE`;
 
-            atualizarBotaoSala(false);
+            // Mantém "SAIR" enquanto a sala ainda é a sala desejada.
+            atualizarBotaoSala(Boolean(salaAtual));
 
         }
     );
@@ -1696,7 +1735,8 @@ function socketConectado() {
     return (
 
         socket &&
-        socket.connected
+        socket.connected &&
+        Boolean(salaAtual)
 
     );
 
@@ -2933,6 +2973,5 @@ atualizarMusicaAtual();
 console.log(
     "★ ESTACAO-TI MUSIC NETWORK carregado ★"
 );
-
 
 
