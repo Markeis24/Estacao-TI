@@ -320,6 +320,94 @@ function carregarChaveYouTube() {
 }
 
 
+/*
+   TROCA DE CHAVE APÓS LIMITE DA API
+ */
+
+function solicitarTrocaChaveApi(
+    mensagem
+) {
+
+    localStorage.removeItem(
+        YOUTUBE_API_KEY_STORAGE
+    );
+
+    if (youtubeApiKeyInput) {
+        youtubeApiKeyInput.value = "";
+        youtubeApiKeyInput.classList.add(
+            "input-error"
+        );
+    }
+
+    atualizarStatusChaveApi();
+
+    searchResults.innerHTML = `
+        <div class="empty-message">
+            <span class="empty-icon">
+                🔑
+            </span>
+
+            <strong>
+                COTA DA CHAVE ESGOTADA
+            </strong>
+
+            <p>
+                ${escaparHTML(
+                    mensagem ||
+                    "A chave atual atingiu o limite de uso."
+                )}
+            </p>
+
+            <button
+                type="button"
+                class="api-key-change-action"
+                id="api-key-change-action"
+            >
+                TROCAR CHAVE AGORA
+            </button>
+        </div>
+    `;
+
+    const trocarChaveButton =
+        document.getElementById(
+            "api-key-change-action"
+        );
+
+    if (trocarChaveButton) {
+        trocarChaveButton.addEventListener(
+            "click",
+            () => {
+                if (youtubeApiKeyInput) {
+                    youtubeApiKeyInput.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+                    youtubeApiKeyInput.focus();
+                    youtubeApiKeyInput.classList.remove(
+                        "input-error"
+                    );
+                }
+            }
+        );
+    }
+
+    setTimeout(
+        () => {
+            if (youtubeApiKeyInput) {
+                youtubeApiKeyInput.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                youtubeApiKeyInput.focus();
+            }
+        },
+        100
+    );
+}
+
+
 if (youtubeApiKeyInput) {
     youtubeApiKeyInput.addEventListener(
         "change",
@@ -1461,10 +1549,19 @@ async function pesquisarMusicas() {
             !dados.sucesso
         ) {
 
-            throw new Error(
-                dados.erro ||
-                "Erro ao pesquisar."
-            );
+            const erroApi =
+                new Error(
+                    dados.erro ||
+                    "Erro ao pesquisar."
+                );
+
+            erroApi.codigo =
+                dados.codigo || "";
+
+            erroApi.status =
+                resposta.status;
+
+            throw erroApi;
 
         }
 
@@ -1480,6 +1577,18 @@ async function pesquisarMusicas() {
             "Erro na pesquisa:",
             erro
         );
+
+
+        if (
+            erro.codigo ===
+                "QUOTA_EXCEDIDA"
+        ) {
+            solicitarTrocaChaveApi(
+                erro.message
+            );
+
+            return;
+        }
 
 
         searchResults.innerHTML = `
