@@ -10,6 +10,7 @@
 
 let socket = null;
 
+let salaAtual = null;
 
 /* 
    YOUTUBE
@@ -199,7 +200,7 @@ if (roomChatForm) {
     roomChatForm.addEventListener("submit", function (evento) {
         evento.preventDefault();
         const texto = roomChatInput.value.trim();
-        if (!texto || !socket || !socket.connected || !socket.sala) return;
+        if (!texto || !socket || !socket.connected || !salaAtual) return;
         socket.emit("chat-mensagem", texto);
         roomChatInput.value = "";
         roomChatInput.focus();
@@ -1053,14 +1054,20 @@ function atualizarBotaoSala(
 
 function sairDaSala() {
 
-    if (!socket || !socket.connected) {
-        atualizarBotaoSala(false);
-        return;
-    }
+    const salaParaSair =
+        salaAtual;
 
-    socket.emit(
-        "sair-sala"
-    );
+    salaAtual = null;
+
+    if (
+        socket &&
+        socket.connected &&
+        salaParaSair
+    ) {
+        socket.emit(
+            "sair-sala"
+        );
+    }
 
     roomCode.textContent =
         "------";
@@ -1104,11 +1111,7 @@ joinRoomButton.addEventListener(
     "click",
     function () {
 
-        if (
-            socket &&
-            socket.connected &&
-            socket.sala
-        ) {
+        if (salaAtual) {
             sairDaSala();
             return;
         }
@@ -1157,6 +1160,9 @@ function conectarSocket(
     codigoSala = null
 ) {
 
+    salaAtual =
+        codigoSala || null;
+
     if (socket) {
 
         socket.disconnect();
@@ -1193,13 +1199,13 @@ function conectarSocket(
             );
 
 
-            if (codigoSala) {
+            if (salaAtual) {
 
                 socket.emit(
                     "entrar-sala",
                     {
                         codigo:
-                            codigoSala,
+                            salaAtual,
 
                         usuario:
                             identidade
@@ -1280,6 +1286,8 @@ function conectarSocket(
     socket.on(
         "erro-sala",
         function (mensagem) {
+
+            salaAtual = null;
 
             alert(
                 mensagem
@@ -1439,6 +1447,9 @@ function conectarSocket(
 function entrarVisualmenteNaSala(
     dados
 ) {
+
+    salaAtual =
+        String(dados.codigo || "").trim().toUpperCase() || null;
 
     atualizarBotaoSala(true);
 
@@ -2922,3 +2933,6 @@ atualizarMusicaAtual();
 console.log(
     "★ ESTACAO-TI MUSIC NETWORK carregado ★"
 );
+
+
+
