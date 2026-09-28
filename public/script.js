@@ -929,6 +929,15 @@ window.onYouTubeIframeAPIReady =
                                     event.data
                                 );
 
+                            },
+
+                        onAutoplayBlocked:
+                            function () {
+
+                                if (enableAudioButton) {
+                                    enableAudioButton.hidden = false;
+                                }
+
                             }
 
                     }
@@ -965,6 +974,21 @@ function tratarEstadoPlayer(
 
             tipo:
                 "play"
+
+        });
+
+    }
+
+
+    if (
+        event.data ===
+        YT.PlayerState.PAUSED
+    ) {
+
+        enviarControle({
+
+            tipo:
+                "pause"
 
         });
 
@@ -2231,38 +2255,35 @@ function obterMusicaAtual() {
    MUDO INDIVIDUAL
 */
 
-function atualizarBotaoMudo() {
+function atualizarBotaoPlayPause() {
 
     if (!playPauseButton) {
         return;
     }
 
-    if (mutadoLocalmente) {
+    if (estadoSala.tocando) {
         playPauseButton.innerHTML =
-            `<img class="ui-icon" src="https://api.iconify.design/tabler/volume-3.svg?color=%2300A6D6" width="20" alt="" aria-hidden="true"> <small>DESMUTAR</small>`;
+            `<img class="ui-icon" src="https://api.iconify.design/tabler/player-pause.svg?color=%2300A6D6" width="20" alt="" aria-hidden="true"> <small>PAUSAR</small>`;
+        playPauseButton.title = "Pausar música";
+        playPauseButton.setAttribute("aria-label", "Pausar música");
     } else {
         playPauseButton.innerHTML =
-            `<img class="ui-icon" src="https://api.iconify.design/tabler/volume-off.svg?color=%2300A6D6" width="20" alt="" aria-hidden="true"> <small>MUTAR</small>`;
+            `<img class="ui-icon" src="https://api.iconify.design/tabler/player-play.svg?color=%2300A6D6" width="20" alt="" aria-hidden="true"> <small>TOCAR</small>`;
+        playPauseButton.title = "Tocar música";
+        playPauseButton.setAttribute("aria-label", "Tocar música");
     }
 }
 
 
-function alternarMudo() {
+function alternarPlayPause() {
 
     if (!playerPronto || !player) {
         return;
     }
 
-    mutadoLocalmente =
-        !mutadoLocalmente;
-
-    if (mutadoLocalmente) {
-        player.mute();
-    } else {
-        player.unMute();
-    }
-
-    atualizarBotaoMudo();
+    enviarControle({
+        tipo: estadoSala.tocando ? "pause" : "play"
+    });
 }
 
 
@@ -2303,7 +2324,7 @@ function atualizarMusicaAtual() {
         musica.canal;
 
 
-    atualizarBotaoMudo();
+    atualizarBotaoPlayPause();
 
 }
 
@@ -2728,7 +2749,7 @@ enableAudioButton.addEventListener(
         );
 
 
-        atualizarBotaoMudo();
+        atualizarBotaoPlayPause();
 
         enableAudioButton.hidden =
             true;
@@ -2748,7 +2769,7 @@ playPauseButton.addEventListener(
             return;
         }
 
-        alternarMudo();
+        alternarPlayPause();
     }
 );
 
