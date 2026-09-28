@@ -22,9 +22,6 @@ let playerPronto = false;
 
 let aplicandoEstadoServidor = false;
 
-/* MUDO INDIVIDUAL */
-let mutadoLocalmente = false;
-
 /* YOUTUBE API - CHAVE POR USUÁRIO */
 const YOUTUBE_API_KEY_STORAGE = "estacaoTI_youtube_api_key";
 
@@ -2611,9 +2608,7 @@ function tentarAplicarEstado(
 
             }
 
-            if (mutadoLocalmente) {
-                player.mute();
-            }
+            player.unMute();
 
 
         } else {
@@ -2719,8 +2714,6 @@ enableAudioButton.addEventListener(
         aplicandoEstadoServidor =
             true;
 
-
-        mutadoLocalmente = false;
 
         player.unMute();
 
