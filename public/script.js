@@ -1083,12 +1083,12 @@ function sairDaSala() {
             socket.emit(
                 "sair-sala"
             );
-        } else {
-            // Saída intencional enquanto offline: interrompe
-            // a reconexão automática do Socket.IO.
-            socket.disconnect();
-            socket = null;
         }
+
+        // A saída é intencional. Desconectamos o socket para que
+        // uma reconexão posterior não crie uma nova sala sozinha.
+        socket.disconnect();
+        socket = null;
     }
 
     roomCode.textContent =
@@ -1331,6 +1331,12 @@ function conectarSocket(
             roomUsers.textContent = "0";
             atualizarBotaoSala(false);
 
+            // Um erro de entrada/criação encerra esta tentativa de socket.
+            // Isso evita que o Socket.IO reconecte e crie uma sala inesperadamente.
+            if (socket) {
+                socket.disconnect();
+                socket = null;
+            }
 
             connectionStatus.innerHTML =
                 `<img class="ui-icon" src="https://api.iconify.design/tabler/circle-x.svg?color=%23FF4D6D" width="16" alt="" aria-hidden="true"> ERRO`;
