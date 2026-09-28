@@ -864,6 +864,52 @@ io.on(
         );
 
         // ==================================================
+        // SAIR DA SALA
+        // ==================================================
+
+        socket.on(
+            "sair-sala",
+            () => {
+                const codigo = socket.sala;
+
+                if (!codigo) {
+                    return;
+                }
+
+                if (socket.usuario) {
+                    socket.to(
+                        codigo
+                    ).emit(
+                        "usuario-saiu",
+                        socket.usuario
+                    );
+                }
+
+                socket.leave(
+                    codigo
+                );
+
+                socket.sala = null;
+
+                socket.emit(
+                    "saiu-sala"
+                );
+
+                atualizarUsuarios(
+                    codigo
+                );
+
+                removerSalaSeVazia(
+                    codigo
+                );
+
+                console.log(
+                    `Usuário saiu da sala ${codigo}`
+                );
+            }
+        );
+
+        // ==================================================
         // CONTROLE DA SALA
         // ==================================================
 
