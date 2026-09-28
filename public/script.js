@@ -1169,7 +1169,7 @@ function conectarSocket(
     socket = io();
 
 
-    connectionStatus.textContent =
+    connectionStatus.innerHTML =
         `<img class="ui-icon" src="https://api.iconify.design/tabler/loader-2.svg?color=%23FFB703" width="16" alt="" aria-hidden="true"> CONECTANDO...`;
 
 
@@ -1183,7 +1183,7 @@ function conectarSocket(
             );
 
 
-            connectionStatus.textContent =
+            connectionStatus.innerHTML =
                 `<img class="ui-icon" src="https://api.iconify.design/tabler/circle-check.svg?color=%2300B894" width="16" alt="" aria-hidden="true"> ONLINE`;
 
 
@@ -1286,7 +1286,7 @@ function conectarSocket(
             );
 
 
-            connectionStatus.textContent =
+            connectionStatus.innerHTML =
                 `<img class="ui-icon" src="https://api.iconify.design/tabler/circle-x.svg?color=%23FF4D6D" width="16" alt="" aria-hidden="true"> ERRO`;
 
         }
@@ -1421,7 +1421,7 @@ function conectarSocket(
         "disconnect",
         function () {
 
-            connectionStatus.textContent =
+            connectionStatus.innerHTML =
                 `<img class="ui-icon" src="https://api.iconify.design/tabler/circle.svg?color=%23FF4D6D" width="16" alt="" aria-hidden="true"> OFFLINE`;
 
             atualizarBotaoSala(false);
