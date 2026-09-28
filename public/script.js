@@ -169,7 +169,7 @@ function adicionarMensagemChat(mensagem) {
     const item = document.createElement("div");
     item.className = "chat-message";
     item.innerHTML =
-        '<img src="/assets/avatars/' + escaparChatHTML(mensagem.avatar || "avatar01.png") + '" alt="" aria-hidden="true">' +
+        '<img src="/avatars/' + escaparChatHTML(mensagem.avatar || "avatar01.png") + '" alt="" aria-hidden="true">' +
         '<div><strong>' + escaparChatHTML(mensagem.nome || "Visitante") + '</strong><p>' + escaparChatHTML(mensagem.texto || "") + '</p></div>';
     roomChatMessages.appendChild(item);
     roomChatMessages.scrollTop = roomChatMessages.scrollHeight;
