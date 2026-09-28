@@ -346,7 +346,8 @@ function criarSala() {
             tocando: false,
             posicao: 0,
             atualizadoEm:
-                Date.now()
+                Date.now(),
+            mensagensChat: []
         }
     );
 
@@ -846,6 +847,11 @@ io.on(
                     }
                 );
 
+                socket.emit(
+                    "chat-historico",
+                    sala.mensagensChat || []
+                );
+
                 socket.to(
                     codigo
                 ).emit(
@@ -860,6 +866,31 @@ io.on(
                 console.log(
                     `Usuário ${socket.usuario.nome} entrou na sala ${codigo}`
                 );
+            }
+        );
+
+        // ==================================================
+        // CHAT TEMPORÁRIO DA SALA
+        // ==================================================
+
+        socket.on(
+            "chat-mensagem",
+            textoRecebido => {
+                const codigo = socket.sala;
+                const sala = codigo ? salas.get(codigo) : null;
+                if (!sala || !socket.usuario) return;
+                const texto = String(textoRecebido || "").trim().slice(0, 300);
+                if (!texto) return;
+                const mensagem = {
+                    nome: socket.usuario.nome,
+                    avatar: socket.usuario.avatar,
+                    texto,
+                    enviadaEm: Date.now()
+                };
+                sala.mensagensChat = sala.mensagensChat || [];
+                sala.mensagensChat.push(mensagem);
+                if (sala.mensagensChat.length > 50) sala.mensagensChat.shift();
+                io.to(codigo).emit("chat-mensagem", mensagem);
             }
         );
 
