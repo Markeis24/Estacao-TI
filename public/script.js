@@ -2143,6 +2143,10 @@ function adicionarNaFila(
 
 function proxima() {
 
+    if (!socketConectado()) {
+        return;
+    }
+
     enviarControle({
 
         tipo:
@@ -2158,6 +2162,10 @@ function proxima() {
  */
 
 function anterior() {
+
+    if (!socketConectado()) {
+        return;
+    }
 
     enviarControle({
 
@@ -2176,6 +2184,10 @@ function anterior() {
 function remover(
     index
 ) {
+
+    if (!socketConectado()) {
+        return;
+    }
 
     enviarControle({
 
@@ -2275,7 +2287,7 @@ function atualizarMusicaAtual() {
 
 
         playPauseButton.innerHTML =
-            `<img class="ui-icon" src="https://api.iconify.design/tabler/player-play.svg?color=%23FFFFFF" width="20" alt="" aria-hidden="true"> <small>TOCAR</small>`;
+            `<img class="ui-icon" src="https://api.iconify.design/tabler/volume-off.svg?color=%23FFFFFF" width="20" alt="" aria-hidden="true"> <small>MUTAR</small>`;
 
 
         return;
@@ -2732,6 +2744,10 @@ enableAudioButton.addEventListener(
 playPauseButton.addEventListener(
     "click",
     function () {
+        if (!socketConectado()) {
+            return;
+        }
+
         alternarMudo();
     }
 );
@@ -2854,6 +2870,10 @@ document.addEventListener(
 
         }
 
+
+        if (!socketConectado()) {
+            return;
+        }
 
         if (
             event.key ===
