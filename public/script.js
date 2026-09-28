@@ -1717,6 +1717,21 @@ function enviarControle(
 }
 
 
+/*
+   ÍCONES ICONIFY
+ */
+
+function icon(nome, cor = "00A6D6", tamanho = 18) {
+    return '<img class="ui-icon" src="https://api.iconify.design/tabler/' +
+        encodeURIComponent(nome) +
+        '.svg?color=%23' +
+        encodeURIComponent(cor) +
+        '" width="' +
+        Number(tamanho) +
+        '" alt="" aria-hidden="true">';
+}
+
+
 /* 
    PESQUISA
  */
