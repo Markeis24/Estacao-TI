@@ -146,6 +146,67 @@ const queueList =
     );
 
 
+const roomChatPanel = document.getElementById("room-chat-panel");
+const toggleChatButton = document.getElementById("toggle-chat-button");
+const roomChatMessages = document.getElementById("room-chat-messages");
+const roomChatForm = document.getElementById("room-chat-form");
+const roomChatInput = document.getElementById("room-chat-input");
+
+
+function escaparChatHTML(valor) {
+    return String(valor || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function adicionarMensagemChat(mensagem) {
+    if (!roomChatMessages || !mensagem) return;
+    const vazio = roomChatMessages.querySelector(".chat-empty");
+    if (vazio) vazio.remove();
+    const item = document.createElement("div");
+    item.className = "chat-message";
+    item.innerHTML = \
+        '<img src="/assets/avatars/' + escaparChatHTML(mensagem.avatar || "avatar01.png") + '" alt="" aria-hidden="true">' +
+        '<div><strong>' + escaparChatHTML(mensagem.nome || "Visitante") + '</strong><p>' + escaparChatHTML(mensagem.texto || "") + '</p></div>';
+    roomChatMessages.appendChild(item);
+    roomChatMessages.scrollTop = roomChatMessages.scrollHeight;
+}
+
+function limparChat() {
+    if (roomChatMessages) roomChatMessages.innerHTML = '<div class="chat-empty">Entre em uma sala para conversar</div>';
+}
+
+function atualizarPainelChat(minimizado) {
+    if (!roomChatPanel || !toggleChatButton) return;
+    roomChatPanel.classList.toggle("room-chat-minimized", minimizado);
+    toggleChatButton.setAttribute("aria-expanded", String(!minimizado));
+    toggleChatButton.title = minimizado ? "Mostrar chat" : "Minimizar chat";
+    toggleChatButton.innerHTML = minimizado
+        ? '<img class="ui-icon" src="https://api.iconify.design/tabler/maximize.svg?color=%23056184" width="18" alt="" aria-hidden="true"><span>CHAT</span>'
+        : '<img class="ui-icon" src="https://api.iconify.design/tabler/minimize.svg?color=%23056184" width="18" alt="" aria-hidden="true"><span>MINIMIZAR</span>';
+}
+
+if (toggleChatButton) {
+    toggleChatButton.addEventListener("click", function () {
+        atualizarPainelChat(!roomChatPanel.classList.contains("room-chat-minimized"));
+    });
+}
+
+if (roomChatForm) {
+    roomChatForm.addEventListener("submit", function (evento) {
+        evento.preventDefault();
+        const texto = roomChatInput.value.trim();
+        if (!texto || !socket || !socket.connected || !socket.sala) return;
+        socket.emit("chat-mensagem", texto);
+        roomChatInput.value = "";
+        roomChatInput.focus();
+    });
+}
+
+
 function atualizarPainelResultados(
     minimizado
 ) {
@@ -1016,6 +1077,7 @@ function sairDaSala() {
 
     atualizarFila();
     atualizarMusicaAtual();
+    limparChat();
 
     roomActivity.innerHTML = "";
     roomUsersList.innerHTML = "";
@@ -1160,6 +1222,22 @@ function conectarSocket(
     /* ======================================================
        SALA CRIADA
     ====================================================== */
+
+    socket.on(
+        "chat-historico",
+        function (mensagens) {
+            limparChat();
+            (mensagens || []).forEach(adicionarMensagemChat);
+        }
+    );
+
+    socket.on(
+        "chat-mensagem",
+        function (mensagem) {
+            adicionarMensagemChat(mensagem);
+        }
+    );
+
 
     socket.on(
         "sala-criada",
@@ -1396,6 +1474,9 @@ function entrarVisualmenteNaSala(
 
 
     atualizarMusicaAtual();
+
+
+    limparChat();
 
 
     roomActivity.innerHTML = "";
