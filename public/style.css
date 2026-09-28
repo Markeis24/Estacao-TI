@@ -3599,3 +3599,11 @@ body::after {
         min-height: 62px;
     }
 }
+
+
+/* Ícones SVG do Iconify */
+.ui-icon {
+    display: inline-block;
+    vertical-align: middle;
+    flex: 0 0 auto;
+}
