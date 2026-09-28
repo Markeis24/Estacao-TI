@@ -128,10 +128,67 @@ const searchResults =
     );
 
 
+const resultsPanel =
+    document.getElementById(
+        "results-panel"
+    );
+
+
+const toggleResultsButton =
+    document.getElementById(
+        "toggle-results-button"
+    );
+
+
 const queueList =
     document.getElementById(
         "queue-list"
     );
+
+
+function atualizarPainelResultados(
+    minimizado
+) {
+
+    if (!resultsPanel || !toggleResultsButton) {
+        return;
+    }
+
+    resultsPanel.classList.toggle(
+        "results-panel-minimized",
+        minimizado
+    );
+
+    toggleResultsButton.setAttribute(
+        "aria-expanded",
+        String(!minimizado)
+    );
+
+    toggleResultsButton.setAttribute(
+        "title",
+        minimizado
+            ? "Mostrar resultados"
+            : "Minimizar resultados"
+    );
+
+    toggleResultsButton.innerHTML = minimizado
+        ? '<img class="ui-icon" src="https://api.iconify.design/tabler/maximize.svg?color=%23056184" width="18" alt="" aria-hidden="true"><span>RESULTADOS</span>'
+        : '<img class="ui-icon" src="https://api.iconify.design/tabler/minimize.svg?color=%23056184" width="18" alt="" aria-hidden="true"><span>MINIMIZAR</span>';
+}
+
+
+if (toggleResultsButton) {
+    toggleResultsButton.addEventListener(
+        "click",
+        function () {
+            atualizarPainelResultados(
+                !resultsPanel.classList.contains(
+                    "results-panel-minimized"
+                )
+            );
+        }
+    );
+}
 
 
 const musicTitle =
