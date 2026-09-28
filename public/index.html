@@ -893,6 +893,35 @@
 
 
         <!-- =================================================
+             CHAT DA SALA
+        ================================================== -->
+
+        <section class="room-chat-panel" id="room-chat-panel">
+            <div class="chat-heading">
+                <div>
+                    <span>ROOM.CHAT</span>
+                    <h2>CHAT DA SALA</h2>
+                </div>
+                <button id="toggle-chat-button" class="panel-toggle-button" type="button" aria-expanded="true" title="Minimizar chat">
+                    <img class="ui-icon" src="https://api.iconify.design/tabler/minimize.svg?color=%23056184" width="18" alt="" aria-hidden="true">
+                    <span>MINIMIZAR</span>
+                </button>
+            </div>
+            <div id="room-chat-content" class="room-chat-content">
+                <div id="room-chat-messages" class="room-chat-messages">
+                    <div class="chat-empty">Entre em uma sala para conversar</div>
+                </div>
+                <form id="room-chat-form" class="room-chat-form">
+                    <input id="room-chat-input" type="text" maxlength="300" placeholder="Digite uma mensagem..." autocomplete="off">
+                    <button type="submit" title="Enviar mensagem" aria-label="Enviar mensagem">
+                        <img class="ui-icon" src="https://api.iconify.design/tabler/send.svg?color=%23FFFFFF" width="18" alt="" aria-hidden="true">
+                    </button>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- =================================================
              RODAPÉ
         ================================================== -->
 
