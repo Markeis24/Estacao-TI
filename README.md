@@ -20,7 +20,7 @@
 
 <br><br>
 
-<sub>☁️ Um player musical colaborativo com salas em tempo real, visual Frutiger Aero e pesquisa pelo YouTube.</sub>
+<sub><img src="https://api.iconify.design/tabler/cloud.svg?color=%2300A6D6" width="18" /> Um player musical colaborativo com salas em tempo real, visual Frutiger Aero e pesquisa pelo YouTube.</sub>
 
 </div>
 
@@ -34,15 +34,15 @@ A proposta é simples: **criar uma sala, escolher um avatar, compartilhar o cód
 
 O projeto combina:
 
-- 🎵 Pesquisa de músicas através da **YouTube Data API v3**
-- 🌊 Salas compartilhadas em tempo real
-- 👤 Identidade temporária com nome e avatar
-- 📋 Fila de reprodução compartilhada
-- ⚡ Sincronização através do **Socket.IO**
-- ▶️ Reprodução utilizando o **YouTube IFrame Player API**
-- 🔇 Controle de áudio local, sem interromper a reprodução dos outros participantes
-- 🔑 Cada usuário utiliza sua própria chave da YouTube Data API
-- 🌱 Interface inspirada na estética **Frutiger Aero / Aquatic**
+- <img src="https://api.iconify.design/tabler/music.svg?color=%2300A6D6" width="18" /> Pesquisa de músicas através da **YouTube Data API v3**
+- <img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /> Salas compartilhadas em tempo real
+- <img src="https://api.iconify.design/tabler/user.svg?color=%2300A6D6" width="18" /> Identidade temporária com nome e avatar
+- <img src="https://api.iconify.design/tabler/clipboard.svg?color=%2300A6D6" width="18" /> Fila de reprodução compartilhada
+- <img src="https://api.iconify.design/tabler/bolt.svg?color=%2300B894" width="18" /> Sincronização através do **Socket.IO**
+- <img src="https://api.iconify.design/tabler/player-play.svg?color=%2300A6D6" width="18" /> Reprodução utilizando o **YouTube IFrame Player API**
+- <img src="https://api.iconify.design/tabler/volume-off.svg?color=%2300A6D6" width="18" /> Controle de áudio local, sem interromper a reprodução dos outros participantes
+- <img src="https://api.iconify.design/tabler/key.svg?color=%2300A6D6" width="18" /> Cada usuário utiliza sua própria chave da YouTube Data API
+- <img src="https://api.iconify.design/tabler/plant.svg?color=%2300B894" width="18" /> Interface inspirada na estética **Frutiger Aero / Aquatic**
 
 > **A ideia:** é como uma Jam de música, mas com identidade própria, gratuita e sem anúncios adicionados pelo projeto.
 
@@ -127,7 +127,7 @@ O botão central de áudio controla **somente o player local do usuário**.
 
 Isso significa que:
 
-> 🔊 Se uma pessoa silenciar o próprio player, a música continua normalmente para os outros participantes da sala.
+> <img src="https://api.iconify.design/tabler/volume-3.svg?color=%2300A6D6" width="18" /> Se uma pessoa silenciar o próprio player, a música continua normalmente para os outros participantes da sala.
 
 O estado de reprodução da sala não é pausado apenas porque um usuário silenciou o próprio áudio.
 
@@ -161,7 +161,7 @@ YOUTUBE DATA API v3
 
 A aplicação bloqueia pesquisas quando nenhuma chave foi configurada e trata respostas relacionadas a chave inválida ou limite de cota.
 
-### 🔐 Segurança da chave
+### <img src="https://api.iconify.design/tabler/lock.svg?color=%2300B894" width="18" /> Segurança da chave
 
 A chave informada pelo usuário:
 
@@ -172,12 +172,12 @@ A chave informada pelo usuário:
 - Não é compartilhada com os outros usuários.
 - Não deve ser colocada no código-fonte do projeto.
 
-### 📘 Guia para criar a chave
+### <img src="https://api.iconify.design/tabler/book.svg?color=%2300A6D6" width="18" /> Guia para criar a chave
 
 O projeto possui um guia em PDF para configurar uma chave da **YouTube Data API v3**:
 
 <a href="https://github.com/Markeis24/Estacao-TI/blob/main/public/docs/Guia_Criar_Chave_YouTube_Estacao_TI.pdf">
-<strong>📄 Abrir Guia — Criar Chave da YouTube API</strong>
+<strong><img src="https://api.iconify.design/tabler/file-text.svg?color=%2300A6D6" width="18" /> Abrir Guia — Criar Chave da YouTube API</strong>
 </a>
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
@@ -232,14 +232,14 @@ O servidor mantém o estado das salas e distribui as atualizações para os clie
 
 ## <img src="https://api.iconify.design/tabler/stack-2.svg?color=%2300A6D6" width="22" /> TECNOLOGIAS
 
-### 🌐 Frontend
+### <img src="https://api.iconify.design/tabler/world.svg?color=%2300A6D6" width="18" /> Frontend
 
 - HTML5
 - CSS3
 - JavaScript
 - YouTube IFrame Player API
 
-### ⚙️ Backend
+### <img src="https://api.iconify.design/tabler/settings.svg?color=%2300B894" width="18" /> Backend
 
 - Node.js
 - Express
@@ -247,14 +247,14 @@ O servidor mantém o estado das salas e distribui as atualizações para os clie
 - CORS
 - dotenv
 
-### ☁️ Serviços
+### <img src="https://api.iconify.design/tabler/cloud.svg?color=%2300A6D6" width="18" /> Serviços
 
 - YouTube Data API v3
 - YouTube IFrame Player API
 - Render
 - GitHub
 
-### 🛠️ Desenvolvimento
+### <img src="https://api.iconify.design/tabler/tool.svg?color=%2300A6D6" width="18" /> Desenvolvimento
 
 - Git
 - GitHub
@@ -298,35 +298,35 @@ Estacao-TI/
 
 ## <img src="https://api.iconify.design/tabler/activity.svg?color=%2300A6D6" width="22" /> COMO O SISTEMA FUNCIONA
 
-### 1. 🌊 Entrada
+### 1. <img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /> Entrada
 
 O usuário acessa o Estação TI e informa seu nome e avatar.
 
-### 2. 🔑 Configuração da API
+### 2. <img src="https://api.iconify.design/tabler/key.svg?color=%2300A6D6" width="18" /> Configuração da API
 
 O usuário informa sua própria chave da YouTube Data API v3.
 
-### 3. 🏠 Sala
+### 3. <img src="https://api.iconify.design/tabler/home.svg?color=%2300B894" width="18" /> Sala
 
 O usuário pode criar uma sala ou entrar em uma sala existente utilizando o código.
 
-### 4. 🎵 Pesquisa
+### 4. <img src="https://api.iconify.design/tabler/music.svg?color=%2300A6D6" width="18" /> Pesquisa
 
 A busca de músicas é realizada através da chave configurada pelo próprio usuário.
 
-### 5. 📋 Fila
+### 5. <img src="https://api.iconify.design/tabler/clipboard.svg?color=%2300A6D6" width="18" /> Fila
 
 As músicas escolhidas são adicionadas à fila compartilhada.
 
-### 6. ⚡ Sincronização
+### 6. <img src="https://api.iconify.design/tabler/bolt.svg?color=%2300B894" width="18" /> Sincronização
 
 O servidor utiliza Socket.IO para manter os usuários da sala atualizados.
 
-### 7. ▶️ Reprodução
+### 7. <img src="https://api.iconify.design/tabler/player-play.svg?color=%2300A6D6" width="18" /> Reprodução
 
 O vídeo atual é reproduzido através do YouTube IFrame Player API.
 
-### 8. 🔇 Controle local
+### 8. <img src="https://api.iconify.design/tabler/volume-off.svg?color=%2300A6D6" width="18" /> Controle local
 
 O usuário pode silenciar ou ativar o próprio áudio sem pausar a reprodução compartilhada da sala.
 
@@ -401,7 +401,7 @@ O servidor utiliza a porta definida pela configuração do ambiente e, quando ex
 
 A identidade visual atual do Estação TI foi construída em torno da estética **Frutiger Aero**, trazendo referências de interfaces e tecnologias dos anos 2000 com elementos naturais e digitais.
 
-### 🌐 Elementos visuais
+### <img src="https://api.iconify.design/tabler/world.svg?color=%2300A6D6" width="18" /> Elementos visuais
 
 - Céu e água
 - Bolhas
@@ -414,7 +414,7 @@ A identidade visual atual do Estação TI foi construída em torno da estética 
 - Formas arredondadas
 - Atmosfera leve e tecnológica
 
-### 🎨 Paleta aproximada
+### <img src="https://api.iconify.design/tabler/palette.svg?color=%2300B894" width="18" /> Paleta aproximada
 
 ```text
 Azul céu       #48CAE4
@@ -457,13 +457,13 @@ O projeto envolve conhecimentos práticos de:
 
 O projeto está hospedado no **Render**.
 
-### 🌎 Aplicação online
+### <img src="https://api.iconify.design/tabler/world.svg?color=%2300A6D6" width="18" /> Aplicação online
 
 <a href="https://estacao-ti.onrender.com/">
 <strong>https://estacao-ti.onrender.com/</strong>
 </a>
 
-### 🐙 Repositório
+### <img src="https://api.iconify.design/tabler/brand-github.svg?color=%2300A6D6" width="18" /> Repositório
 
 <a href="https://github.com/Markeis24/Estacao-TI">
 <strong>https://github.com/Markeis24/Estacao-TI</strong>
@@ -490,15 +490,15 @@ Estação TI
 Criar uma experiência musical colaborativa que una:
 
 ```text
-🎵 MÚSICA
+<img src="https://api.iconify.design/tabler/music.svg?color=%2300A6D6" width="18" /> MÚSICA
    +
-💻 TECNOLOGIA
+<img src="https://api.iconify.design/tabler/device-laptop.svg?color=%2300A6D6" width="18" /> TECNOLOGIA
    +
-🌊 DESIGN
+<img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /> DESIGN
    +
-⚡ TEMPO REAL
+<img src="https://api.iconify.design/tabler/bolt.svg?color=%2300B894" width="18" /> TEMPO REAL
    +
-👥 CONEXÃO
+<img src="https://api.iconify.design/tabler/users.svg?color=%2300B894" width="18" /> CONEXÃO
 ```
 
 O Estação TI busca transformar uma simples fila de músicas em um espaço compartilhado, com identidade visual própria e participação coletiva.
@@ -519,7 +519,7 @@ O projeto está em desenvolvimento. A estrutura atual já contempla salas compar
 
 ### ESTAÇÃO TI
 
-<sub>☁️ Música • Tecnologia • Conexão • 🌊</sub>
+<sub><img src="https://api.iconify.design/tabler/cloud.svg?color=%2300A6D6" width="18" /> Música • Tecnologia • Conexão • <img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /></sub>
 
 <br><br>
 
@@ -527,8 +527,8 @@ O projeto está em desenvolvimento. A estrutura atual já contempla salas compar
 
 <br><br>
 
-<a href="https://estacao-ti.onrender.com/">🌐 Projeto online</a>
+<a href="https://estacao-ti.onrender.com/"><img src="https://api.iconify.design/tabler/world.svg?color=%2300A6D6" width="18" /> Projeto online</a>
 &nbsp;&nbsp;•&nbsp;&nbsp;
-<a href="https://github.com/Markeis24/Estacao-TI">🐙 GitHub</a>
+<a href="https://github.com/Markeis24/Estacao-TI"><img src="https://api.iconify.design/tabler/brand-github.svg?color=%2300A6D6" width="18" /> GitHub</a>
 
 </div>
