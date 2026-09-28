@@ -1141,6 +1141,38 @@ io.on(
                 }
 
                 // ==================================================
+                // PAUSE
+                // ==================================================
+
+                if (
+                    tipo === "pause"
+                ) {
+                    if (
+                        sala.indiceAtual ===
+                        -1
+                    ) {
+                        return;
+                    }
+
+                    sala.posicao =
+                        obterPosicaoAtual(
+                            sala
+                        );
+
+                    sala.tocando =
+                        false;
+
+                    sala.atualizadoEm =
+                        Date.now();
+
+                    enviarEstadoPlayer(
+                        codigo
+                    );
+
+                    return;
+                }
+
+                // ==================================================
                 // NEXT
                 // ==================================================
 
