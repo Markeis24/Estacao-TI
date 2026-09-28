@@ -3607,3 +3607,57 @@ body::after {
     vertical-align: middle;
     flex: 0 0 auto;
 }
+
+
+/* =========================================================
+   PAINEL DE RESULTADOS RECOLHÍVEL
+========================================================= */
+
+.results-panel .panel-heading {
+    position: relative;
+}
+
+.panel-toggle-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    padding: 7px 10px;
+    border: 2px solid rgba(0,130,180,.25);
+    border-radius: 9px;
+    background: rgba(255,255,255,.55);
+    color: #056184;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 8px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.panel-toggle-button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(0,130,180,.5);
+    background: rgba(255,255,255,.75);
+}
+
+.results-panel-minimized #search-results {
+    display: none;
+}
+
+.results-panel-minimized .panel-heading {
+    border-bottom: 0;
+}
+
+.results-panel-minimized .heading-decoration {
+    display: none;
+}
+
+@media (max-width: 750px) {
+    .panel-toggle-button span {
+        display: none;
+    }
+
+    .panel-toggle-button {
+        padding: 8px;
+    }
+}
