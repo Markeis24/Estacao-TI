@@ -344,7 +344,7 @@ function solicitarTrocaChaveApi(
     searchResults.innerHTML = `
         <div class="empty-message">
             <span class="empty-icon">
-                🔑
+                <img class="ui-icon" src="https://api.iconify.design/tabler/key.svg?color=%2300A6D6" width="20" alt="" aria-hidden="true">
             </span>
 
             <strong>
@@ -958,7 +958,7 @@ function conectarSocket(
 
 
     connectionStatus.textContent =
-        "🟡 CONECTANDO...";
+        `<img class="ui-icon" src="https://api.iconify.design/tabler/loader-2.svg?color=%23FFB703" width="16" alt="" aria-hidden="true"> CONECTANDO...`;
 
 
     socket.on(
@@ -972,7 +972,7 @@ function conectarSocket(
 
 
             connectionStatus.textContent =
-                "🟢 ONLINE";
+                `<img class="ui-icon" src="https://api.iconify.design/tabler/circle-check.svg?color=%2300B894" width="16" alt="" aria-hidden="true"> ONLINE`;
 
 
             socket.emit(
@@ -1059,7 +1059,7 @@ function conectarSocket(
 
 
             connectionStatus.textContent =
-                "🔴 ERRO";
+                `<img class="ui-icon" src="https://api.iconify.design/tabler/circle-x.svg?color=%23FF4D6D" width="16" alt="" aria-hidden="true"> ERRO`;
 
         }
     );
@@ -1194,7 +1194,7 @@ function conectarSocket(
         function () {
 
             connectionStatus.textContent =
-                "🔴 OFFLINE";
+                `<img class="ui-icon" src="https://api.iconify.design/tabler/circle.svg?color=%23FF4D6D" width="16" alt="" aria-hidden="true"> OFFLINE`;
 
         }
     );
@@ -1508,7 +1508,7 @@ async function pesquisarMusicas() {
         <div class="empty-message">
 
             <span class="empty-icon">
-                🔎
+                <img class="ui-icon" src="https://api.iconify.design/tabler/search.svg?color=%2300A6D6" width="26" alt="" aria-hidden="true">
             </span>
 
             <strong>
@@ -1596,7 +1596,7 @@ async function pesquisarMusicas() {
             <div class="empty-message">
 
                 <span class="empty-icon">
-                    ⚠
+                    <img class="ui-icon" src="https://api.iconify.design/tabler/alert-triangle.svg?color=%23FFB703" width="26" alt="" aria-hidden="true">
                 </span>
 
                 <strong>
@@ -1639,7 +1639,7 @@ function mostrarResultados(
             <div class="empty-message">
 
                 <span class="empty-icon">
-                    ♪
+                    <img class="ui-icon" src="https://api.iconify.design/tabler/music.svg?color=%2300A6D6" width="26" alt="" aria-hidden="true">
                 </span>
 
                 <strong>
@@ -1702,7 +1702,7 @@ function mostrarResultados(
                     <button
                         class="play-button"
                     >
-                        ▶ TOCAR
+                        ${icon("player-play","FFFFFF",18)} TOCAR
                     </button>
 
                     <button
@@ -1920,10 +1920,10 @@ function atualizarBotaoMudo() {
 
     if (mutadoLocalmente) {
         playPauseButton.innerHTML =
-            `✕ <small>DESMUTAR</small>`;
+            `<img class="ui-icon" src="https://api.iconify.design/tabler/volume-3.svg?color=%2300A6D6" width="20" alt="" aria-hidden="true"> <small>DESMUTAR</small>`;
     } else {
         playPauseButton.innerHTML =
-            `▶ <small>MUTAR</small>`;
+            `<img class="ui-icon" src="https://api.iconify.design/tabler/volume-off.svg?color=%2300A6D6" width="20" alt="" aria-hidden="true"> <small>MUTAR</small>`;
     }
 }
 
@@ -1968,7 +1968,7 @@ function atualizarMusicaAtual() {
 
 
         playPauseButton.innerHTML =
-            `▶ <small>TOCAR</small>`;
+            `<img class="ui-icon" src="https://api.iconify.design/tabler/player-play.svg?color=%23FFFFFF" width="20" alt="" aria-hidden="true"> <small>TOCAR</small>`;
 
 
         return;
@@ -2008,7 +2008,7 @@ function atualizarFila() {
             <div class="empty-message">
 
                 <span class="empty-icon">
-                    ♬
+                    <img class="ui-icon" src="https://api.iconify.design/tabler/list.svg?color=%2300A6D6" width="26" alt="" aria-hidden="true">
                 </span>
 
                 <strong>
@@ -2119,7 +2119,7 @@ function atualizarFila() {
                     class="queue-play-button"
                     title="Tocar"
                 >
-                    ▶
+                    ${icon("player-play","00A6D6",18)}
                 </button>
 
 
@@ -2127,7 +2127,7 @@ function atualizarFila() {
                     class="queue-remove-button"
                     title="Remover"
                 >
-                    ×
+                    ${icon("x","FF4D6D",18)}
                 </button>
 
             `;
