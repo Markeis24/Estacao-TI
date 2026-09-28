@@ -1170,6 +1170,24 @@ body::after {
 }
 
 
+.api-key-change-action {
+    margin-top: 16px;
+    padding: 10px 18px;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.api-key-change-action:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
 #clear-api-key-button:hover {
     border-color:
         #00aee8;
