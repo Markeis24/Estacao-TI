@@ -893,6 +893,90 @@ createRoomButton.addEventListener(
 );
 
 
+/*
+   ESTADO DO BOTÃO DA SALA
+*/
+
+function atualizarBotaoSala(
+    dentroDaSala
+) {
+
+    if (!joinRoomButton) {
+        return;
+    }
+
+    if (dentroDaSala) {
+        joinRoomButton.innerHTML =
+            '<img class="ui-icon" src="https://api.iconify.design/tabler/logout.svg?color=%23056384" width="18" alt="" aria-hidden="true"> SAIR';
+
+        joinRoomButton.classList.add(
+            "leave-room-button"
+        );
+
+        roomInput.disabled = true;
+
+    } else {
+        joinRoomButton.innerHTML =
+            "ENTRAR";
+
+        joinRoomButton.classList.remove(
+            "leave-room-button"
+        );
+
+        roomInput.disabled = false;
+
+    }
+}
+
+
+/*
+   SAIR DA SALA
+*/
+
+function sairDaSala() {
+
+    if (!socket || !socket.connected) {
+        atualizarBotaoSala(false);
+        return;
+    }
+
+    socket.emit(
+        "sair-sala"
+    );
+
+    roomCode.textContent =
+        "------";
+
+    roomInput.value =
+        "";
+
+    estadoSala = {
+        fila: [],
+        indiceAtual: -1,
+        tocando: false,
+        posicao: 0
+    };
+
+    atualizarFila();
+    atualizarMusicaAtual();
+
+    roomActivity.innerHTML = "";
+    roomUsersList.innerHTML = "";
+    roomUsers.textContent = "0";
+
+    atualizarBotaoSala(false);
+
+    const novaUrl =
+        window.location.pathname;
+
+    window.history.replaceState(
+        {},
+        "",
+        novaUrl
+    );
+}
+
+
 /* 
    ENTRAR EM SALA
  */
@@ -900,6 +984,15 @@ createRoomButton.addEventListener(
 joinRoomButton.addEventListener(
     "click",
     function () {
+
+        if (
+            socket &&
+            socket.connected &&
+            socket.sala
+        ) {
+            sairDaSala();
+            return;
+        }
 
         const codigo =
             roomInput.value
@@ -1196,6 +1289,8 @@ function conectarSocket(
             connectionStatus.textContent =
                 `<img class="ui-icon" src="https://api.iconify.design/tabler/circle.svg?color=%23FF4D6D" width="16" alt="" aria-hidden="true"> OFFLINE`;
 
+            atualizarBotaoSala(false);
+
         }
     );
 
@@ -1209,6 +1304,8 @@ function conectarSocket(
 function entrarVisualmenteNaSala(
     dados
 ) {
+
+    atualizarBotaoSala(true);
 
     console.log(
         "Entrando na sala:",
