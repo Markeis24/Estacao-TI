@@ -2842,7 +2842,7 @@ body::after {
 }
 
 
-.result-card img {
+.result-card > img {
     width: 125px;
 
     height: 70px;
@@ -2854,6 +2854,11 @@ body::after {
         rgba(255,255,255,.7);
 
     border-radius: 10px;
+}
+
+.result-actions .ui-icon {
+    width: 18px;
+    height: 18px;
 }
 
 
@@ -3294,7 +3299,7 @@ body::after {
     }
 
 
-    .result-card img {
+    .result-card > img {
         width:
             90px;
 
