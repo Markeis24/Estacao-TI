@@ -3621,7 +3621,9 @@ body::after {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-left: auto;
+    margin-left: 0;
+    margin-right: auto;
+    order: -1;
     padding: 7px 10px;
     border: 2px solid rgba(0,130,180,.25);
     border-radius: 9px;
