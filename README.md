@@ -42,13 +42,13 @@ O projeto combina:
 - <img src="https://api.iconify.design/tabler/player-play.svg?color=%2300A6D6" width="18" /> Reprodução utilizando o **YouTube IFrame Player API**
 - <img src="https://api.iconify.design/tabler/volume-off.svg?color=%2300A6D6" width="18" /> Controle de áudio local, sem interromper a reprodução dos outros participantes
 - <img src="https://api.iconify.design/tabler/key.svg?color=%2300A6D6" width="18" /> Cada usuário utiliza sua própria chave da YouTube Data API
-- <img src="https://api.iconify.design/tabler/plant.svg?color=%2300B894" width="18" /> Interface inspirada na estética **Frutiger Aero / Aquatic**
+- <img src="https://api.iconify.design/tabler/leaf.svg?color=%2300B894" width="18" /> Interface inspirada na estética **Frutiger Aero / Aquatic**
 
 > **A ideia:** é como uma Jam de música, mas com identidade própria, gratuita e sem anúncios adicionados pelo projeto.
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-## <img src="https://api.iconify.design/tabler/target-arrow.svg?color=%2300B894" width="22" /> PROPOSTA
+## <img src="https://api.iconify.design/tabler/target.svg?color=%2300B894" width="22" /> PROPOSTA
 
 O Estação TI foi pensado para facilitar momentos em que várias pessoas querem participar da mesma seleção musical.
 
@@ -133,7 +133,7 @@ O estado de reprodução da sala não é pausado apenas porque um usuário silen
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-## <img src="https://api.iconify.design/tabler/api.svg?color=%2300A6D6" width="22" /> YOUTUBE DATA API
+## <img src="https://api.iconify.design/tabler/code.svg?color=%2300A6D6" width="22" /> YOUTUBE DATA API
 
 O Estação TI utiliza a **YouTube Data API v3** para pesquisar conteúdos do YouTube.
 
@@ -206,7 +206,7 @@ Reprodução
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-## <img src="https://api.iconify.design/tabler/brand-socket-io.svg?color=%2300B894" width="22" /> COMUNICAÇÃO EM TEMPO REAL
+## <img src="https://api.iconify.design/tabler/share.svg?color=%2300B894" width="22" /> COMUNICAÇÃO EM TEMPO REAL
 
 O **Socket.IO** é responsável pela comunicação entre o navegador e o servidor.
 
@@ -230,7 +230,7 @@ O servidor mantém o estado das salas e distribui as atualizações para os clie
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-## <img src="https://api.iconify.design/tabler/stack-2.svg?color=%2300A6D6" width="22" /> TECNOLOGIAS
+## <img src="https://api.iconify.design/tabler/layers-intersect.svg?color=%2300A6D6" width="22" /> TECNOLOGIAS
 
 ### <img src="https://api.iconify.design/tabler/world.svg?color=%2300A6D6" width="18" /> Frontend
 
@@ -453,7 +453,7 @@ O projeto envolve conhecimentos práticos de:
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-## <img src="https://api.iconify.design/tabler/cloud-upload.svg?color=%2300B894" width="22" /> DEPLOY
+## <img src="https://api.iconify.design/tabler/cloud-up.svg?color=%2300B894" width="22" /> DEPLOY
 
 O projeto está hospedado no **Render**.
 
@@ -485,7 +485,7 @@ Estação TI
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
-## <img src="https://api.iconify.design/tabler/heart-handshake.svg?color=%2300A6D6" width="22" /> MISSÃO
+## <img src="https://api.iconify.design/tabler/heart.svg?color=%2300A6D6" width="22" /> MISSÃO
 
 Criar uma experiência musical colaborativa que una:
 
