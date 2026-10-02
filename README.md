@@ -2,7 +2,7 @@
 
 # <img src="https://api.iconify.design/tabler/headphones.svg?color=%2300A6D6" width="34" /> ESTAÇÃO TI
 
-### <img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /> Música compartilhada • Tecnologia • Conexão
+### <img src="https://api.iconify.design/tabler/sparkles.svg?color=%2300C6C7" width="18" /> Música compartilhada • Tecnologia • Conexão
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:00B4D8,45:48CAE4,75:90E0EF,100:80ED99&height=130&section=header&text=ESTA%C3%87%C3%83O%20TI&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=38" />
 
@@ -35,7 +35,7 @@ A proposta é simples: **criar uma sala, escolher um avatar, compartilhar o cód
 O projeto combina:
 
 - <img src="https://api.iconify.design/tabler/music.svg?color=%2300A6D6" width="18" /> Pesquisa de músicas através da **YouTube Data API v3**
-- <img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /> Salas compartilhadas em tempo real
+- <img src="https://api.iconify.design/tabler/door-enter.svg?color=%2300C6C7" width="18" /> Salas compartilhadas em tempo real
 - <img src="https://api.iconify.design/tabler/user.svg?color=%2300A6D6" width="18" /> Identidade temporária com nome e avatar
 - <img src="https://api.iconify.design/tabler/clipboard.svg?color=%2300A6D6" width="18" /> Fila de reprodução compartilhada
 - <img src="https://api.iconify.design/tabler/bolt.svg?color=%2300B894" width="18" /> Sincronização através do **Socket.IO**
@@ -298,7 +298,7 @@ Estacao-TI/
 
 ## <img src="https://api.iconify.design/tabler/activity.svg?color=%2300A6D6" width="22" /> COMO O SISTEMA FUNCIONA
 
-### 1. <img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /> Entrada
+### 1. <img src="https://api.iconify.design/tabler/door-enter.svg?color=%2300C6C7" width="18" /> Entrada
 
 O usuário acessa o Estação TI e informa seu nome e avatar.
 
@@ -489,17 +489,16 @@ Estação TI
 
 Criar uma experiência musical colaborativa que una:
 
-```text
 <img src="https://api.iconify.design/tabler/music.svg?color=%2300A6D6" width="18" /> MÚSICA
    +
 <img src="https://api.iconify.design/tabler/device-laptop.svg?color=%2300A6D6" width="18" /> TECNOLOGIA
    +
-<img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /> DESIGN
+<img src="https://api.iconify.design/tabler/sparkles.svg?color=%2300C6C7" width="18" /> DESIGN
    +
 <img src="https://api.iconify.design/tabler/bolt.svg?color=%2300B894" width="18" /> TEMPO REAL
    +
 <img src="https://api.iconify.design/tabler/users.svg?color=%2300B894" width="18" /> CONEXÃO
-```
+
 
 O Estação TI busca transformar uma simples fila de músicas em um espaço compartilhado, com identidade visual própria e participação coletiva.
 
@@ -519,7 +518,7 @@ O projeto está em desenvolvimento. A estrutura atual já contempla salas compar
 
 ### ESTAÇÃO TI
 
-<sub><img src="https://api.iconify.design/tabler/cloud.svg?color=%2300A6D6" width="18" /> Música • Tecnologia • Conexão • <img src="https://api.iconify.design/tabler/waves.svg?color=%2300C6C7" width="18" /></sub>
+<sub><img src="https://api.iconify.design/tabler/cloud.svg?color=%2300A6D6" width="18" /> Música • Tecnologia • Conexão • <img src="https://api.iconify.design/tabler/sparkles.svg?color=%2300C6C7" width="18" /></sub>
 
 <br><br>
 
