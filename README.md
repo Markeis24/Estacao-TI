@@ -121,16 +121,6 @@ A sala mantém informações sobre:
 - Estado do player.
 - Fila de músicas.
 
-### <img src="https://api.iconify.design/tabler/volume-3.svg?color=%2300A6D6" width="18" /> Áudio individual
-
-O botão central de áudio controla **somente o player local do usuário**.
-
-Isso significa que:
-
-> <img src="https://api.iconify.design/tabler/volume-3.svg?color=%2300A6D6" width="18" /> Se uma pessoa silenciar o próprio player, a música continua normalmente para os outros participantes da sala.
-
-O estado de reprodução da sala não é pausado apenas porque um usuário silenciou o próprio áudio.
-
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
 ## <img src="https://api.iconify.design/tabler/code.svg?color=%2300A6D6" width="22" /> YOUTUBE DATA API
@@ -325,10 +315,6 @@ O servidor utiliza Socket.IO para manter os usuários da sala atualizados.
 ### 7. <img src="https://api.iconify.design/tabler/player-play.svg?color=%2300A6D6" width="18" /> Reprodução
 
 O vídeo atual é reproduzido através do YouTube IFrame Player API.
-
-### 8. <img src="https://api.iconify.design/tabler/volume-off.svg?color=%2300A6D6" width="18" /> Controle local
-
-O usuário pode silenciar ou ativar o próprio áudio sem pausar a reprodução compartilhada da sala.
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00B4D8,50:48CAE4,100:80ED99&height=5" />
 
