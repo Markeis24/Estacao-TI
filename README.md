@@ -7,9 +7,9 @@
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:00B4D8,45:48CAE4,75:90E0EF,100:80ED99&height=130&section=header&text=ESTA%C3%87%C3%83O%20TI&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=38" />
 
 <img src="https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-00A6D6?style=for-the-badge&labelColor=E8FBFF" />
-<img src="https://img.shields.io/badge/NODE.JS-24.x-00B894?style=for-the-badge&labelColor=E8FBFF" />
-<img src="https://img.shields.io/badge/EXPRESS-5.x-00A6D6?style=for-the-badge&labelColor=E8FBFF" />
-<img src="https://img.shields.io/badge/SOCKET.IO-4.x-00B894?style=for-the-badge&labelColor=E8FBFF" />
+<img src="https://img.shields.io/badge/NODE.JS-  -00B894?style=for-the-badge&labelColor=E8FBFF" />
+<img src="https://img.shields.io/badge/EXPRESS-  -00A6D6?style=for-the-badge&labelColor=E8FBFF" />
+<img src="https://img.shields.io/badge/SOCKET.IO-  -00B894?style=for-the-badge&labelColor=E8FBFF" />
 
 <br><br>
 
