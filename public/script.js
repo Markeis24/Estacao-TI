@@ -1,11 +1,5 @@
 /* 
-   ESTACAO-TI MUSIC NETWORK
-   SCRIPT PRINCIPAL
- */
-
-
-/* 
-   SOCKET.IO
+SOCKET.IO
  */
 
 let socket = null;
@@ -13,7 +7,7 @@ let socket = null;
 let salaAtual = null;
 
 /* 
-   YOUTUBE
+YOUTUBE
  */
 
 let player = null;
@@ -27,7 +21,7 @@ const YOUTUBE_API_KEY_STORAGE = "estacaoTI_youtube_api_key";
 
 
 /* 
-   IDENTIDADE
+IDENTIDADE
  */
 
 let identidade = null;
@@ -52,7 +46,7 @@ const AVATARES = [
 
 
 /* 
-   ESTADO DA SALA
+ESTADO DA SALA
  */
 
 let estadoSala = {
@@ -69,7 +63,7 @@ let estadoSala = {
 
 
 /* 
-   ELEMENTOS
+ELEMENTOS
  */
 
 const identityOverlay =
@@ -368,7 +362,7 @@ const apiKeyStatus =
 
 
 /*
-   YOUTUBE API - CHAVE LOCAL
+YOUTUBE API - CHAVE LOCAL
 */
 
 function obterChaveYouTube() {
@@ -452,7 +446,7 @@ function carregarChaveYouTube() {
 
 
 /*
-   TROCA DE CHAVE APÓS LIMITE DA API
+TROCA DE CHAVE APÓS LIMITE DA API
  */
 
 function solicitarTrocaChaveApi(
@@ -556,7 +550,7 @@ if (clearApiKeyButton) {
 
 
 /* 
-   IDENTIDADE - AVATARES
+IDENTIDADE - AVATARES
  */
 
 function montarAvatares() {
@@ -653,7 +647,7 @@ function montarAvatares() {
 
 
 /* 
-   SALVAR IDENTIDADE
+SALVAR IDENTIDADE
  */
 
 function salvarIdentidade() {
@@ -739,7 +733,7 @@ function salvarIdentidade() {
 
 
 /* 
-   CARREGAR IDENTIDADE
+CARREGAR IDENTIDADE
  */
 
 function carregarIdentidade() {
@@ -824,7 +818,7 @@ function carregarIdentidade() {
 
 
 /* 
-   VISUAL DA IDENTIDADE
+VISUAL DA IDENTIDADE
  */
 
 function atualizarIdentidadeVisual() {
@@ -946,7 +940,7 @@ window.onYouTubeIframeAPIReady =
 
 
 /* 
-   ESTADO DO YOUTUBE
+ESTADO DO YOUTUBE
  */
 
 function tratarEstadoPlayer(
@@ -1024,7 +1018,7 @@ function tratarEstadoPlayer(
 
 
 /* 
-   CRIAR SALA
+CRIAR SALA
  */
 
 createRoomButton.addEventListener(
@@ -1053,7 +1047,7 @@ createRoomButton.addEventListener(
 
 
 /*
-   ESTADO DO BOTÃO DA SALA
+ESTADO DO BOTÃO DA SALA
 */
 
 function atualizarBotaoSala(
@@ -1089,7 +1083,7 @@ function atualizarBotaoSala(
 
 
 /*
-   SAIR DA SALA
+SAIR DA SALA
 */
 
 function sairDaSala() {
@@ -1147,7 +1141,7 @@ function sairDaSala() {
 
 
 /* 
-   ENTRAR EM SALA
+ENTRAR EM SALA
  */
 
 joinRoomButton.addEventListener(
@@ -1196,7 +1190,7 @@ joinRoomButton.addEventListener(
 
 
 /* 
-   SOCKET
+SOCKET
  */
 
 function conectarSocket(
@@ -1268,9 +1262,9 @@ function conectarSocket(
     );
 
 
-    /* ======================================================
-       SALA CRIADA
-    ====================================================== */
+/* 
+SALA CRIADA
+ */
 
     socket.on(
         "chat-historico",
@@ -1306,9 +1300,9 @@ function conectarSocket(
     );
 
 
-    /* ======================================================
-       ENTROU
-    ====================================================== */
+/* 
+ENTROU
+*/
 
     socket.on(
         "entrou-sala",
@@ -1321,10 +1315,9 @@ function conectarSocket(
         }
     );
 
-
-    /* ======================================================
-       ERRO
-    ====================================================== */
+/* 
+ERRO
+*/
 
     socket.on(
         "erro-sala",
@@ -1366,9 +1359,9 @@ function conectarSocket(
     );
 
 
-    /* ======================================================
-       FILA
-    ====================================================== */
+/* 
+FILA
+*/
 
     socket.on(
         "fila-atualizada",
@@ -1400,9 +1393,9 @@ function conectarSocket(
     );
 
 
-    /* ======================================================
-       ESTADO PLAYER
-    ====================================================== */
+/* 
+ESTADO PLAYER
+*/
 
     socket.on(
         "estado-player",
@@ -1432,9 +1425,9 @@ function conectarSocket(
     );
 
 
-    /* ======================================================
-       USUÁRIOS
-    ====================================================== */
+/* 
+USUÁRIOS
+*/
 
     socket.on(
         "usuarios-atualizados",
@@ -1452,9 +1445,9 @@ function conectarSocket(
     );
 
 
-    /* ======================================================
-       USUÁRIO ENTROU
-    ====================================================== */
+/* 
+USUÁRIO ENTROU
+*/
 
     socket.on(
         "usuario-entrou",
@@ -1469,9 +1462,9 @@ function conectarSocket(
     );
 
 
-    /* ======================================================
-       USUÁRIO SAIU
-    ====================================================== */
+/* 
+USUÁRIO SAIU
+*/
 
     socket.on(
         "usuario-saiu",
@@ -1486,9 +1479,9 @@ function conectarSocket(
     );
 
 
-    /* ======================================================
-       DISCONNECT
-    ====================================================== */
+/* 
+DISCONNECT
+*/
 
     socket.on(
         "disconnect",
@@ -1507,8 +1500,8 @@ function conectarSocket(
 
 
 /* 
-   ENTRAR VISUALMENTE NA SALA
- */
+ENTRAR VISUALMENTE NA SALA
+*/
 
 function entrarVisualmenteNaSala(
     dados
@@ -1582,8 +1575,8 @@ function entrarVisualmenteNaSala(
 
 
 /* 
-   USUÁRIOS
- */
+USUÁRIOS
+*/
 
 function atualizarUsuarios(
     usuarios
@@ -1676,8 +1669,8 @@ function atualizarUsuarios(
 
 
 /* 
-   ATIVIDADE DA SALA
- */
+ATIVIDADE DA SALA
+*/
 
 function adicionarAtividade(
     usuario,
@@ -1754,8 +1747,8 @@ function adicionarAtividade(
 
 
 /* 
-   SOCKET CONECTADO?
- */
+SOCKET CONECTADO?
+*/
 
 function socketConectado() {
 
@@ -1771,8 +1764,8 @@ function socketConectado() {
 
 
 /* 
-   CONTROLE
- */
+CONTROLE
+*/
 
 function enviarControle(
     dados
@@ -1811,8 +1804,8 @@ function icon(nome, cor = "00A6D6", tamanho = 18) {
 
 
 /* 
-   PESQUISA
- */
+PESQUISA
+*/
 
 async function pesquisarMusicas() {
 
